@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MapaEstoqueCD.Database.Models
 {
+
     [Table("PRODUTOS")]
     public class Produtos
     {
@@ -13,102 +14,106 @@ namespace MapaEstoqueCD.Database.Models
         [Column("produtoId")]
         public int ProdutoId { get; set; }
 
-        [Column("cod")]
         [Required]
-        public string Cod { get; set; } = null!;
-
-        [Column("produto")]
-        public byte[]? Produto { get; set; } = null;
+        [Column("codigo")]
+        public string Codigo { get; set; } = null!;
 
         [Column("descricao")]
-        public string? Descricao { get; set; } = string.Empty;
+        public string? Descricao { get; set; }
+
+        [Column("produto")]
+        public byte[]? Produto { get; set; }
 
         [Column("ncm")]
-        public string? Ncm { get; set; } = string.Empty;
+        public string? Ncm { get; set; }
 
         [Column("ipi")]
-        public double? Ipi { get; set; } = 0;
+        public decimal? Ipi { get; set; }
 
         [Column("pis")]
-        public double? Pis { get; set; } = 0;
+        public decimal? Pis { get; set; }
 
         [Column("cofins")]
-        public double? Cofins { get; set; } = 0;
+        public decimal? Cofins { get; set; }
 
         [Column("shelf_life")]
-        public  string? ShelfLife { get; set; } = string.Empty;
+        public string? ShelfLife { get; set; }
 
-        [Column("codigo_barras_ean13")]
-        public string? CodigoBarrasEan13 { get; set; } = string.Empty;
+        // Unidade
+        [Column("u_codigo_barras")]
+        public string? UCodigoBarras { get; set; }
 
-        [Column("c_cm_unit")]
-        public double? CcmUnit { get; set; } = 0;
+        [Column("u_c")]
+        public double? UC { get; set; }
 
-        [Column("l_cm_unit")]
-        public double? LcmUnit { get; set; } = 0;
+        [Column("u_l")]
+        public double? UL { get; set; }
 
-        [Column("d_cm_unit")]
-        public double? DcmUnit { get; set; } = 0;
+        [Column("u_d")]
+        public double? UD { get; set; }
 
-        [Column("h_cm_unit")]
-        public double? HcmUnit { get; set; } = 0;
+        [Column("u_h")]
+        public double? UH { get; set; }
 
-        [Column("peso_liquido_unit")]
-        public double? PesoLiquidoUnit { get; set; } = 0;
+        [Column("u_peso_liquido")]
+        public double? UPesoLiquido { get; set; }
 
-        [Column("peso_bruto_unit")]
-        public double? PesoBrutoUnit { get; set; } = 0;
+        [Column("u_peso_bruto")]
+        public double? UPesoBruto { get; set; }
 
-        [Column("codigo_barras_dun13")]
-        public string? CodigoBarrasDun13 { get; set; } = string.Empty;
+        // Display
+        [Column("d_codigo_barras")]
+        public string? DCodigoBarras { get; set; }
 
-        [Column("qtd_unit")]
-        public int? QtdUnit { get; set; } = 0;
+        [Column("d_qtd")]
+        public int? DQtd { get; set; }
 
-        [Column("c_cm_caixa")]
-        public double? CcmCaixa { get; set; } = 0;
+        [Column("d_c")]
+        public double? DC { get; set; }
 
-        [Column("l_cm_caixa")]
-        public double? LcmCaixa { get; set; } = 0;
+        [Column("d_l")]
+        public double? DL { get; set; }        
 
-        [Column("h_cm_caixa")]
-        public double? HcmCaixa { get; set; } = 0;
+        [Column("d_h")]
+        public double? DH { get; set; }
 
-        [Column("peso_liquido_caixa")]
-        public double? PesoLiquidoCaixa { get; set; } = 0;
+        [Column("d_peso_liquido")]
+        public double? DPesoLiquido { get; set; }
 
-        [Column("peso_bruto_caixa")]
-        public double? PesoBrutoCaixa { get; set; } = 0;
+        [Column("d_peso_bruto")]
+        public double? DPesoBruto { get; set; }
 
-        [Column("codigo_barras_dun14")]
-        public string? CodigoBarrasDun14 { get; set; } = string.Empty;
+        // Caixa
+        [Column("c_codigo_barras")]
+        public string? CCodigoBarras { get; set; }
 
-        [Column("qtd_caixa")]
-        public int? QtdCaixa { get; set; } = 0;
+        [Column("c_qtd")]
+        public int? CQtd { get; set; }
 
-        [Column("c_cm_palet")]
-        public double? CcmPalet { get; set; } = 0;
+        [Column("c_c")]
+        public double? CC { get; set; }
 
-        [Column("l_cm_palet")]
-        public double? LcmPalet { get; set; } = 0;
+        [Column("c_l")]
+        public double? CL { get; set; }
 
-        [Column("h_cm_palet")]
-        public double? HcmPalet { get; set; } = 0;
+        [Column("c_h")]
+        public double? CH { get; set; }
 
-        [Column("peso_liquido_palet")]
-        public double? PesoLiquidoPalet { get; set; } = 0;
+        [Column("c_peso_liquido")]
+        public double? CPesoLiquido { get; set; }
 
-        [Column("peso_bruto_palet")]
-        public double? PesoBrutoPalet { get; set; } = 0;
+        [Column("c_peso_bruto")]
+        public double? CPesoBruto { get; set; }
 
-        [Column("cxs_por_lastro")]
-        public int? CxsPorLastro { get; set; } = 0;
+        // Paletização
+        [Column("p_cx_lastro")]
+        public int? PCxLastro { get; set; }
 
-        [Column("emp_cxs")]
-        public int? EmpCxs { get; set; } = 0;
+        [Column("p_emp_cx")]
+        public int? PEmpCx { get; set; }
 
-        [Column("cxs_por_palet")]
-        public int? CxsPorPalet { get; set; } = 0;
+        [Column("p_cx_palete")]
+        public int? PCxPalete { get; set; }
 
         [Column("update_at")]
         public DateTime UpdateAt { get; set; } = DateTime.Now;
@@ -119,4 +124,5 @@ namespace MapaEstoqueCD.Database.Models
         public ICollection<Estoque> Estoques { get; set; } = new List<Estoque>();
         public ICollection<Movimentacao> Movimentacoes { get; set; } = new List<Movimentacao>();
     }
+    
 }

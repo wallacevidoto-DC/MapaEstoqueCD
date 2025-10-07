@@ -34,20 +34,20 @@ namespace MapaEstoqueCD.Services
                                   : query.Where(p => p.Descricao.ToLower().Contains(termo));
                     break;
                 case "Código":
-                    query = exato ? query.Where(p => p.Cod.ToLower() == termo)
-                                  : query.Where(p => p.Cod.ToLower().Contains(termo));
+                    query = exato ? query.Where(p => p.Codigo.ToLower() == termo)
+                                  : query.Where(p => p.Codigo.ToLower().Contains(termo));
                     break;
                 case "codigo_barras_ean13":
-                    query = exato ? query.Where(p => p.CodigoBarrasEan13.ToLower() == termo)
-                                  : query.Where(p => p.CodigoBarrasEan13.ToLower().Contains(termo));
+                    query = exato ? query.Where(p => p.UCodigoBarras.ToLower() == termo)
+                                  : query.Where(p => p.UCodigoBarras.ToLower().Contains(termo));
                     break;
                 case "codigo_barras_dun13":
-                    query = exato ? query.Where(p => p.CodigoBarrasDun13.ToLower() == termo)
-                                  : query.Where(p => p.Descricao.ToLower().Contains(termo));
+                    query = exato ? query.Where(p => p.DCodigoBarras.ToLower() == termo)
+                                  : query.Where(p => p.DCodigoBarras.ToLower().Contains(termo));
                     break;
                 case "codigo_barras_dun14":
-                    query = exato ? query.Where(p => p.CodigoBarrasDun14.ToLower() == termo)
-                                  : query.Where(p => p.CodigoBarrasDun14.ToLower().Contains(termo));
+                    query = exato ? query.Where(p => p.CCodigoBarras.ToLower() == termo)
+                                  : query.Where(p => p.CCodigoBarras.ToLower().Contains(termo));
                     break;
             }
 
@@ -62,6 +62,12 @@ namespace MapaEstoqueCD.Services
 
         public void Atualizar(Produtos p)
         {
+            var local = _db.Produtos.Local.FirstOrDefault(x => x.ProdutoId == p.ProdutoId);
+            if (local != null)
+            {
+                _db.Entry(local).State = EntityState.Detached; 
+            }
+
             _db.Produtos.Update(p);
             _db.SaveChanges();
         }
@@ -77,9 +83,14 @@ namespace MapaEstoqueCD.Services
             return _db.Produtos.Find(id);
         }
 
+        public Produtos? ObterPorCod(string cod)
+        {
+            return _db.Produtos.First(p => p.Codigo == cod);
+        }
+
         public bool ExisteCodigo(string codigo)
         {
-            return _db.Produtos.Any(p => p.Cod == codigo);
+            return _db.Produtos.Any(p => p.Codigo == codigo);
         }
 
         public List<Produtos> GetProdutosByFilter(List<FiltroItem> filtroItems)

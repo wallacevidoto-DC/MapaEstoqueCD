@@ -163,6 +163,16 @@ namespace MapaEstoqueCD.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap editar_codigo {
+            get {
+                object obj = ResourceManager.GetObject("editar-codigo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap entrada {
             get {
                 object obj = ResourceManager.GetObject("entrada", resourceCulture);
@@ -176,6 +186,16 @@ namespace MapaEstoqueCD.Properties {
         internal static System.Drawing.Bitmap exportar {
             get {
                 object obj = ResourceManager.GetObject("exportar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap filtro {
+            get {
+                object obj = ResourceManager.GetObject("filtro", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -206,6 +226,16 @@ namespace MapaEstoqueCD.Properties {
         internal static System.Drawing.Bitmap importar {
             get {
                 object obj = ResourceManager.GetObject("importar", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap limpar_limpo {
+            get {
+                object obj = ResourceManager.GetObject("limpar-limpo", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -256,6 +286,26 @@ namespace MapaEstoqueCD.Properties {
         internal static System.Drawing.Bitmap salve {
             get {
                 object obj = ResourceManager.GetObject("salve", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sem_imagens {
+            get {
+                object obj = ResourceManager.GetObject("sem-imagens", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap sem_imagens__1_ {
+            get {
+                object obj = ResourceManager.GetObject("sem-imagens (1)", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

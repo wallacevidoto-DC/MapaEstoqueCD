@@ -16,39 +16,42 @@ namespace MapaEstoqueCD.Controller
         public ProdutosController()
         {
             Columns = new Dictionary<string, string>
-            {{ "Código", "Cod" },
-            { "Descrição", "Descricao" },
-            { "NCM", "Ncm" },
-            { "IPI", "Ipi" },
-            { "PIS", "Pis" },
-            { "COFINS", "Cofins" },
-            { "Shelf Life", "ShelfLife" },
-            { "EAN-13", "CodigoBarrasEan13" },
-            { "C(cm) Unit", "CcmUnit" },
-            { "L(cm) Unit", "LcmUnit" },
-            { "D(cm) Unit", "DcmUnit" },
-            { "H(cm) Unit", "HcmUnit" },
-            { "Peso Líquido (Unit)", "PesoLiquidoUnit" },
-            { "Peso Bruto (Unit)", "PesoBrutoUnit" },
-            { "DUN-13", "CodigoBarrasDun13" },
-            { "Qtd/Unidade", "QtdUnit" },
-            { "C(cm) Caixa", "CcmCaixa" },
-            { "L(cm) Caixa", "LcmCaixa" },
-            { "H(cm) Caixa", "HcmCaixa" },
-            { "Peso Líquido (Caixa)", "PesoLiquidoCaixa" },
-            { "Peso Bruto (Caixa)", "PesoBrutoCaixa" },
-            { "DUN-14", "CodigoBarrasDun14" },
-            { "Qtd/Caixa", "QtdCaixa" },
-            { "C(cm) Palet", "CcmPalet" },
-            { "L(cm) Palet", "LcmPalet" },
-            { "H(cm) Palet", "HcmPalet" },
-            { "Peso Líquido (Palet)", "PesoLiquidoPalet" },
-            { "Peso Bruto (Palet)", "PesoBrutoPalet" },
-            { "Caixas por Lastro", "CxsPorLastro" },
-            { "Empilhamento (Cxs)", "EmpCxs" },
-            { "Caixas por Palet", "CxsPorPalet" },
-            { "Data de Atualização", "UpdateAt" },
-            { "Data de Criação", "CreateAt" }};
+            {
+                { "Código", nameof(Produtos.Codigo) },
+                { "Descrição", nameof(Produtos.Descricao) },
+                { "NCM", nameof(Produtos.Ncm) },
+                { "IPI", nameof(Produtos.Ipi) },
+                { "PIS", nameof(Produtos.Pis) },
+                { "COFINS", nameof(Produtos.Cofins) },
+                { "Shelf Life", nameof(Produtos.ShelfLife) },
+                { "EAN-13", nameof(Produtos.UCodigoBarras) },
+                { "C(cm) Unit", nameof(Produtos.UC) },
+                { "L(cm) Unit", nameof(Produtos.UL) },
+                { "D(cm) Unit", nameof(Produtos.UD) },
+                { "H(cm) Unit", nameof(Produtos.UH) },
+                { "Peso Líquido (Unit)", nameof(Produtos.UPesoLiquido) },
+                { "Peso Bruto (Unit)", nameof(Produtos.UPesoBruto) },
+                { "DUN-13", nameof(Produtos.DCodigoBarras) },
+                { "Qtd/Unidade", nameof(Produtos.DQtd) },
+                { "C(cm) Caixa", nameof(Produtos.DC) },
+                { "L(cm) Caixa", nameof(Produtos.DL) },
+                { "H(cm) Caixa", nameof(Produtos.DH) },
+                { "Peso Líquido (Caixa)", nameof(Produtos.DPesoLiquido) },
+                { "Peso Bruto (Caixa)", nameof(Produtos.DPesoBruto) },
+                { "DUN-14", nameof(Produtos.CCodigoBarras) },
+                { "Qtd/Caixa", nameof(Produtos.CQtd) },
+                { "C(cm) Palet", nameof(Produtos.CC) },
+                { "L(cm) Palet", nameof(Produtos.CL) },
+                { "H(cm) Palet", nameof(Produtos.CH) },
+                { "Peso Líquido (Palet)", nameof(Produtos.CPesoLiquido) },
+                { "Peso Bruto (Palet)", nameof(Produtos.CPesoBruto) },
+                { "Caixas por Lastro", nameof(Produtos.PCxLastro) },
+                { "Empilhamento (Cxs)", nameof(Produtos.PEmpCx) },
+                { "Caixas por Palet", nameof(Produtos.PCxPalete) },
+                { "Data de Atualização", nameof(Produtos.UpdateAt) },
+                { "Data de Criação", nameof(Produtos.CreateAt) }
+            };
+
         }
 
         public void GetAllProduct(ref ListView listView)
@@ -72,6 +75,11 @@ namespace MapaEstoqueCD.Controller
 
         public void GetProductByFilter(List<FiltroItem> filtros, ref ListView listView)
         {
+            if (filtros == null || !filtros.Any())
+            {
+                GetAllProduct(ref listView);
+                return;
+            }
             listView.Items.Clear();
             var produtos = _produtoService.GetProdutosByFilter(filtros);
             
@@ -87,5 +95,13 @@ namespace MapaEstoqueCD.Controller
             }
             listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
         }
+
+        public Produtos GetByCod(string id) => _produtoService.ObterPorCod(id);
+
+        public void AddProduct(Produtos p) => _produtoService.Adicionar(p);
+
+        public void UpdateProduct(Produtos p) => _produtoService.Atualizar(p);
+
+
     }
 }

@@ -7,18 +7,13 @@ namespace MapaEstoqueCD
     public partial class MainWindow : Form
     {
         public CacheMP Cache { get; private set; }
-
+        public static MainWindow Instance { get; private set; }
         public MainWindow()
         {
+            Instance = this;
             Cache = CacheMP.Instance;
             InitializeComponent();
             ChekcedLogin();
-
-
-
-
-
-
         }
 
 

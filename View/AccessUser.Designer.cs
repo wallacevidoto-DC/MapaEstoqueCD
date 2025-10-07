@@ -88,7 +88,7 @@
             button1.Location = new Point(261, 488);
             button1.Name = "button1";
             button1.Size = new Size(195, 79);
-            button1.TabIndex = 2;
+            button1.TabIndex = 1;
             button1.Text = "Sair";
             button1.UseVisualStyleBackColor = false;
             button1.Click += button1_Click;
@@ -104,7 +104,7 @@
             button_accept.Location = new Point(9, 488);
             button_accept.Name = "button_accept";
             button_accept.Size = new Size(195, 79);
-            button_accept.TabIndex = 2;
+            button_accept.TabIndex = 0;
             button_accept.Text = "Entrar";
             button_accept.UseVisualStyleBackColor = false;
             button_accept.Click += button_accept_Click;

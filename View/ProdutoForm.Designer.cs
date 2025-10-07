@@ -28,7 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             toolStrip1 = new ToolStrip();
+            toolStripButton_filtrar = new ToolStripButton();
+            toolStripSeparator5 = new ToolStripSeparator();
             toolStripButton_cadastrar = new ToolStripButton();
             toolStripSeparator1 = new ToolStripSeparator();
             toolStripButton_remoto = new ToolStripDropDownButton();
@@ -42,12 +45,12 @@
             panel1 = new Panel();
             panel3 = new Panel();
             listView1 = new ListView();
-            panel2 = new Panel();
-            button1 = new Button();
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            editarToolStripMenuItem = new ToolStripMenuItem();
             toolStrip1.SuspendLayout();
             panel1.SuspendLayout();
             panel3.SuspendLayout();
-            panel2.SuspendLayout();
+            contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // toolStrip1
@@ -56,13 +59,32 @@
             toolStrip1.Dock = DockStyle.Right;
             toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
             toolStrip1.ImageScalingSize = new Size(60, 60);
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton_cadastrar, toolStripSeparator1, toolStripButton_remoto, toolStripSeparator3, toolStripButton_importar, toolStripSeparator2, toolStripButton_exportar, toolStripSeparator4 });
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton_filtrar, toolStripSeparator5, toolStripButton_cadastrar, toolStripSeparator1, toolStripButton_remoto, toolStripSeparator3, toolStripButton_importar, toolStripSeparator2, toolStripButton_exportar, toolStripSeparator4 });
             toolStrip1.Location = new Point(901, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.RenderMode = ToolStripRenderMode.System;
             toolStrip1.Size = new Size(101, 633);
             toolStrip1.TabIndex = 1;
             toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripButton_filtrar
+            // 
+            toolStripButton_filtrar.AutoSize = false;
+            toolStripButton_filtrar.Image = Properties.Resources.filtro;
+            toolStripButton_filtrar.ImageTransparentColor = Color.Magenta;
+            toolStripButton_filtrar.Name = "toolStripButton_filtrar";
+            toolStripButton_filtrar.RightToLeft = RightToLeft.Yes;
+            toolStripButton_filtrar.Size = new Size(100, 100);
+            toolStripButton_filtrar.Text = "Filtrar";
+            toolStripButton_filtrar.TextAlign = ContentAlignment.BottomCenter;
+            toolStripButton_filtrar.TextImageRelation = TextImageRelation.Overlay;
+            toolStripButton_filtrar.ToolTipText = "Filtrar Produtos";
+            toolStripButton_filtrar.Click += btnFiltroAvancado_Click;
+            // 
+            // toolStripSeparator5
+            // 
+            toolStripSeparator5.Name = "toolStripSeparator5";
+            toolStripSeparator5.Size = new Size(98, 6);
             // 
             // toolStripButton_cadastrar
             // 
@@ -76,6 +98,7 @@
             toolStripButton_cadastrar.TextAlign = ContentAlignment.BottomCenter;
             toolStripButton_cadastrar.TextImageRelation = TextImageRelation.Overlay;
             toolStripButton_cadastrar.ToolTipText = "Cadastrar Novo Produto";
+            toolStripButton_cadastrar.Click += toolStripButton_cadastrar_Click;
             // 
             // toolStripSeparator1
             // 
@@ -94,7 +117,7 @@
             toolStripButton_remoto.Text = "Relatórios";
             toolStripButton_remoto.TextAlign = ContentAlignment.BottomCenter;
             toolStripButton_remoto.TextImageRelation = TextImageRelation.Overlay;
-            toolStripButton_remoto.ToolTipText = "Remoto";
+            toolStripButton_remoto.ToolTipText = "Relátorios";
             // 
             // pDFToolStripMenuItem
             // 
@@ -127,6 +150,7 @@
             toolStripButton_importar.TextAlign = ContentAlignment.BottomCenter;
             toolStripButton_importar.TextImageRelation = TextImageRelation.Overlay;
             toolStripButton_importar.ToolTipText = "Importar";
+            toolStripButton_importar.Click += toolStripButton_importar_Click;
             // 
             // toolStripSeparator2
             // 
@@ -145,6 +169,7 @@
             toolStripButton_exportar.TextAlign = ContentAlignment.BottomCenter;
             toolStripButton_exportar.TextImageRelation = TextImageRelation.Overlay;
             toolStripButton_exportar.ToolTipText = "Exportar";
+            toolStripButton_exportar.Click += toolStripButton_exportar_Click;
             // 
             // toolStripSeparator4
             // 
@@ -154,7 +179,6 @@
             // panel1
             // 
             panel1.Controls.Add(panel3);
-            panel1.Controls.Add(panel2);
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(0, 0);
             panel1.Name = "panel1";
@@ -165,38 +189,34 @@
             // 
             panel3.Controls.Add(listView1);
             panel3.Dock = DockStyle.Fill;
-            panel3.Location = new Point(0, 100);
+            panel3.Location = new Point(0, 0);
             panel3.Name = "panel3";
-            panel3.Size = new Size(901, 533);
+            panel3.Size = new Size(901, 633);
             panel3.TabIndex = 1;
             // 
             // listView1
             // 
+            listView1.ContextMenuStrip = contextMenuStrip1;
             listView1.Dock = DockStyle.Fill;
             listView1.Location = new Point(0, 0);
             listView1.Name = "listView1";
-            listView1.Size = new Size(901, 533);
+            listView1.Size = new Size(901, 633);
             listView1.TabIndex = 0;
             listView1.UseCompatibleStateImageBehavior = false;
             // 
-            // panel2
+            // contextMenuStrip1
             // 
-            panel2.Controls.Add(button1);
-            panel2.Dock = DockStyle.Top;
-            panel2.Location = new Point(0, 0);
-            panel2.Name = "panel2";
-            panel2.Size = new Size(901, 100);
-            panel2.TabIndex = 0;
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { editarToolStripMenuItem });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(105, 26);
             // 
-            // button1
+            // editarToolStripMenuItem
             // 
-            button1.Location = new Point(196, 24);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 23);
-            button1.TabIndex = 0;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += btnFiltroAvancado_Click;
+            editarToolStripMenuItem.Image = Properties.Resources.editar_codigo;
+            editarToolStripMenuItem.Name = "editarToolStripMenuItem";
+            editarToolStripMenuItem.Size = new Size(104, 22);
+            editarToolStripMenuItem.Text = "Editar";
+            editarToolStripMenuItem.Click += editarToolStripMenuItem_Click;
             // 
             // ProdutoForm
             // 
@@ -212,7 +232,7 @@
             toolStrip1.PerformLayout();
             panel1.ResumeLayout(false);
             panel3.ResumeLayout(false);
-            panel2.ResumeLayout(false);
+            contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -235,5 +255,9 @@
         private ListView listView1;
         private Panel panel2;
         private Button button1;
+        private ToolStripButton toolStripButton_filtrar;
+        private ToolStripSeparator toolStripSeparator5;
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem editarToolStripMenuItem;
     }
 }

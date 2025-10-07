@@ -217,7 +217,6 @@
 
         private ToolStrip toolStrip1;
         private ToolStripButton toolStripButton_movimentacao;
-        private StatusStrip statusStrip1;
         private ToolStripSeparator toolStripSeparator1;
         private Panel paneL_center;
         private ToolStripButton toolStripButton_estoque;
@@ -230,5 +229,6 @@
         private ToolStripSeparator toolStripSeparator4;
         private ToolStripSeparator toolStripSeparator5;
         private ToolStripStatusLabel toolStripStatusLabel_infoUser;
+        public StatusStrip statusStrip1;
     }
 }

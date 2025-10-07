@@ -1,120 +1,91 @@
-﻿//using ClosedXML.Excel;
-//using MapaEstoqueCD.Database.Models;
-//using System.Collections.Generic;
-//using System.IO;
-//using System.Linq;
+﻿using ClosedXML.Excel;
+using MapaEstoqueCD.Database;
+using MapaEstoqueCD.Database.Models;
+using MapaEstoqueCD.Utils;
+using System.Globalization;
+using System.Windows.Forms;
 
-//namespace MapaEstoqueCD.Services
-//{
-//    public class ExcelReader
-//    {
-//        public static List<Produtos> GetDataSourceFromExcel(string filePath)
-//        {
-//            var produtos = new List<Produtos>();
-
-//            if (!File.Exists(filePath))
-//            {
-//                throw new FileNotFoundException($"O arquivo não foi encontrado: {filePath}");
-//            }
-
-//            // --- Função Auxiliar para Leitura Segura de Strings (Evita InvalidCastException) ---
-//            string GetCellValueSafe(IXLRow row, int colIndex)
-//            {
-//                var cell = row.Cell(colIndex);
-//                if (cell.IsEmpty())
-//                {
-//                    return string.Empty;
-//                }
-//                // Retorna o valor formatado (texto)
-//                return cell.GetString();
-//            }
-//            // ----------------------------------------------------------------------------------
-
-//            using (var workbook = new XLWorkbook(filePath))
-//            {
-//                var worksheet = workbook.Worksheets.FirstOrDefault();
-//                if (worksheet == null) return produtos;
-
-//                // A leitura começa na Linha 3 (Rótulo 1 e 2 são cabeçalhos)
-//                int startRow = 3;
-
-//                // Itera apenas pelas linhas que contêm dados
-//                foreach (var row in worksheet.RowsUsed().Where(r => r.RowNumber() >= startRow))
-//                {
-//                    var produto = new Produtos();
-
-//                    try
-//                    {
-//                        // Colunas de DADOS PRINCIPAIS (Texto)
-//                        produto.Cod = GetCellValueSafe(row, 1);    // Coluna A: COD
-//                        produto.Descricao = GetCellValueSafe(row, 2); // Coluna B: DESCRIÇÃO
-
-//                        // Coluna C: IMAGEM (Nula no ClosedXML)
-//                        //produto.ImagemProduto = null;
-
-//                        produto.Produto = null;
-//                            var x = GetCellValueSafe(row, 3); // Coluna D: PRODUTO (Texto)
-
-//                        // Colunas de IMPOSTOS / INFORMAÇÕES GERAIS
-//                        produto.Ncm = GetCellValueSafe(row, 5);          // Coluna E: NCM
-//                        produto.Ipi = row.Cell(6).GetValue<double?>() ?? 0.0;     // Coluna F: IPI
-//                        produto.Pis = row.Cell(7).GetValue<double?>() ?? 0.0;     // Coluna G: PIS
-//                        produto.Cofins = row.Cell(8).GetValue<double?>() ?? 0.0;  // Coluna H: COFINS
-//                        produto.ShelfLife = GetCellValueSafe(row, 9);    // Coluna I: SHELF LIFE
-
-//                        // --- UNIDADE (Unit) --- (Colunas J a R)
-//                        produto.CodigoBarrasEan13 = GetCellValueSafe(row, 10); // Coluna J
-//                        produto.CcmUnit = row.Cell(11).GetValue<double?>() ?? 0.0; // Coluna K (C)
-//                        produto.LcmUnit = row.Cell(12).GetValue<double?>() ?? 0.0; // Coluna L (L)
-//                        produto.DcmUnit = row.Cell(13).GetValue<double?>() ?? 0.0; // Coluna M (D)
-//                        produto.HcmUnit = row.Cell(14).GetValue<double?>() ?? 0.0; // Coluna N (H)
-//                        produto.PesoLiquidoUnit = row.Cell(15).GetValue<double?>() ?? 0.0; // Coluna O
-//                        produto.PesoBrutoUnit = row.Cell(16).GetValue<double?>() ?? 0.0;   // Coluna P
-//                        produto.CodigoBarrasDun13 = GetCellValueSafe(row, 17);  // Coluna Q
-//                        produto.QtdUnit = row.Cell(18).GetValue<int?>() ?? 0;   // Coluna R (QTD)
-
-//                        // --- CAIXA (Caixa) --- (Colunas S a Z)
-//                        produto.CcmCaixa = row.Cell(19).GetValue<double?>() ?? 0.0;     // Coluna S (C)
-//                        produto.LcmCaixa = row.Cell(20).GetValue<double?>() ?? 0.0;     // Coluna T (L)
-//                        produto.HcmCaixa = row.Cell(21).GetValue<double?>() ?? 0.0;     // Coluna U (H)
-//                        produto.PesoLiquidoCaixa = row.Cell(22).GetValue<double?>() ?? 0.0; // Coluna V
-//                        produto.PesoBrutoCaixa = row.Cell(23).GetValue<double?>() ?? 0.0;   // Coluna W
-//                        produto.CodigoBarrasDun14 = GetCellValueSafe(row, 24);  // Coluna X
-//                        produto.QtdCaixa = row.Cell(25).GetValue<int?>() ?? 0;  // Coluna Y (QTD)
-
-//                        // --- PALET (Pallet) --- (Colunas AA a AE)
-//                        produto.CcmPalet = row.Cell(27).GetValue<double?>() ?? 0.0;     // Coluna AA (27) (C)
-//                        produto.LcmPalet = row.Cell(28).GetValue<double?>() ?? 0.0;     // Coluna AB (28) (L)
-//                        produto.HcmPalet = row.Cell(29).GetValue<double?>() ?? 0.0;     // Coluna AC (29) (H)
-//                        produto.PesoLiquidoPalet = row.Cell(30).GetValue<double?>() ?? 0.0; // Coluna AD (30)
-//                        produto.PesoBrutoPalet = row.Cell(31).GetValue<double?>() ?? 0.0;   // Coluna AE (31)
-
-//                        // --- Cxs / Pallet (Colunas AF, AG, AH)
-//                        produto.CxsPorLastro = row.Cell(32).GetValue<int?>() ?? 0; // Coluna AF (Cxs/Lastro)
-//                        produto.EmpCxs = row.Cell(33).GetValue<int?>() ?? 0;       // Coluna AG (Emp/Cxs)
-//                        produto.CxsPorPalet = row.Cell(34).GetValue<int?>() ?? 0;  // Coluna AH (Cxs/Palet)
-
-//                        // Nota sobre Colunas Vazias: A planilha tem uma coluna vazia (Z), 
-//                        // pulando do índice 25 (Y) para o 27 (AA). O ClosedXML não se importa com colunas
-//                        // vazias, mas a numeração é sequencial.
-//                        // (26 é a coluna Z, que parece estar vazia na imagem)
-
-//                        produtos.Add(produto);
-//                    }
-//                    catch (Exception ex)
-//                    {
-//                        // Em caso de erro na conversão de um valor (ex: texto em campo double), 
-//                        // ele logará e pulará a linha.
-//                        Console.WriteLine($"Erro ao ler a Linha {row.RowNumber()} do Excel: {ex.Message}");
-//                        // Você pode adicionar um 'continue;' aqui se quiser que a leitura siga.
-//                    }
-//                }
-//            }
-
-//            return produtos;
-//        }
-//    }
-//}
+public class ExcelImporter
+{
+    public static async void ImportarProdutos(string caminhoExcel)
+    {
+        using var workbook = new XLWorkbook(caminhoExcel);
+        var worksheet = workbook.Worksheet(1);
+        int totalRows = worksheet.LastRowUsed().RowNumber() - 1;
 
 
-   
+        await ProgressHelper.RunWithProgressAsync(totalRows, async progress =>
+        {
+            using var db = new AppDbContext();
+
+            for (int row = 2; row <= worksheet.LastRowUsed().RowNumber(); row++)
+            {
+                var produto = new Produtos
+                {
+                    Codigo = worksheet.Cell(row, 1).GetValue<string>().Trim(),
+                    Descricao = worksheet.Cell(row, 2).GetValue<string>().Trim(),
+                    Ncm = worksheet.Cell(row, 4).GetValue<string>().Trim(),
+                    Ipi = ParsePercentual(worksheet.Cell(row, 5).GetValue<string>()),
+                    Pis = ParsePercentual(worksheet.Cell(row, 6).GetValue<string>()),
+                    Cofins = ParsePercentual(worksheet.Cell(row, 7).GetValue<string>()),
+                    ShelfLife = worksheet.Cell(row, 8).GetValue<string>().Trim(),
+
+                    UCodigoBarras = worksheet.Cell(row, 9).GetValue<string>().Trim(),
+                    UC = ParseDouble(worksheet.Cell(row, 10).GetValue<string>()),
+                    UL = ParseDouble(worksheet.Cell(row, 11).GetValue<string>()),
+                    UD = ParseDouble(worksheet.Cell(row, 12).GetValue<string>()),
+                    UH = ParseDouble(worksheet.Cell(row, 13).GetValue<string>()),
+                    UPesoLiquido = ParseDouble(worksheet.Cell(row, 14).GetValue<string>()),
+                    UPesoBruto = ParseDouble(worksheet.Cell(row, 15).GetValue<string>()),
+
+                    DCodigoBarras = worksheet.Cell(row, 16).GetValue<string>().Trim(),
+                    DQtd = ParseInt(worksheet.Cell(row, 17).GetValue<string>()),
+                    DC = ParseDouble(worksheet.Cell(row, 18).GetValue<string>()),
+                    DL = ParseDouble(worksheet.Cell(row, 19).GetValue<string>()),
+                    DH = ParseDouble(worksheet.Cell(row, 20).GetValue<string>()),
+                    DPesoLiquido = ParseDouble(worksheet.Cell(row, 21).GetValue<string>()),
+                    DPesoBruto = ParseDouble(worksheet.Cell(row, 22).GetValue<string>()),
+
+                    CCodigoBarras = worksheet.Cell(row, 23).GetValue<string>().Trim(),
+                    CQtd = ParseInt(worksheet.Cell(row, 24).GetValue<string>()),
+                    CC = ParseDouble(worksheet.Cell(row, 25).GetValue<string>()),
+                    CL = ParseDouble(worksheet.Cell(row, 26).GetValue<string>()),
+                    CH = ParseDouble(worksheet.Cell(row, 27).GetValue<string>()),
+                    CPesoLiquido = ParseDouble(worksheet.Cell(row, 28).GetValue<string>()),
+                    CPesoBruto = ParseDouble(worksheet.Cell(row, 29).GetValue<string>()),
+
+                    PCxLastro = ParseInt(worksheet.Cell(row, 30).GetValue<string>()),
+                    PEmpCx = ParseInt(worksheet.Cell(row, 31).GetValue<string>()),
+                    PCxPalete = ParseInt(worksheet.Cell(row, 32).GetValue<string>())
+                };
+
+                db.Produtos.Add(produto);
+                progress.Report(row - 1);
+            }
+
+            db.SaveChanges();
+        });
+        
+    }
+
+    private static int? ParseInt(string valor)
+        => int.TryParse(valor, out int result) ? result : (int?)null;
+
+    private static double? ParseDouble(string valor)
+    {
+        if (double.TryParse(valor, NumberStyles.Any, new CultureInfo("pt-BR"), out double result))
+            return result;
+        if (double.TryParse(valor, NumberStyles.Any, CultureInfo.InvariantCulture, out result))
+            return result;
+        return null;
+    }
+
+
+    private static decimal? ParsePercentual(string valor)
+    {
+        if (decimal.TryParse(valor, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal result))
+            return result / 100m; // divide por 100 para transformar em fração
+        return null;
+    }
+}
+

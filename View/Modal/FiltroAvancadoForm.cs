@@ -16,27 +16,41 @@ namespace MapaEstoqueCD.View.Modal
         private readonly Dictionary<string, string> _colunasFiltro;
         private readonly List<FiltroLinha> _linhas = new();
 
+
         public FiltroAvancadoForm(Dictionary<string, string> colunasFiltro, List<FiltroItem>? filtrosExistentes = null)
         {
             InitializeComponent();
             _colunasFiltro = colunasFiltro;
+
+            // Primeiro cria o layout e o painel de filtros
             MontarLayout();
 
-            if (filtrosExistentes != null && filtrosExistentes.Any())
+            // Adiciona os filtros SOMENTE depois que o formulário estiver carregado
+            Load += (s, e) =>
             {
-                foreach (var f in filtrosExistentes)
-                    AdicionarLinha(f.Coluna, f.Valor, f.Tipo);
-            }
-            else
-            {
-                AdicionarLinha();
-            }
+                _panelFiltros.SuspendLayout();
+
+                if (filtrosExistentes != null && filtrosExistentes.Any())
+                {
+                    foreach (var f in filtrosExistentes)
+                        AdicionarLinha(f.Coluna, f.Valor, f.Tipo, f.Tabela);
+                }
+                else
+                {
+                    AdicionarLinha();
+                }
+
+                _panelFiltros.ResumeLayout();
+                _panelFiltros.PerformLayout();
+                _panelFiltros.Refresh();
+                
+            };
         }
 
         private void MontarLayout()
         {
             Text = "Filtro Avançado";
-            Size = new Size(520, 430);
+            Size = new Size(520, 470);
             StartPosition = FormStartPosition.CenterParent;
             FormBorderStyle = FormBorderStyle.FixedDialog;
             MaximizeBox = false;
@@ -62,7 +76,7 @@ namespace MapaEstoqueCD.View.Modal
 
             _panelFiltros = new FlowLayoutPanel
             {
-                Dock = DockStyle.Fill,
+                Dock = DockStyle.Top,
                 AutoSize = true,
                 FlowDirection = FlowDirection.TopDown,
                 WrapContents = false
@@ -111,9 +125,9 @@ namespace MapaEstoqueCD.View.Modal
 
         private FlowLayoutPanel _panelFiltros;
 
-        private void AdicionarLinha(string? coluna = null, string valor = "", string tipo = "contém")
+        private void AdicionarLinha(string? coluna = null, string valor = "",  string tipo = "contém", string tabela = "")
         {
-            var linha = new FiltroLinha(_colunasFiltro, coluna, valor, tipo);
+            var linha = new FiltroLinha(_colunasFiltro, coluna, valor, tipo,tabela);
             linha.OnRemover += () =>
             {
                 _panelFiltros.Controls.Remove(linha.Container);
@@ -122,6 +136,11 @@ namespace MapaEstoqueCD.View.Modal
 
             _panelFiltros.Controls.Add(linha.Container);
             _linhas.Add(linha);
+
+            _panelFiltros.ResumeLayout();
+            _panelFiltros.PerformLayout();
+            _panelFiltros.Refresh();
+            linha.Container.BringToFront();
         }
 
         private void Aplicar()
@@ -147,7 +166,7 @@ namespace MapaEstoqueCD.View.Modal
         private readonly Dictionary<string, string> _colunas;
         
 
-        public FiltroLinha(Dictionary<string, string> colunas, string? coluna = null, string valor = "", string tipo = "contém")
+        public FiltroLinha(Dictionary<string, string> colunas, string? coluna = null, string valor = "", string tabela = "", string tipo = "contém")
         {
             _colunas = colunas;
 
