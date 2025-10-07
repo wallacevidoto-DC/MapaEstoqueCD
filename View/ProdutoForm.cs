@@ -1,5 +1,8 @@
 ﻿using MapaEstoqueCD.Controller;
+using MapaEstoqueCD.Database.Models;
+using MapaEstoqueCD.Services;
 using MapaEstoqueCD.Utils;
+using MapaEstoqueCD.Utils.Print;
 using MapaEstoqueCD.View.Modal;
 using System.Windows.Forms;
 
@@ -9,11 +12,12 @@ namespace MapaEstoqueCD.View
     {
         private readonly ProdutosController produtosController = new();
         private List<FiltroItem> filtrosAtivos = new();
+        private List<Produtos> produtosCurrent;
         public ProdutoForm()
         {
             InitializeComponent();
             Grids.SetDefaultListViews(produtosController.Columns, ref listView1);
-            produtosController.GetAllProduct(ref listView1);
+            produtosCurrent = produtosController.GetAllProduct(ref listView1);
 
             if (!ControlAccess.IsSupers())
             {
@@ -91,6 +95,55 @@ namespace MapaEstoqueCD.View
         private void toolStripButton_exportar_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void pDFToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //var printDoc = new ProdutosPrintDocument(produtosCurrent);
+
+            //var preview = new PrintPreviewForm(printDoc);
+            //preview.ShowDialog();
+
+            IPrint print = new ProdutosPrintDocument(produtosCurrent);
+            print.ShowPrintPreview();
+
+
+            //var printDoc = new ProdutosPrintDocument(produtosCurrent.Select(p => new Produtos
+            //{
+            //    Codigo = p.Codigo,
+            //    Descricao = p.Descricao,
+            //    Ncm = p.Ncm,
+            //    Ipi = p.Ipi,
+            //    Pis = p.Pis,
+            //    Cofins = p.Cofins,
+            //    ShelfLife = p.ShelfLife,
+            //    UCodigoBarras = p.UCodigoBarras,
+            //    UC = p.UC,
+            //    UL = p.UL,
+            //    UD = p.UD,
+            //    UH = p.UH,
+            //    UPesoLiquido = p.UPesoLiquido,
+            //    UPesoBruto = p.UPesoBruto,
+            //    DCodigoBarras = p.DCodigoBarras,
+            //    DQtd = p.DQtd,
+            //    DC = p.DC,
+            //    DL = p.DL,
+            //    DH = p.DH,
+            //    DPesoLiquido = p.DPesoLiquido,
+            //    DPesoBruto = p.DPesoBruto,
+            //    CCodigoBarras = p.CCodigoBarras,
+            //    CQtd = p.CQtd,
+            //    CC = p.CC,
+            //    CL = p.CL,
+            //    CH = p.CH,
+            //    CPesoLiquido = p.CPesoLiquido,
+            //    CPesoBruto = p.CPesoBruto,
+            //    PCxLastro = p.PCxLastro,
+            //    PEmpCx = p.PEmpCx,
+            //    PCxPalete = p.PCxPalete,
+            //    UpdateAt = p.UpdateAt,
+            //    CreateAt = p.CreateAt
+            //}).ToList());
         }
     }
 }

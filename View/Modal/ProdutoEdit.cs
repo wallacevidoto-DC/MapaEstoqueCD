@@ -66,17 +66,18 @@ namespace MapaEstoqueCD.View.Modal
                 textBox_empcx.Text = produtoAtual.PEmpCx.ToString();
                 textBox_pcxp.Text = produtoAtual.PCxPalete.ToString();
 
-                // carrega imagem se existir
-                if (produtoAtual.Produto != null && produtoAtual.Produto.Length > 0)
+                
+                if (produtoAtual.Produto != null)
                 {
-                    using (MemoryStream ms = new MemoryStream(produtoAtual.Produto))
+                    Image img = produtosController.CarregarImagemProduto(produtoAtual.Produto);
+                    if(img != null)
                     {
-                        pictureBox_imagem.Image = Image.FromStream(ms);
+                        pictureBox_imagem.Image = img;
                     }
                 }
                 else
                 {
-                    pictureBox_imagem.Image = Properties.Resources.sem_imagens;
+                    pictureBox_imagem.Image = Properties.Resources.sem_imagens__1_;
                 }
             }
         }
@@ -169,18 +170,7 @@ namespace MapaEstoqueCD.View.Modal
             }
 
             try
-            {
-                byte[]? imagemBytes = null;
-                if (imagemAtual != null)
-                {
-
-                    using (MemoryStream ms = new MemoryStream())
-                    {
-
-                        imagemAtual.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                        imagemBytes = ms.ToArray();
-                    }                   
-                }                
+            {             
 
                 Produtos produto = new Produtos
                 {
@@ -223,7 +213,7 @@ namespace MapaEstoqueCD.View.Modal
                     PEmpCx = int.TryParse(textBox_empcx.Text, out int empCxs) ? empCxs : (int?)null,
                     PCxPalete = int.TryParse(textBox_pcxp.Text, out int cxsPalet) ? cxsPalet : (int?)null,
 
-                    Produto = imagemBytes // já será null se não houver imagem
+                    
                 };
 
                 //produtoAtual = produto;
@@ -231,13 +221,14 @@ namespace MapaEstoqueCD.View.Modal
                 if (isEditMode)
                 {
                     produto.ProdutoId = produtoAtual!.ProdutoId;
-                    produtosController.UpdateProduct(produto);
+                    produtosController.UpdateProduct(produto, imagemAtual);
                 }
                 else
                 {
-                    produtosController.AddProduct(produto);
+                    produtosController.AddProduct(produto, imagemAtual);
                 }
 
+                this.Close();
             }
             catch (Exception ex)
             {

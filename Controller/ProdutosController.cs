@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MapaEstoqueCD.Controller
 {
@@ -54,7 +55,7 @@ namespace MapaEstoqueCD.Controller
 
         }
 
-        public void GetAllProduct(ref ListView listView)
+        public List<Produtos> GetAllProduct(ref ListView listView)
         {
             listView.Items.Clear();
             List<Produtos> produtos = CacheMP.Instance.Db.Produtos.ToList();
@@ -71,18 +72,18 @@ namespace MapaEstoqueCD.Controller
                 listView.Items.Add(new ListViewItem(valores));
             }
             listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            return produtos;
         }
 
-        public void GetProductByFilter(List<FiltroItem> filtros, ref ListView listView)
+        public List<Produtos> GetProductByFilter(List<FiltroItem> filtros, ref ListView listView)
         {
             if (filtros == null || !filtros.Any())
             {
-                GetAllProduct(ref listView);
-                return;
+                return GetAllProduct(ref listView);                
             }
             listView.Items.Clear();
             var produtos = _produtoService.GetProdutosByFilter(filtros);
-            
+
             foreach (var p in produtos.ToList())
             {
                 var valores = Columns.Values.Select(propName =>
@@ -94,13 +95,72 @@ namespace MapaEstoqueCD.Controller
                 listView.Items.Add(new ListViewItem(valores));
             }
             listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+            return produtos;
         }
 
         public Produtos GetByCod(string id) => _produtoService.ObterPorCod(id);
 
-        public void AddProduct(Produtos p) => _produtoService.Adicionar(p);
+        public void AddProduct(Produtos p, Image img)
+        {
+            p.Produto = img != null ? SalvarImagemLocal(img, p.Codigo) : null;
+            _produtoService.Adicionar(p);
+            MessageBox.Show("Produto adiciondo com sucesso!");
+        }
 
-        public void UpdateProduct(Produtos p) => _produtoService.Atualizar(p);
+        public void UpdateProduct(Produtos p, Image img)
+        {
+
+
+
+            p.Produto = img != null ? SalvarImagemLocal(img, p.Codigo) : null;
+            _produtoService.Atualizar(p);
+
+            MessageBox.Show("Produto atualizado com sucesso!");
+
+        }
+        private static string SalvarImagemLocal(Image imagem, string nomeArquivo)
+        {
+            try
+            {
+                string pasta = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "imagens", "produtos");
+
+                if (!Directory.Exists(pasta))
+                    Directory.CreateDirectory(pasta);
+
+                if (!nomeArquivo.EndsWith(".jpg", StringComparison.OrdinalIgnoreCase))
+                    nomeArquivo += ".jpg";
+
+                string caminhoCompleto = Path.Combine(pasta, nomeArquivo);
+
+                imagem.Save(caminhoCompleto, System.Drawing.Imaging.ImageFormat.Jpeg);
+
+                return Path.Combine("imagens", "produtos", nomeArquivo);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Erro ao salvar imagem: {ex.Message}");
+            }
+        }
+
+        public Image CarregarImagemProduto(string url)
+        {
+            try
+            {
+                if (File.Exists(url))
+                {
+                    return Image.FromFile(url);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+        }
+
 
 
     }

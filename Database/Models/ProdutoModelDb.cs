@@ -22,7 +22,7 @@ namespace MapaEstoqueCD.Database.Models
         public string? Descricao { get; set; }
 
         [Column("produto")]
-        public byte[]? Produto { get; set; }
+        public string? Produto { get; set; }
 
         [Column("ncm")]
         public string? Ncm { get; set; }
