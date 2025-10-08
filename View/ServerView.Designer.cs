@@ -1,6 +1,6 @@
 ﻿namespace MapaEstoqueCD.View
 {
-    partial class Administrador
+    partial class ServerView
     {
         /// <summary>
         /// Required designer variable.
@@ -28,14 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
             toolStrip1 = new ToolStrip();
             toolStripButton_cadastrar = new ToolStripButton();
-            listView1 = new ListView();
-            contextMenuStrip1 = new ContextMenuStrip(components);
-            editarToolStripMenuItem = new ToolStripMenuItem();
+            toolStripSeparator1 = new ToolStripSeparator();
+            listBoxLogs = new ListBox();
             toolStrip1.SuspendLayout();
-            contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // toolStrip1
@@ -44,64 +41,58 @@
             toolStrip1.Dock = DockStyle.Right;
             toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
             toolStrip1.ImageScalingSize = new Size(60, 60);
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton_cadastrar });
-            toolStrip1.Location = new Point(1228, 0);
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton_cadastrar, toolStripSeparator1 });
+            toolStrip1.Location = new Point(1395, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.RenderMode = ToolStripRenderMode.System;
-            toolStrip1.Size = new Size(101, 698);
-            toolStrip1.TabIndex = 2;
+            toolStrip1.Size = new Size(101, 727);
+            toolStrip1.TabIndex = 3;
             toolStrip1.Text = "toolStrip1";
             // 
             // toolStripButton_cadastrar
             // 
             toolStripButton_cadastrar.AutoSize = false;
-            toolStripButton_cadastrar.Image = Properties.Resources.adicionar_usuario;
+            toolStripButton_cadastrar.Image = Properties.Resources.verificacao_de_codigo_qr;
             toolStripButton_cadastrar.ImageTransparentColor = Color.Magenta;
             toolStripButton_cadastrar.Name = "toolStripButton_cadastrar";
             toolStripButton_cadastrar.RightToLeft = RightToLeft.Yes;
             toolStripButton_cadastrar.Size = new Size(100, 100);
-            toolStripButton_cadastrar.Text = "Cadastrar";
+            toolStripButton_cadastrar.Text = "Acessar";
             toolStripButton_cadastrar.TextAlign = ContentAlignment.BottomCenter;
             toolStripButton_cadastrar.TextImageRelation = TextImageRelation.Overlay;
-            toolStripButton_cadastrar.ToolTipText = "Cadastrar Novo Produto";
-            toolStripButton_cadastrar.Click += toolStripButton_cadastrar_Click;
+            toolStripButton_cadastrar.ToolTipText = "Qr code para acessar o sistema";
             // 
-            // listView1
+            // toolStripSeparator1
             // 
-            listView1.ContextMenuStrip = contextMenuStrip1;
-            listView1.Dock = DockStyle.Fill;
-            listView1.Location = new Point(0, 0);
-            listView1.Name = "listView1";
-            listView1.Size = new Size(1228, 698);
-            listView1.TabIndex = 3;
-            listView1.UseCompatibleStateImageBehavior = false;
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(98, 6);
             // 
-            // contextMenuStrip1
+            // listBoxLogs
             // 
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { editarToolStripMenuItem });
-            contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 48);
+            listBoxLogs.BackColor = Color.FromArgb(20, 20, 20);
+            listBoxLogs.Dock = DockStyle.Fill;
+            listBoxLogs.DrawMode = DrawMode.OwnerDrawFixed;
+            listBoxLogs.Font = new Font("Consolas", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            listBoxLogs.ForeColor = Color.White;
+            listBoxLogs.FormattingEnabled = true;
+            listBoxLogs.Location = new Point(0, 0);
+            listBoxLogs.Name = "listBoxLogs";
+            listBoxLogs.SelectionMode = SelectionMode.None;
+            listBoxLogs.Size = new Size(1395, 727);
+            listBoxLogs.TabIndex = 4;
+            listBoxLogs.DrawItem += listBoxLogs_DrawItem;
             // 
-            // editarToolStripMenuItem
-            // 
-            editarToolStripMenuItem.Image = Properties.Resources.editar_codigo;
-            editarToolStripMenuItem.Name = "editarToolStripMenuItem";
-            editarToolStripMenuItem.Size = new Size(180, 22);
-            editarToolStripMenuItem.Text = "Editar";
-            editarToolStripMenuItem.Click += editarToolStripMenuItem_Click;
-            // 
-            // Administrador
+            // ServerView
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1329, 698);
-            Controls.Add(listView1);
+            ClientSize = new Size(1496, 727);
+            Controls.Add(listBoxLogs);
             Controls.Add(toolStrip1);
-            Name = "Administrador";
-            Text = "Administrador";
+            Name = "ServerView";
+            Text = "ServerView";
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
-            contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -110,8 +101,7 @@
 
         private ToolStrip toolStrip1;
         private ToolStripButton toolStripButton_cadastrar;
-        private ListView listView1;
-        private ContextMenuStrip contextMenuStrip1;
-        private ToolStripMenuItem editarToolStripMenuItem;
+        private ToolStripSeparator toolStripSeparator1;
+        private ListBox listBoxLogs;
     }
 }

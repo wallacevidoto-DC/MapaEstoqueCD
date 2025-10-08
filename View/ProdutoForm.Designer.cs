@@ -133,6 +133,7 @@
             eXCELToolStripMenuItem.Name = "eXCELToolStripMenuItem";
             eXCELToolStripMenuItem.Size = new Size(224, 66);
             eXCELToolStripMenuItem.Text = "EXCEL";
+            eXCELToolStripMenuItem.Click += eXCELToolStripMenuItem_Click;
             // 
             // toolStripSeparator3
             // 
@@ -170,12 +171,14 @@
             toolStripButton_exportar.TextAlign = ContentAlignment.BottomCenter;
             toolStripButton_exportar.TextImageRelation = TextImageRelation.Overlay;
             toolStripButton_exportar.ToolTipText = "Exportar";
+            toolStripButton_exportar.Visible = false;
             toolStripButton_exportar.Click += toolStripButton_exportar_Click;
             // 
             // toolStripSeparator4
             // 
             toolStripSeparator4.Name = "toolStripSeparator4";
             toolStripSeparator4.Size = new Size(98, 6);
+            toolStripSeparator4.Visible = false;
             // 
             // panel1
             // 

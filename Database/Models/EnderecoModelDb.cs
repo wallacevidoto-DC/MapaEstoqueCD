@@ -17,7 +17,7 @@ namespace MapaEstoqueCD.Database.Models
         public required string Coluna { get; set; }
         public required string Palete { get; set; }
 
-        public ICollection<Estoque> Estoques { get; set; } = new List<Estoque>();
+        public ICollection<Estoque> Estoque { get; set; } = new List<Estoque>();
     }
 
 }

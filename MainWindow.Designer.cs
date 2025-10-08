@@ -141,6 +141,7 @@
             toolStripButton_remoto.TextAlign = ContentAlignment.BottomCenter;
             toolStripButton_remoto.TextImageRelation = TextImageRelation.Overlay;
             toolStripButton_remoto.ToolTipText = "Remoto";
+            toolStripButton_remoto.Click += toolStripButton_remoto_Click;
             // 
             // toolStripSeparator4
             // 
@@ -161,6 +162,7 @@
             toolStripButton_adm.TextAlign = ContentAlignment.BottomCenter;
             toolStripButton_adm.TextImageRelation = TextImageRelation.Overlay;
             toolStripButton_adm.ToolTipText = "Administrador";
+            toolStripButton_adm.Click += toolStripButton_adm_Click;
             // 
             // toolStripSeparator5
             // 

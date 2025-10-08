@@ -1,7 +1,10 @@
 ﻿using MapaEstoqueCD.Database;
 using MapaEstoqueCD.Database.Models;
+using Server.Models;
 using Server.Service;
 using System;
+using System.Net.WebSockets;
+using System.Text.Json;
 
 namespace MapaEstoqueCD.Controller
 {
@@ -12,14 +15,12 @@ namespace MapaEstoqueCD.Controller
 
         public AppDbContext Db { get; private set; }
 
-        private readonly ServerService server = new();
+        public readonly ServerService server = new();
         public User UserCurrent = null;
 
         #region Events
-        public event Action<List<string>>? OnLogServerChanged;
-
-        private Action<List<string>>? _serverLogHandler;
-
+        public Action<LogModel>? _serverLogHandler;
+        public event Action<(string, JsonElement, WebSocket)> DataRecevied;
         #endregion
 
         private CacheMP()
@@ -30,15 +31,25 @@ namespace MapaEstoqueCD.Controller
 
         #region Server       
         public async Task InitServerAsync()
-        {
-            _serverLogHandler = (logs) =>
-            {
-                OnLogServerChanged?.Invoke(logs);
-            };
+        {           
 
-            server.OnLogServerChanged += _serverLogHandler;
+            server.OnLog += OnlogEventServe;
 
             await server.StartAsync();
+
+            server.DataRecevied += Server_DataRecevied;
+
+            //var inic = WebSocketService.Instance;
+        }
+
+        private void Server_DataRecevied((string, JsonElement, WebSocket) obj)
+        {
+            DataRecevied?.Invoke(obj);
+        }
+
+        private void OnlogEventServe(LogModel model)
+        {
+            _serverLogHandler?.Invoke(model);
         }
 
         public void StopedServerAsync()
@@ -47,27 +58,26 @@ namespace MapaEstoqueCD.Controller
 
 
             if (_serverLogHandler != null)
-                server.OnLogServerChanged -= _serverLogHandler;
+                server.OnLog -= OnlogEventServe;
+                server.DataRecevied -= Server_DataRecevied;
         }
 
         public async Task RestartServerAsync()
         {
 
             if (_serverLogHandler != null)
-                server.OnLogServerChanged -= _serverLogHandler;
+                server.OnLog -= OnlogEventServe;
 
             await server.RestartAsync();
-
-
-            if (_serverLogHandler != null)
-                server.OnLogServerChanged += _serverLogHandler;
         }
 
-        public List<string> GetServerLogs()
+        public List<LogModel> GetServerLogs()
         {
             return server.LogServer;
         }
+
         #endregion
+
     }
 
 }

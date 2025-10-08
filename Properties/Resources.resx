@@ -139,8 +139,8 @@
   <data name="smartphone" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\smartphone.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="cancelar" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\cancelar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="download" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\download.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="busca" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\busca.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -172,6 +172,9 @@
   <data name="filtrolimpo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\filtrolimpo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="cancelar" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\cancelar.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="saida" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\saida.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -180,6 +183,9 @@
   </data>
   <data name="sem-imagens" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\sem-imagens.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="adicionar-usuario" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\adicionar-usuario.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="xls" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\xls.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -202,7 +208,7 @@
   <data name="entrada" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\entrada.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="download" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\download.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="verificacao-de-codigo-qr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\verificacao-de-codigo-qr.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

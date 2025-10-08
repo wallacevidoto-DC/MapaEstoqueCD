@@ -24,7 +24,7 @@ public class ExcelImporter
                 {
                     Codigo = worksheet.Cell(row, 1).GetValue<string>().Trim(),
                     Descricao = worksheet.Cell(row, 2).GetValue<string>().Trim(),
-                    Ncm = worksheet.Cell(row, 4).GetValue<string>().Trim(),
+                    Ncm = worksheet.Cell(row, 4).GetValue<string>().Trim().Replace(".",""),
                     Ipi = ParsePercentual(worksheet.Cell(row, 5).GetValue<string>()),
                     Pis = ParsePercentual(worksheet.Cell(row, 6).GetValue<string>()),
                     Cofins = ParsePercentual(worksheet.Cell(row, 7).GetValue<string>()),
@@ -83,8 +83,10 @@ public class ExcelImporter
 
     private static decimal? ParsePercentual(string valor)
     {
+        return Convert.ToDecimal(valor);
+        
         if (decimal.TryParse(valor, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal result))
-            return result / 100m; // divide por 100 para transformar em fração
+            return result;// divide por 100 para transformar em fração
         return null;
     }
 }

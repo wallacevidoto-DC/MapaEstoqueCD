@@ -103,6 +103,16 @@ namespace MapaEstoqueCD.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap adicionar_usuario {
+            get {
+                object obj = ResourceManager.GetObject("adicionar-usuario", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap administrador {
             get {
                 object obj = ResourceManager.GetObject("administrador", resourceCulture);
@@ -336,6 +346,16 @@ namespace MapaEstoqueCD.Properties {
         internal static System.Drawing.Bitmap transferencia {
             get {
                 object obj = ResourceManager.GetObject("transferencia", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap verificacao_de_codigo_qr {
+            get {
+                object obj = ResourceManager.GetObject("verificacao-de-codigo-qr", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

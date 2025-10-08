@@ -1,8 +1,10 @@
 ﻿using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Services;
+using MapaEstoqueCD.Utils.Excel;
 using MapaEstoqueCD.View.Modal;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -69,6 +71,13 @@ namespace MapaEstoqueCD.Controller
                     return val?.ToString() ?? "";
                 }).ToArray();
 
+
+
+                valores[3] = (Convert.ToDecimal(valores[3]) * 100) + "%";
+                valores[4] = (Convert.ToDecimal(valores[4]) * 100) + "%";
+                valores[5] = (Convert.ToDecimal(valores[5]) * 100) + "%";
+
+
                 listView.Items.Add(new ListViewItem(valores));
             }
             listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
@@ -109,9 +118,6 @@ namespace MapaEstoqueCD.Controller
 
         public void UpdateProduct(Produtos p, Image img)
         {
-
-
-
             p.Produto = img != null ? SalvarImagemLocal(img, p.Codigo) : null;
             _produtoService.Atualizar(p);
 
@@ -161,7 +167,21 @@ namespace MapaEstoqueCD.Controller
             }
         }
 
+        internal void PrintPdf(List<Produtos> produtosCurrent)
+        {
+            var pdfGenerator = new ProdutosPdfGenerator(produtosCurrent);
+            string caminho = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                $"Produtos_{DateTime.Now:yyyyMMdd_HHmmss}.pdf");
+            pdfGenerator.GeneratePdf(caminho);
+            Process.Start(new ProcessStartInfo(caminho) { UseShellExecute = true });
+        }
 
-
+        internal void ExportExcel(List<Produtos> produtosCurrent)
+        {
+            string caminho = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+               $"Produtos_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx");
+            ExcelExporter.ExportProdutos(produtosCurrent, caminho);
+            Process.Start(new ProcessStartInfo(caminho) { UseShellExecute = true });
+        }
     }
 }
