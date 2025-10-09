@@ -121,8 +121,8 @@ namespace MapaEstoqueCD.Database.Models
         [Column("create_at")]
         public DateTime CreateAt { get; set; } = DateTime.Now;
 
-        public ICollection<Estoque> Estoques { get; set; } = new List<Estoque>();
-        public ICollection<Movimentacao> Movimentacoes { get; set; } = new List<Movimentacao>();
+        public ICollection<Estoque> Estoque { get; set; } = new List<Estoque>();
+        public ICollection<Movimentacao> Movimentacao { get; set; } = new List<Movimentacao>();
     }
     
 }

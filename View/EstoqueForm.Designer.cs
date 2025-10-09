@@ -1,6 +1,6 @@
 ﻿namespace MapaEstoqueCD.View
 {
-    partial class ProdutoForm
+    partial class EstoqueForm
     {
         /// <summary>
         /// Required designer variable.
@@ -32,7 +32,7 @@
             toolStrip1 = new ToolStrip();
             toolStripButton_filtrar = new ToolStripButton();
             toolStripSeparator5 = new ToolStripSeparator();
-            toolStripButton_cadastrar = new ToolStripButton();
+            toolStripButton_entrada = new ToolStripButton();
             toolStripSeparator1 = new ToolStripSeparator();
             toolStripButton_remoto = new ToolStripDropDownButton();
             pDFToolStripMenuItem = new ToolStripMenuItem();
@@ -42,14 +42,12 @@
             toolStripSeparator2 = new ToolStripSeparator();
             toolStripButton_exportar = new ToolStripButton();
             toolStripSeparator4 = new ToolStripSeparator();
-            panel1 = new Panel();
-            panel3 = new Panel();
             listView1 = new ListView();
             contextMenuStrip1 = new ContextMenuStrip(components);
-            editarToolStripMenuItem = new ToolStripMenuItem();
+            saídaToolStripMenuItem = new ToolStripMenuItem();
+            tRANSFERÊNCIAToolStripMenuItem = new ToolStripMenuItem();
+            cORREÇÃOToolStripMenuItem = new ToolStripMenuItem();
             toolStrip1.SuspendLayout();
-            panel1.SuspendLayout();
-            panel3.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -59,12 +57,12 @@
             toolStrip1.Dock = DockStyle.Right;
             toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
             toolStrip1.ImageScalingSize = new Size(60, 60);
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton_filtrar, toolStripSeparator5, toolStripButton_cadastrar, toolStripSeparator1, toolStripButton_remoto, toolStripSeparator3, toolStripButton_importar, toolStripSeparator2, toolStripButton_exportar, toolStripSeparator4 });
-            toolStrip1.Location = new Point(901, 0);
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton_filtrar, toolStripSeparator5, toolStripButton_entrada, toolStripSeparator1, toolStripButton_remoto, toolStripSeparator3, toolStripButton_importar, toolStripSeparator2, toolStripButton_exportar, toolStripSeparator4 });
+            toolStrip1.Location = new Point(1218, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.RenderMode = ToolStripRenderMode.System;
-            toolStrip1.Size = new Size(101, 633);
-            toolStrip1.TabIndex = 1;
+            toolStrip1.Size = new Size(101, 561);
+            toolStrip1.TabIndex = 2;
             toolStrip1.Text = "toolStrip1";
             // 
             // toolStripButton_filtrar
@@ -79,26 +77,25 @@
             toolStripButton_filtrar.TextAlign = ContentAlignment.BottomCenter;
             toolStripButton_filtrar.TextImageRelation = TextImageRelation.Overlay;
             toolStripButton_filtrar.ToolTipText = "Filtrar Produtos";
-            toolStripButton_filtrar.Click += btnFiltroAvancado_Click;
+            toolStripButton_filtrar.Click += toolStripButton_filtrar_Click;
             // 
             // toolStripSeparator5
             // 
             toolStripSeparator5.Name = "toolStripSeparator5";
             toolStripSeparator5.Size = new Size(98, 6);
             // 
-            // toolStripButton_cadastrar
+            // toolStripButton_entrada
             // 
-            toolStripButton_cadastrar.AutoSize = false;
-            toolStripButton_cadastrar.Image = Properties.Resources.add_prod;
-            toolStripButton_cadastrar.ImageTransparentColor = Color.Magenta;
-            toolStripButton_cadastrar.Name = "toolStripButton_cadastrar";
-            toolStripButton_cadastrar.RightToLeft = RightToLeft.Yes;
-            toolStripButton_cadastrar.Size = new Size(100, 100);
-            toolStripButton_cadastrar.Text = "Cadastrar";
-            toolStripButton_cadastrar.TextAlign = ContentAlignment.BottomCenter;
-            toolStripButton_cadastrar.TextImageRelation = TextImageRelation.Overlay;
-            toolStripButton_cadastrar.ToolTipText = "Cadastrar Novo Produto";
-            toolStripButton_cadastrar.Click += toolStripButton_cadastrar_Click;
+            toolStripButton_entrada.AutoSize = false;
+            toolStripButton_entrada.Image = Properties.Resources.entrada;
+            toolStripButton_entrada.ImageTransparentColor = Color.Magenta;
+            toolStripButton_entrada.Name = "toolStripButton_entrada";
+            toolStripButton_entrada.RightToLeft = RightToLeft.Yes;
+            toolStripButton_entrada.Size = new Size(100, 100);
+            toolStripButton_entrada.Text = "Entrada";
+            toolStripButton_entrada.TextAlign = ContentAlignment.BottomCenter;
+            toolStripButton_entrada.TextImageRelation = TextImageRelation.Overlay;
+            toolStripButton_entrada.ToolTipText = "Cadastrar Nova Entrada";
             // 
             // toolStripSeparator1
             // 
@@ -125,7 +122,6 @@
             pDFToolStripMenuItem.Name = "pDFToolStripMenuItem";
             pDFToolStripMenuItem.Size = new Size(107, 22);
             pDFToolStripMenuItem.Text = "PDF";
-            pDFToolStripMenuItem.Click += pDFToolStripMenuItem_Click;
             // 
             // eXCELToolStripMenuItem
             // 
@@ -133,7 +129,6 @@
             eXCELToolStripMenuItem.Name = "eXCELToolStripMenuItem";
             eXCELToolStripMenuItem.Size = new Size(107, 22);
             eXCELToolStripMenuItem.Text = "EXCEL";
-            eXCELToolStripMenuItem.Click += eXCELToolStripMenuItem_Click;
             // 
             // toolStripSeparator3
             // 
@@ -172,7 +167,6 @@
             toolStripButton_exportar.TextImageRelation = TextImageRelation.Overlay;
             toolStripButton_exportar.ToolTipText = "Exportar";
             toolStripButton_exportar.Visible = false;
-            toolStripButton_exportar.Click += toolStripButton_exportar_Click;
             // 
             // toolStripSeparator4
             // 
@@ -180,63 +174,55 @@
             toolStripSeparator4.Size = new Size(98, 6);
             toolStripSeparator4.Visible = false;
             // 
-            // panel1
-            // 
-            panel1.Controls.Add(panel3);
-            panel1.Dock = DockStyle.Fill;
-            panel1.Location = new Point(0, 0);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(901, 633);
-            panel1.TabIndex = 2;
-            // 
-            // panel3
-            // 
-            panel3.Controls.Add(listView1);
-            panel3.Dock = DockStyle.Fill;
-            panel3.Location = new Point(0, 0);
-            panel3.Name = "panel3";
-            panel3.Size = new Size(901, 633);
-            panel3.TabIndex = 1;
-            // 
             // listView1
             // 
             listView1.ContextMenuStrip = contextMenuStrip1;
             listView1.Dock = DockStyle.Fill;
             listView1.Location = new Point(0, 0);
             listView1.Name = "listView1";
-            listView1.Size = new Size(901, 633);
-            listView1.TabIndex = 0;
+            listView1.Size = new Size(1218, 561);
+            listView1.TabIndex = 3;
             listView1.UseCompatibleStateImageBehavior = false;
             // 
             // contextMenuStrip1
             // 
             contextMenuStrip1.ImageScalingSize = new Size(25, 25);
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { editarToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { saídaToolStripMenuItem, tRANSFERÊNCIAToolStripMenuItem, cORREÇÃOToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(114, 36);
+            contextMenuStrip1.Size = new Size(190, 122);
             // 
-            // editarToolStripMenuItem
+            // saídaToolStripMenuItem
             // 
-            editarToolStripMenuItem.Image = Properties.Resources.editar_codigo;
-            editarToolStripMenuItem.Name = "editarToolStripMenuItem";
-            editarToolStripMenuItem.Size = new Size(113, 32);
-            editarToolStripMenuItem.Text = "Editar";
-            editarToolStripMenuItem.Click += editarToolStripMenuItem_Click;
+            saídaToolStripMenuItem.Image = Properties.Resources.saida;
+            saídaToolStripMenuItem.Name = "saídaToolStripMenuItem";
+            saídaToolStripMenuItem.Size = new Size(189, 32);
+            saídaToolStripMenuItem.Text = "SAÍDA";
             // 
-            // ProdutoForm
+            // tRANSFERÊNCIAToolStripMenuItem
+            // 
+            tRANSFERÊNCIAToolStripMenuItem.Image = Properties.Resources.transferencia;
+            tRANSFERÊNCIAToolStripMenuItem.Name = "tRANSFERÊNCIAToolStripMenuItem";
+            tRANSFERÊNCIAToolStripMenuItem.Size = new Size(189, 32);
+            tRANSFERÊNCIAToolStripMenuItem.Text = "TRANSFERÊNCIA";
+            // 
+            // cORREÇÃOToolStripMenuItem
+            // 
+            cORREÇÃOToolStripMenuItem.Image = Properties.Resources.correcao;
+            cORREÇÃOToolStripMenuItem.Name = "cORREÇÃOToolStripMenuItem";
+            cORREÇÃOToolStripMenuItem.Size = new Size(189, 32);
+            cORREÇÃOToolStripMenuItem.Text = "CORREÇÃO";
+            // 
+            // EstoqueForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.White;
-            ClientSize = new Size(1002, 633);
-            Controls.Add(panel1);
+            ClientSize = new Size(1319, 561);
+            Controls.Add(listView1);
             Controls.Add(toolStrip1);
-            Name = "ProdutoForm";
-            Text = "Produto";
+            Name = "EstoqueForm";
+            Text = "Estoque";
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
-            panel1.ResumeLayout(false);
-            panel3.ResumeLayout(false);
             contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
@@ -245,24 +231,22 @@
         #endregion
 
         private ToolStrip toolStrip1;
-        private ToolStripButton toolStripButton_cadastrar;
+        private ToolStripButton toolStripButton_filtrar;
+        private ToolStripSeparator toolStripSeparator5;
+        private ToolStripButton toolStripButton_entrada;
         private ToolStripSeparator toolStripSeparator1;
-        private ToolStripButton toolStripButton_importar;
-        private ToolStripSeparator toolStripSeparator2;
-        private ToolStripButton toolStripButton_exportar;
-        private ToolStripSeparator toolStripSeparator3;
-        private ToolStripSeparator toolStripSeparator4;
-        private Panel panel1;
         private ToolStripDropDownButton toolStripButton_remoto;
         private ToolStripMenuItem pDFToolStripMenuItem;
         private ToolStripMenuItem eXCELToolStripMenuItem;
-        private Panel panel3;
+        private ToolStripSeparator toolStripSeparator3;
+        private ToolStripButton toolStripButton_importar;
+        private ToolStripSeparator toolStripSeparator2;
+        private ToolStripButton toolStripButton_exportar;
+        private ToolStripSeparator toolStripSeparator4;
         private ListView listView1;
-        private Panel panel2;
-        private Button button1;
-        private ToolStripButton toolStripButton_filtrar;
-        private ToolStripSeparator toolStripSeparator5;
         private ContextMenuStrip contextMenuStrip1;
-        private ToolStripMenuItem editarToolStripMenuItem;
+        private ToolStripMenuItem saídaToolStripMenuItem;
+        private ToolStripMenuItem tRANSFERÊNCIAToolStripMenuItem;
+        private ToolStripMenuItem cORREÇÃOToolStripMenuItem;
     }
 }

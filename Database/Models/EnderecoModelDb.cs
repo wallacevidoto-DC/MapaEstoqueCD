@@ -8,14 +8,18 @@ namespace MapaEstoqueCD.Database.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
 
-        public string EnderecoId { get; set; } = string.Empty; // mapeado no OnModelCreating
+        [Column("enderecoId")]
+        public int EnderecoId { get; set; }
 
-        public required string Barracao { get; set; }
-        public required string Rua { get; set; }
-        public required string Coluna { get; set; }
-        public required string Palete { get; set; }
+        [Column("rua")]
+        public required string Rua { get; set; } = string.Empty;
+
+        [Column("coluna")]
+        public required string Coluna { get; set; }= string.Empty;
+
+        [Column("palete")]
+        public required string Palete { get; set; }= string.Empty;
 
         public ICollection<Estoque> Estoque { get; set; } = new List<Estoque>();
     }

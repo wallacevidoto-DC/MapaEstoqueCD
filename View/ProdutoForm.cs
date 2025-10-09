@@ -1,10 +1,7 @@
 ﻿using MapaEstoqueCD.Controller;
 using MapaEstoqueCD.Database.Models;
-using MapaEstoqueCD.Services;
 using MapaEstoqueCD.Utils;
-using MapaEstoqueCD.Utils.Print;
 using MapaEstoqueCD.View.Modal;
-using System.Windows.Forms;
 
 namespace MapaEstoqueCD.View
 {

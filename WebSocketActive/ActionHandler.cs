@@ -1,4 +1,5 @@
 ﻿using MapaEstoqueCD.Controller;
+using MapaEstoqueCD.Database.Dto.Ws;
 using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Services;
 using MapaEstoqueCD.WebSocketActive.Interface;
@@ -16,7 +17,7 @@ namespace MapaEstoqueCD.WebSocketActive
         {
             try
             {
-                List<Estoque> estoque = estoqueService.GetAll();
+                List<EstoqueWsDto> estoque = estoqueService.GetAllProd();
 
                 return new WebSocketResponse { type = "estoque", status = "ok", mensagem = "es",dados=estoque };
             }
@@ -25,9 +26,6 @@ namespace MapaEstoqueCD.WebSocketActive
                 return new WebSocketResponse { type = $"{ActionsWs.GET_ESTOQUE}_resposta", status = "erro", mensagem = ex.Message };
             }
 
-            // Simulação de busca no estoque
-            await Task.Delay(50);
-            return null;// new { status = "ok", estoque = 123 };
         }
     }
 
@@ -44,7 +42,8 @@ namespace MapaEstoqueCD.WebSocketActive
 
                 if (user != null)
                 {
-                    return new WebSocketResponse { type = "login_resposta", status = "ok", mensagem = "Login realizado com sucesso",dados= user.Role };
+                    user.Password = null;
+                    return new WebSocketResponse { type = "login_resposta", status = "ok", mensagem = "Login realizado com sucesso",dados= user };
                 }
                 return new WebSocketResponse { type = "login_resposta", status = "erro", mensagem = "Algum dado errado" };
             }

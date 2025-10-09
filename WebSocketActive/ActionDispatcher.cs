@@ -19,7 +19,8 @@ namespace MapaEstoqueCD.WebSocketActive
         public async Task<WebSocketResponse?> DispatchAsync(string action, JsonElement data, WebSocket socket)
         {
             if (!_handlers.TryGetValue(action, out var handler))
-                throw new InvalidOperationException($"Ação desconhecida: {action}");
+                return null;
+                //throw new InvalidOperationException($"Ação desconhecida: {action}");
 
             return await handler.ExecuteAsync(data, socket);
         }

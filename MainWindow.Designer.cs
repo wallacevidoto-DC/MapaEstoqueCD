@@ -100,6 +100,7 @@
             toolStripButton_estoque.TextAlign = ContentAlignment.BottomCenter;
             toolStripButton_estoque.TextImageRelation = TextImageRelation.Overlay;
             toolStripButton_estoque.ToolTipText = "Estoque";
+            toolStripButton_estoque.Click += toolStripButton_estoque_Click;
             // 
             // toolStripSeparator2
             // 

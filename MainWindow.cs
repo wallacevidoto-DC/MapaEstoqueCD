@@ -44,5 +44,7 @@ namespace MapaEstoqueCD
         private void toolStripButton_adm_Click(object sender, EventArgs e) => OpenForm.OpenFormToForm(new Administrador(), ref paneL_center);
 
         private void toolStripButton_remoto_Click(object sender, EventArgs e) => OpenForm.OpenFormToForm(new ServerView(), ref paneL_center);
+
+        private void toolStripButton_estoque_Click(object sender, EventArgs e) => OpenForm.OpenFormToForm(new EstoqueForm(), ref paneL_center);
     }
 }

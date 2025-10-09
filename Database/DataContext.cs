@@ -8,12 +8,14 @@ namespace MapaEstoqueCD.Database
         public DbSet<Endereco> Enderecos { get; set; }
         public DbSet<Produtos> Produtos { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Estoque> Estoques { get; set; }
+        public DbSet<Estoque> Estoque { get; set; }
         public DbSet<Movimentacao> Movimentacoes { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlite("Data Source=db_dc.db");
+            optionsBuilder.UseSqlite("Data Source=db_dc.db").EnableSensitiveDataLogging()
+        .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+            ;
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -21,20 +23,14 @@ namespace MapaEstoqueCD.Database
             // -------------------- ENDERECO --------------------
             modelBuilder.Entity<Endereco>(entity =>
             {
-                entity.HasKey(e => e.Id);
+                entity.HasKey(e => e.EnderecoId);
 
-                //entity.Property(e => e.EnderecoId)
-                //        .HasComputedColumnSql("UPPER(Barracao || Rua || Coluna || Palete)", stored: true);
 
-                entity.HasAlternateKey(e => e.EnderecoId)
-                      .HasName("AK_ENDERECO_EnderecoId");
 
-                entity.HasMany(e => e.Estoques)
-                      .WithOne(s => s.Endereco)
-                      .HasForeignKey(s => s.EnderecoId)
-                      .HasPrincipalKey(e => e.EnderecoId)
-                      .OnDelete(DeleteBehavior.Restrict);
-
+                entity.HasMany(e => e.Estoque)
+                  .WithOne(s => s.Endereco)
+                  .HasForeignKey(s => s.EnderecoId)
+                  .OnDelete(DeleteBehavior.Restrict);
             });
 
             // -------------------- PRODUTOS --------------------
@@ -46,13 +42,13 @@ namespace MapaEstoqueCD.Database
                       .HasDefaultValueSql("CURRENT_TIMESTAMP")
                       .ValueGeneratedOnAdd();
 
-                entity.HasMany(p => p.Estoques)
-                      .WithOne(e => e.Produtos)
+                entity.HasMany(p => p.Estoque)
+                      .WithOne(e => e.Produto)
                       .HasForeignKey(e => e.ProdutoId)
                       .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasMany(p => p.Movimentacoes)
-                      .WithOne(m => m.Produtos)
+                entity.HasMany(p => p.Movimentacao)
+                      .WithOne(m => m.Produto)
                       .HasForeignKey(m => m.ProdutoId)
                       .OnDelete(DeleteBehavior.Restrict);
             });
@@ -77,9 +73,9 @@ namespace MapaEstoqueCD.Database
             {
                 entity.HasKey(e => e.EstoqueId);
 
-                entity.Property(e => e.DateIn)
-                      .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                      .ValueGeneratedOnAdd();
+                //entity.Property(e => e.DateIn)
+                //      .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                //.ValueGeneratedOnAdd();
 
                 entity.Property(e => e.CreateAt)
                       .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -90,13 +86,13 @@ namespace MapaEstoqueCD.Database
                       .ValueGeneratedOnAddOrUpdate();
 
                 entity.HasOne(e => e.Endereco)
-                      .WithMany(end => end.Estoques)
+                      .WithMany(end => end.Estoque)
                       .HasForeignKey(e => e.EnderecoId)
                       .HasPrincipalKey(e => e.EnderecoId)
                       .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne(e => e.Produtos)
-                      .WithMany(p => p.Estoques)
+                entity.HasOne(e => e.Produto)
+                      .WithMany(p => p.Estoque)
                       .HasForeignKey(e => e.ProdutoId)
                       .OnDelete(DeleteBehavior.Restrict);
 
@@ -111,9 +107,9 @@ namespace MapaEstoqueCD.Database
             {
                 entity.HasKey(m => m.MovimentacaoId);
 
-                entity.Property(m => m.Data)
-                      .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                      .ValueGeneratedOnAdd();
+                //entity.Property(m => m.DataF)
+                //      .HasDefaultValueSql("CURRENT_TIMESTAMP")
+                //      .ValueGeneratedOnAdd();
 
                 entity.Property(m => m.CreateAt)
                       .HasDefaultValueSql("CURRENT_TIMESTAMP")
@@ -124,8 +120,8 @@ namespace MapaEstoqueCD.Database
                       .HasForeignKey(m => m.EstoqueId)
                       .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne(m => m.Produtos)
-                      .WithMany(p => p.Movimentacoes)
+                entity.HasOne(m => m.Produto)
+                      .WithMany(p => p.Movimentacao)
                       .HasForeignKey(m => m.ProdutoId)
                       .OnDelete(DeleteBehavior.Restrict);
 

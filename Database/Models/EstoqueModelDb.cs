@@ -12,7 +12,7 @@ namespace MapaEstoqueCD.Database.Models
         public int EstoqueId { get; set; }
 
         [Column("enderecoId")]
-        public string? EnderecoId { get; set; }
+        public int EnderecoId { get; set; }
 
         [Column("produtoId")]
         public int ProdutoId { get; set; }
@@ -24,13 +24,13 @@ namespace MapaEstoqueCD.Database.Models
         public int Quantidade { get; set; }
 
         [Column("data_f")]
-        public DateTime DataF { get; set; } = DateTime.Now;
+        public DateTime DataF { get; set; }
 
         [Column("data_l")]
-        public DateTime DataL { get; set; } = DateTime.Now;
+        public DateTime DataL { get; set; } 
 
         [Column("lote")]
-        public string? Lote { get; set; }
+        public string? Lote { get; set; } 
 
         [Column("obs")]
         public string? Obs { get; set; }
@@ -42,8 +42,9 @@ namespace MapaEstoqueCD.Database.Models
         public DateTime UpdateAt { get; set; } = DateTime.Now;
 
 
+
         public Endereco? Endereco { get; set; }
-        public Produtos? Produto { get; set; }    
+        public Produtos? Produto { get; set; } = new();
         public ICollection<Movimentacao> Movimentacoes { get; set; } = new List<Movimentacao>();
     }
 }
