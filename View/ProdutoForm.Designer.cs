@@ -55,7 +55,7 @@
             // 
             // toolStrip1
             // 
-            toolStrip1.BackColor = Color.White;
+            toolStrip1.BackColor = Color.FromArgb(248, 250, 255);
             toolStrip1.Dock = DockStyle.Right;
             toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
             toolStrip1.ImageScalingSize = new Size(60, 60);

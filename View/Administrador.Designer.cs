@@ -40,7 +40,7 @@
             // 
             // toolStrip1
             // 
-            toolStrip1.BackColor = Color.White;
+            toolStrip1.BackColor = Color.FromArgb(248, 250, 255);
             toolStrip1.Dock = DockStyle.Right;
             toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
             toolStrip1.ImageScalingSize = new Size(60, 60);
@@ -80,13 +80,13 @@
             // 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { editarToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(181, 48);
+            contextMenuStrip1.Size = new Size(105, 26);
             // 
             // editarToolStripMenuItem
             // 
             editarToolStripMenuItem.Image = Properties.Resources.editar_codigo;
             editarToolStripMenuItem.Name = "editarToolStripMenuItem";
-            editarToolStripMenuItem.Size = new Size(180, 22);
+            editarToolStripMenuItem.Size = new Size(104, 22);
             editarToolStripMenuItem.Text = "Editar";
             editarToolStripMenuItem.Click += editarToolStripMenuItem_Click;
             // 
@@ -94,6 +94,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(248, 250, 255);
             ClientSize = new Size(1329, 698);
             Controls.Add(listView1);
             Controls.Add(toolStrip1);

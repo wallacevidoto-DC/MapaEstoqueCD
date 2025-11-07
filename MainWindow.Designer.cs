@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             toolStrip1 = new ToolStrip();
             toolStripSeparator6 = new ToolStripSeparator();
             toolStripButton_movimentacao = new ToolStripButton();
@@ -49,7 +50,7 @@
             // 
             // toolStrip1
             // 
-            toolStrip1.BackColor = Color.WhiteSmoke;
+            toolStrip1.BackColor = Color.FromArgb(248, 250, 255);
             toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
             toolStrip1.ImageScalingSize = new Size(60, 60);
             toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripSeparator6, toolStripButton_movimentacao, toolStripSeparator1, toolStripButton_estoque, toolStripSeparator2, toolStripButton_produto, toolStripSeparator3, toolStripButton_remoto, toolStripSeparator4, toolStripButton_adm, toolStripSeparator5 });
@@ -200,10 +201,12 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.FromArgb(248, 250, 255);
             ClientSize = new Size(1326, 621);
             Controls.Add(paneL_center);
             Controls.Add(statusStrip1);
             Controls.Add(toolStrip1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainWindow";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Mapa de Estoque DC";

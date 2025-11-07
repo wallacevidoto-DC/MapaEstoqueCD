@@ -56,5 +56,10 @@ namespace MapaEstoqueCD.View
                 MessageBox.Show("Importação concluída com sucesso!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
+
+        private void toolStripButton_entrada_Click(object sender, EventArgs e)
+        {
+            (new EntradaProduto()).ShowDialog();
+        }
     }
 }

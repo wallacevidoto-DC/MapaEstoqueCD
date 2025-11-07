@@ -1,4 +1,5 @@
 using MapaEstoqueCD.Controller;
+using MapaEstoqueCD.View.Modal;
 
 namespace MapaEstoqueCD
 {
@@ -12,6 +13,7 @@ namespace MapaEstoqueCD
         {
             ApplicationConfiguration.Initialize();
             Application.Run(new MainWindow());
+            //Application.Run(new EntradaProduto());
         }
     }
 }

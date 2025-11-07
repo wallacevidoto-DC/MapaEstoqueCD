@@ -146,7 +146,7 @@
             // 
             // groupBox1
             // 
-            groupBox1.BackColor = Color.White;
+            groupBox1.BackColor = Color.WhiteSmoke;
             groupBox1.Controls.Add(button_clear);
             groupBox1.Controls.Add(button_salvar);
             groupBox1.Controls.Add(tabControl1);
@@ -175,6 +175,8 @@
             // button_salvar
             // 
             button_salvar.Cursor = Cursors.Hand;
+            button_salvar.FlatAppearance.BorderSize = 0;
+            button_salvar.FlatStyle = FlatStyle.Flat;
             button_salvar.Image = Properties.Resources.salve;
             button_salvar.Location = new Point(514, 337);
             button_salvar.Name = "button_salvar";

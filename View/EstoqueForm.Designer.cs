@@ -53,7 +53,7 @@
             // 
             // toolStrip1
             // 
-            toolStrip1.BackColor = Color.White;
+            toolStrip1.BackColor = Color.FromArgb(248, 250, 255);
             toolStrip1.Dock = DockStyle.Right;
             toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
             toolStrip1.ImageScalingSize = new Size(60, 60);
@@ -96,6 +96,7 @@
             toolStripButton_entrada.TextAlign = ContentAlignment.BottomCenter;
             toolStripButton_entrada.TextImageRelation = TextImageRelation.Overlay;
             toolStripButton_entrada.ToolTipText = "Cadastrar Nova Entrada";
+            toolStripButton_entrada.Click += toolStripButton_entrada_Click;
             // 
             // toolStripSeparator1
             // 
@@ -189,27 +190,27 @@
             contextMenuStrip1.ImageScalingSize = new Size(25, 25);
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { saídaToolStripMenuItem, tRANSFERÊNCIAToolStripMenuItem, cORREÇÃOToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(190, 122);
+            contextMenuStrip1.Size = new Size(174, 100);
             // 
             // saídaToolStripMenuItem
             // 
             saídaToolStripMenuItem.Image = Properties.Resources.saida;
             saídaToolStripMenuItem.Name = "saídaToolStripMenuItem";
-            saídaToolStripMenuItem.Size = new Size(189, 32);
+            saídaToolStripMenuItem.Size = new Size(173, 32);
             saídaToolStripMenuItem.Text = "SAÍDA";
             // 
             // tRANSFERÊNCIAToolStripMenuItem
             // 
             tRANSFERÊNCIAToolStripMenuItem.Image = Properties.Resources.transferencia;
             tRANSFERÊNCIAToolStripMenuItem.Name = "tRANSFERÊNCIAToolStripMenuItem";
-            tRANSFERÊNCIAToolStripMenuItem.Size = new Size(189, 32);
+            tRANSFERÊNCIAToolStripMenuItem.Size = new Size(173, 32);
             tRANSFERÊNCIAToolStripMenuItem.Text = "TRANSFERÊNCIA";
             // 
             // cORREÇÃOToolStripMenuItem
             // 
             cORREÇÃOToolStripMenuItem.Image = Properties.Resources.correcao;
             cORREÇÃOToolStripMenuItem.Name = "cORREÇÃOToolStripMenuItem";
-            cORREÇÃOToolStripMenuItem.Size = new Size(189, 32);
+            cORREÇÃOToolStripMenuItem.Size = new Size(173, 32);
             cORREÇÃOToolStripMenuItem.Text = "CORREÇÃO";
             // 
             // EstoqueForm
