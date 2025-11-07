@@ -1,6 +1,7 @@
 ﻿using MapaEstoqueCD.Database.Dto.Ws;
 using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Services;
+using MapaEstoqueCD.Utils;
 using MapaEstoqueCD.View.Modal;
 using System;
 using System.Collections.Generic;
@@ -13,44 +14,50 @@ namespace MapaEstoqueCD.Controller
     public class EstoqueController
     {
         public readonly EstoqueService estoqueService = new();
-        public readonly Dictionary<string, string> Columns;
+        public readonly List<ColumnConfig> Columns;
         public EstoqueController()
         {
-            Columns = new Dictionary<string, string>
-            {
-                { "Estoque ID", nameof(EstoqueWsDto.estoqueId) },
-                { "Endereço ID", nameof(EstoqueWsDto.enderecoId) },
-                //{ "Produto ID", nameof(EstoqueWsDto.produtoId) },
-                { "Código do Produto", "produto.codigo" },
-                { "Descrição do Produto", "produto.descricao" },
-                { "Quantidade", nameof(EstoqueWsDto.quantidade) },
-                { "Data F", nameof(EstoqueWsDto.dataF) },
-                { "Sem F", nameof(EstoqueWsDto.semF) },
-                { "Data L", nameof(EstoqueWsDto.dataL) },
-                { "Lote", nameof(EstoqueWsDto.lote) },
-                { "Observações", nameof(EstoqueWsDto.obs) },
-                { "Data de Criação", nameof(EstoqueWsDto.createAt) },
-                { "Data de Atualização", nameof(EstoqueWsDto.updateAt) },
-                // Campos do Produto (ProdutoWsDto) aninhado
-            };
+            Columns = new()
+                            {
+                                new ColumnConfig("Estoque ID", nameof(EstoqueWsDto.estoqueId)),
+                                new ColumnConfig("Endereço", nameof(EstoqueWsDto.enderecoId)),
+                                // new ColumnConfig("Produto ID", nameof(EstoqueWsDto.produtoId), false),
+                                new ColumnConfig("Código do Produto", "produto.codigo"),
+                                new ColumnConfig("Descrição do Produto", "produto.descricao"),
+                                new ColumnConfig("Quantidade", nameof(EstoqueWsDto.quantidade)),
+                                new ColumnConfig("Data F", nameof(EstoqueWsDto.dataF)),
+                                new ColumnConfig("Sem F", nameof(EstoqueWsDto.semF)),
+                                new ColumnConfig("Data L", nameof(EstoqueWsDto.dataL)),
+                                new ColumnConfig("Lote", nameof(EstoqueWsDto.lote)),
+                                new ColumnConfig("Observações", nameof(EstoqueWsDto.obs)),
+                                new ColumnConfig("Data de Criação", nameof(EstoqueWsDto.createAt)),
+                                new ColumnConfig("Data de Atualização", nameof(EstoqueWsDto.updateAt)),
+                            };
 
         }
 
         internal List<EstoqueWsDto>? GetAllEstoque(ref ListView listView1)
         {
             listView1.Items.Clear();
+
+            
+            var columns = Columns.Where(c => c.Visivel).ToList();
+           
+            listView1.Columns.Clear();
+            foreach (var col in columns)
+                listView1.Columns.Add(col.Titulo);
+
             List<EstoqueWsDto> estoque = estoqueService.GetAllProd();
 
             foreach (var p in estoque)
             {
-                var valores = Columns.Values.Select(propName =>
+                var valores = columns.Select(c =>
                 {
                     object? val = null;
 
-                    // Trata propriedades aninhadas (ex: "produto.codigo")
-                    if (propName.Contains("."))
+                    if (c.Propriedade.Contains("."))
                     {
-                        var parts = propName.Split('.');
+                        var parts = c.Propriedade.Split('.');
                         object? currentObj = p;
 
                         foreach (var part in parts)
@@ -64,7 +71,7 @@ namespace MapaEstoqueCD.Controller
                     }
                     else
                     {
-                        var prop = typeof(EstoqueWsDto).GetProperty(propName);
+                        var prop = typeof(EstoqueWsDto).GetProperty(c.Propriedade);
                         val = prop?.GetValue(p);
                     }
 
@@ -74,8 +81,8 @@ namespace MapaEstoqueCD.Controller
                 listView1.Items.Add(new ListViewItem(valores));
             }
 
-            // Ajusta tamanho das colunas
             listView1.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+
             return estoque;
         }
 

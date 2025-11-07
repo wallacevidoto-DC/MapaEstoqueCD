@@ -11,6 +11,7 @@ namespace MapaEstoqueCD.View
     public partial class Administrador : Form
     {
         private readonly AdminController _adminController = new();
+
         public Administrador()
         {
             InitializeComponent();
@@ -21,116 +22,140 @@ namespace MapaEstoqueCD.View
 
         private void toolStripButton_cadastrar_Click(object sender, EventArgs e)
         {
-            (new CreateUser()).ShowDialog();
+            new CreateUser().ShowDialog();
             _adminController.GetAllUser(ref listView1);
         }
 
         private void editarToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (listView1.SelectedItems.Count > 0)
-            {
-                ListViewItem item = listView1.SelectedItems[0];
-
-                int valorPrimeiraCelula = Convert.ToInt32(item.SubItems[0].Text);
-
-                (new CreateUser(_adminController.GetByCod(valorPrimeiraCelula))).ShowDialog();
-            }
-            else
+            if (listView1.SelectedItems.Count == 0)
             {
                 MessageBox.Show("Nenhuma linha selecionada!");
+                return;
             }
+
+            ListViewItem item = listView1.SelectedItems[0];
+            if (!int.TryParse(item.SubItems[0].Text, out int userId))
+            {
+                MessageBox.Show("Erro ao obter o ID do usuário!");
+                return;
+            }
+
+            var user = _adminController.GetByCod(userId);
+            if (user == null)
+            {
+                MessageBox.Show("Usuário não encontrado!");
+                return;
+            }
+
+            new CreateUser(user).ShowDialog();
+            _adminController.GetAllUser(ref listView1);
         }
     }
 
-
     public class AdminController
     {
-        public readonly Dictionary<string, string> ColumnsUser;
-        private readonly ProdutoService _produtoService = new();
+        public readonly List<ColumnConfig> ColumnsUser;
         private readonly AppDbContext _db;
-
 
         public AdminController()
         {
             _db = CacheMP.Instance.Db;
 
-            ColumnsUser = new Dictionary<string, string>
+            ColumnsUser = new List<ColumnConfig>
             {
-                { "ID", nameof(User.UserId) },
-                { "Nome", nameof(User.Name) },
-                { "Acesso", nameof(User.Role) },                
-                { "Data de Criação", nameof(User.CreateAt) }
+                new ColumnConfig("ID", nameof(User.UserId)),
+                new ColumnConfig("Nome", nameof(User.Name)),
+                new ColumnConfig("Acesso", nameof(User.Role)),
+                new ColumnConfig("Data de Criação", nameof(User.CreateAt))
             };
         }
-
-
-
-
 
         public List<User> GetAllUser(ref ListView listView)
         {
             listView.Items.Clear();
-            List<User> produtos = CacheMP.Instance.Db.Users.ToList();
 
-            foreach (var p in produtos)
+            var users = _db.Users.ToList();
+            var columns = ColumnsUser.Where(c => c.Visivel).ToList();
+
+            listView.Columns.Clear();
+            foreach (var col in columns)
+                listView.Columns.Add(col.Titulo);
+
+            foreach (var u in users)
             {
-                var valores = ColumnsUser.Values.Select(propName =>
+                var valores = columns.Select(c =>
                 {
-                    var prop = typeof(User).GetProperty(propName);
-                    var val = prop?.GetValue(p);
+                    object? val = null;
+
+                    // Suporte a propriedades aninhadas (ex: "Endereco.Cidade")
+                    if (c.Propriedade.Contains("."))
+                    {
+                        var parts = c.Propriedade.Split('.');
+                        object? currentObj = u;
+
+                        foreach (var part in parts)
+                        {
+                            if (currentObj == null) break;
+                            var prop = currentObj.GetType().GetProperty(part);
+                            currentObj = prop?.GetValue(currentObj);
+                        }
+
+                        val = currentObj;
+                    }
+                    else
+                    {
+                        var prop = typeof(User).GetProperty(c.Propriedade);
+                        val = prop?.GetValue(u);
+                    }
+
                     return val?.ToString() ?? "";
                 }).ToArray();
 
-
-
                 listView.Items.Add(new ListViewItem(valores));
             }
+
             listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
-            return produtos;
+            return users;
         }
 
-        public User? GetByCod(int valorPrimeiraCelula)
+        public User? GetByCod(int userId)
         {
-            return CacheMP.Instance.Db.Users.First(x => x.UserId == valorPrimeiraCelula);
+            return _db.Users.FirstOrDefault(x => x.UserId == userId);
         }
 
         public bool CreateUser(User user)
         {
             try
             {
-                CacheMP.Instance.Db.Users.Add(user);
-                CacheMP.Instance.Db.SaveChanges();
+                _db.Users.Add(user);
+                _db.SaveChanges();
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                MessageBox.Show($"Erro ao criar usuário: {ex.Message}");
                 return false;
             }
-           
         }
 
         public bool UpdateUser(User user)
         {
             try
             {
-                var local = CacheMP.Instance.Db.Users.Local.FirstOrDefault(x => x.UserId == user.UserId);
+                var local = _db.Users.Local.FirstOrDefault(x => x.UserId == user.UserId);
                 if (local != null)
-                {
                     _db.Entry(local).State = EntityState.Detached;
-                }
 
                 _db.Users.Update(user);
                 _db.SaveChanges();
-
                 return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
+                MessageBox.Show($"Erro ao atualizar usuário: {ex.Message}");
                 return false;
             }
-           
         }
     }
 }

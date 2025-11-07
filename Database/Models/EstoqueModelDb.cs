@@ -12,39 +12,37 @@ namespace MapaEstoqueCD.Database.Models
         public int EstoqueId { get; set; }
 
         [Column("enderecoId")]
-        public int EnderecoId { get; set; }
+        public string? EnderecoId { get; set; }  
 
         [Column("produtoId")]
-        public int ProdutoId { get; set; }
+        public int? ProdutoId { get; set; }  
 
         [Column("sem_f")]
-        public int SemF { get; set; }      
+        public int? SemF { get; set; }
 
         [Column("quantidade")]
-        public int Quantidade { get; set; }
+        public int? Quantidade { get; set; }
 
         [Column("data_f")]
-        public DateTime DataF { get; set; }
+        public string? DataF { get; set; }  
 
         [Column("data_l")]
-        public DateTime DataL { get; set; } 
+        public DateTime? DataL { get; set; }
 
         [Column("lote")]
-        public string? Lote { get; set; } 
+        public string? Lote { get; set; }
 
         [Column("obs")]
         public string? Obs { get; set; }
 
         [Column("create_at")]
-        public DateTime CreateAt { get; set; } = DateTime.Now;
+        public DateTime? CreateAt { get; set; } = DateTime.Now;
 
         [Column("update_at")]
-        public DateTime UpdateAt { get; set; } = DateTime.Now;
-
-
+        public DateTime? UpdateAt { get; set; } = DateTime.Now;
 
         public Endereco? Endereco { get; set; }
-        public Produtos? Produto { get; set; } = new();
+        public Produtos? Produto { get; set; }
         public ICollection<Movimentacao> Movimentacoes { get; set; } = new List<Movimentacao>();
     }
 }

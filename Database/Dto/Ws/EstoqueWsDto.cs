@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MapaEstoqueCD.Database.Dto.Ws
+﻿namespace MapaEstoqueCD.Database.Dto.Ws
 {
     public class ProdutoWsDto
     {
@@ -18,12 +12,12 @@ namespace MapaEstoqueCD.Database.Dto.Ws
         public int produtoId { get; set; }
         public int semF { get; set; }
         public int quantidade { get; set; }
-        public DateTime dataF { get; set; }
+        public string dataF { get; set; }
         public DateTime dataL { get; set; }
         public string? lote { get; set; }
         public string? obs { get; set; }
         public DateTime createAt { get; set; }
         public DateTime updateAt { get; set; }
-        public ProdutoWsDto? produto { get; set; } 
+        public ProdutoWsDto? produto { get; set; }
     }
 }

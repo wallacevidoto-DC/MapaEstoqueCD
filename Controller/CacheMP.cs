@@ -1,5 +1,6 @@
 ﻿using MapaEstoqueCD.Database;
 using MapaEstoqueCD.Database.Models;
+using MapaEstoqueCD.Utils;
 using Server.Models;
 using Server.Service;
 using System;
@@ -27,6 +28,10 @@ namespace MapaEstoqueCD.Controller
         {
             Db = new AppDbContext();
             InitServerAsync().GetAwaiter().GetResult();
+
+
+
+            
         }
 
         #region Server       

@@ -6,9 +6,6 @@ namespace MapaEstoqueCD.Services
 {
     public class UserService
     {
-
-
-
         public User? Login(string username, string password)
         {
             string hash = AuthHelper.HashPassword(password);

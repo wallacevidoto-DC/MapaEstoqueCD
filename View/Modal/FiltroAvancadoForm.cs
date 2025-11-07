@@ -1,11 +1,8 @@
-﻿using System;
+﻿using MapaEstoqueCD.Utils;
+using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MapaEstoqueCD.View.Modal
@@ -13,19 +10,19 @@ namespace MapaEstoqueCD.View.Modal
     public partial class FiltroAvancadoForm : Form
     {
         public List<FiltroItem> Resultado { get; private set; } = new();
-        private readonly Dictionary<string, string> _colunasFiltro;
+        private readonly List<ColumnConfig> _colunasFiltro;
         private readonly List<FiltroLinha> _linhas = new();
+        private FlowLayoutPanel _panelFiltros;
 
-
-        public FiltroAvancadoForm(Dictionary<string, string> colunasFiltro, List<FiltroItem>? filtrosExistentes = null)
+        public FiltroAvancadoForm(List<ColumnConfig> colunasFiltro, List<FiltroItem>? filtrosExistentes = null)
         {
             InitializeComponent();
-            _colunasFiltro = colunasFiltro;
+            _colunasFiltro = colunasFiltro.Where(c => c.Visivel).ToList();
 
-            // Primeiro cria o layout e o painel de filtros
+            // Primeiro cria o layout
             MontarLayout();
 
-            // Adiciona os filtros SOMENTE depois que o formulário estiver carregado
+            // Adiciona filtros depois do Load
             Load += (s, e) =>
             {
                 _panelFiltros.SuspendLayout();
@@ -43,7 +40,6 @@ namespace MapaEstoqueCD.View.Modal
                 _panelFiltros.ResumeLayout();
                 _panelFiltros.PerformLayout();
                 _panelFiltros.Refresh();
-                
             };
         }
 
@@ -66,7 +62,7 @@ namespace MapaEstoqueCD.View.Modal
             };
             Controls.Add(lblTitulo);
 
-            // Painel scrollável (container de filtros)
+            // Painel com scroll
             Panel pnlScroll = new Panel
             {
                 Dock = DockStyle.Fill,
@@ -123,11 +119,9 @@ namespace MapaEstoqueCD.View.Modal
             Controls.Add(panelBtns);
         }
 
-        private FlowLayoutPanel _panelFiltros;
-
-        private void AdicionarLinha(string? coluna = null, string valor = "",  string tipo = "contém", string tabela = "")
+        private void AdicionarLinha(string? coluna = null, string valor = "", string tipo = "contém", string tabela = "")
         {
-            var linha = new FiltroLinha(_colunasFiltro, coluna, valor, tipo,tabela);
+            var linha = new FiltroLinha(_colunasFiltro, coluna, valor, tipo, tabela);
             linha.OnRemover += () =>
             {
                 _panelFiltros.Controls.Remove(linha.Container);
@@ -149,6 +143,7 @@ namespace MapaEstoqueCD.View.Modal
                 .Select(l => l.ObterFiltro())
                 .Where(f => !string.IsNullOrWhiteSpace(f.Valor))
                 .ToList();
+
             DialogResult = DialogResult.OK;
             Close();
         }
@@ -163,13 +158,11 @@ namespace MapaEstoqueCD.View.Modal
         private TextBox txtValor;
         private RadioButton radioContem;
         private RadioButton radioExato;
-        private readonly Dictionary<string, string> _colunas;
-        
+        private readonly List<ColumnConfig> _colunas;
 
-        public FiltroLinha(Dictionary<string, string> colunas, string? coluna = null, string valor = "", string tabela = "", string tipo = "contém")
+        public FiltroLinha(List<ColumnConfig> colunas, string? coluna = null, string valor = "", string tipo = "contém", string tabela = "")
         {
             _colunas = colunas;
-
             Container = new Panel { Height = 35, Width = 460 };
 
             comboColuna = new ComboBox
@@ -179,9 +172,12 @@ namespace MapaEstoqueCD.View.Modal
                 Left = 5,
                 Top = 5
             };
-            comboColuna.Items.AddRange(colunas.Keys.ToArray());
+
+            // Adiciona títulos visíveis
+            comboColuna.Items.AddRange(colunas.Select(c => c.Titulo).ToArray());
+
             comboColuna.SelectedIndex = 0;
-            if (coluna != null && colunas.ContainsKey(coluna))
+            if (coluna != null && colunas.Any(c => c.Titulo == coluna))
                 comboColuna.SelectedItem = coluna;
 
             txtValor = new TextBox { Left = 130, Top = 5, Width = 130, Text = valor };
@@ -205,23 +201,22 @@ namespace MapaEstoqueCD.View.Modal
         public FiltroItem ObterFiltro()
         {
             string colunaExibicao = comboColuna.SelectedItem?.ToString() ?? "";
+            var colunaObj = _colunas.FirstOrDefault(c => c.Titulo == colunaExibicao);
+
             return new FiltroItem
             {
                 Coluna = colunaExibicao,
                 Valor = txtValor.Text.Trim(),
                 Tipo = radioExato.Checked ? "exato" : "contém",
-                Tabela = _colunas[colunaExibicao]  
+                Tabela = colunaObj?.Propriedade ?? ""
             };
         }
-
     }
-
-    // Resultado que será retornado ao Form principal
     public class FiltroItem
     {
         public string Coluna { get; set; } = "";
         public string Valor { get; set; } = "";
-        public string Tipo { get; set; } = "contém"; // ou "exato"
-        public string Tabela { get; set; } = ""; 
+        public string Tipo { get; set; } = "contém";
+        public string Tabela { get; set; } = "";
     }
 }

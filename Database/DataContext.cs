@@ -25,12 +25,14 @@ namespace MapaEstoqueCD.Database
             {
                 entity.HasKey(e => e.EnderecoId);
 
-
+                // Campo computado
+                entity.Property(e => e.EnderecoId)
+                      .HasComputedColumnSql("rua || coluna || palete", stored: true);
 
                 entity.HasMany(e => e.Estoque)
-                  .WithOne(s => s.Endereco)
-                  .HasForeignKey(s => s.EnderecoId)
-                  .OnDelete(DeleteBehavior.Restrict);
+                      .WithOne(s => s.Endereco)
+                      .HasForeignKey(s => s.EnderecoId)
+                      .OnDelete(DeleteBehavior.Restrict);
             });
 
             // -------------------- PRODUTOS --------------------
@@ -39,8 +41,7 @@ namespace MapaEstoqueCD.Database
                 entity.HasKey(p => p.ProdutoId);
 
                 entity.Property(p => p.CreateAt)
-                      .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                      .ValueGeneratedOnAdd();
+                      .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasMany(p => p.Estoque)
                       .WithOne(e => e.Produto)
@@ -59,8 +60,7 @@ namespace MapaEstoqueCD.Database
                 entity.HasKey(u => u.UserId);
 
                 entity.Property(u => u.CreateAt)
-                      .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                      .ValueGeneratedOnAdd();
+                      .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasMany(u => u.Movimentacoes)
                       .WithOne(m => m.User)
@@ -73,17 +73,11 @@ namespace MapaEstoqueCD.Database
             {
                 entity.HasKey(e => e.EstoqueId);
 
-                //entity.Property(e => e.DateIn)
-                //      .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                //.ValueGeneratedOnAdd();
-
                 entity.Property(e => e.CreateAt)
-                      .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                      .ValueGeneratedOnAdd();
+                      .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                entity.Property(e => e.UpdateAt)
-                      .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                      .ValueGeneratedOnAddOrUpdate();
+                // Atualização de UpdateAt precisa ser manual ou via trigger SQLite
+                entity.Property(e => e.UpdateAt);
 
                 entity.HasOne(e => e.Endereco)
                       .WithMany(end => end.Estoque)
@@ -107,13 +101,8 @@ namespace MapaEstoqueCD.Database
             {
                 entity.HasKey(m => m.MovimentacaoId);
 
-                //entity.Property(m => m.DataF)
-                //      .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                //      .ValueGeneratedOnAdd();
-
                 entity.Property(m => m.CreateAt)
-                      .HasDefaultValueSql("CURRENT_TIMESTAMP")
-                      .ValueGeneratedOnAdd();
+                      .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasOne(m => m.Estoque)
                       .WithMany(e => e.Movimentacoes)
@@ -131,5 +120,6 @@ namespace MapaEstoqueCD.Database
                       .OnDelete(DeleteBehavior.Restrict);
             });
         }
+
     }
 }

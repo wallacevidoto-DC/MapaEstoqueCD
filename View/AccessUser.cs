@@ -1,5 +1,6 @@
 ﻿using MapaEstoqueCD.Controller;
 using MapaEstoqueCD.Database.Models;
+using MapaEstoqueCD.Utils;
 
 namespace MapaEstoqueCD.View
 {
@@ -11,6 +12,7 @@ namespace MapaEstoqueCD.View
         public AccessUser()
         {
             InitializeComponent();
+            //CacheMP.Instance.Db.Users.AddAsync(new User { Name = "dev", Password = AuthHelper.HashPassword("123"), Role = UserRole.DEV }).GetAwaiter().GetResult();
         }
 
         private void button1_Click(object sender, EventArgs e)
