@@ -35,13 +35,13 @@
             textBox_cod = new TextBox();
             groupBox2 = new GroupBox();
             groupBox8 = new GroupBox();
-            textBox4 = new TextBox();
+            textBox_lote = new TextBox();
             groupBox6 = new GroupBox();
-            textBox2 = new TextBox();
+            maskedTextBox_datef = new MaskedTextBox();
             groupBox7 = new GroupBox();
-            textBox3 = new TextBox();
+            textBox_semf = new TextBox();
             groupBox5 = new GroupBox();
-            textBox1 = new TextBox();
+            textBox_qtd = new TextBox();
             button_salvar = new Button();
             groupBox1.SuspendLayout();
             groupBox4.SuspendLayout();
@@ -71,7 +71,7 @@
             groupBox4.Location = new Point(6, 128);
             groupBox4.Name = "groupBox4";
             groupBox4.Size = new Size(391, 53);
-            groupBox4.TabIndex = 5;
+            groupBox4.TabIndex = 1;
             groupBox4.TabStop = false;
             groupBox4.Text = "Descrição";
             // 
@@ -94,7 +94,7 @@
             groupBox3.Location = new Point(6, 22);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(391, 100);
-            groupBox3.TabIndex = 4;
+            groupBox3.TabIndex = 0;
             groupBox3.TabStop = false;
             groupBox3.Text = "Código do produto";
             // 
@@ -109,6 +109,7 @@
             textBox_cod.TabIndex = 0;
             textBox_cod.Text = "999999";
             textBox_cod.TextAlign = HorizontalAlignment.Center;
+            textBox_cod.KeyPress += textBox_cod_KeyPress;
             // 
             // groupBox2
             // 
@@ -125,87 +126,92 @@
             // 
             // groupBox8
             // 
-            groupBox8.Controls.Add(textBox4);
+            groupBox8.Controls.Add(textBox_lote);
             groupBox8.Location = new Point(201, 81);
             groupBox8.Name = "groupBox8";
             groupBox8.Size = new Size(133, 53);
-            groupBox8.TabIndex = 6;
+            groupBox8.TabIndex = 3;
             groupBox8.TabStop = false;
             groupBox8.Text = "Lote";
             // 
-            // textBox4
+            // textBox_lote
             // 
-            textBox4.Dock = DockStyle.Fill;
-            textBox4.Font = new Font("Segoe UI", 9F);
-            textBox4.Location = new Point(3, 19);
-            textBox4.Multiline = true;
-            textBox4.Name = "textBox4";
-            textBox4.Size = new Size(127, 31);
-            textBox4.TabIndex = 0;
-            textBox4.TextAlign = HorizontalAlignment.Center;
+            textBox_lote.Dock = DockStyle.Fill;
+            textBox_lote.Font = new Font("Segoe UI", 15F);
+            textBox_lote.Location = new Point(3, 19);
+            textBox_lote.Multiline = true;
+            textBox_lote.Name = "textBox_lote";
+            textBox_lote.Size = new Size(127, 31);
+            textBox_lote.TabIndex = 0;
+            textBox_lote.TextAlign = HorizontalAlignment.Center;
             // 
             // groupBox6
             // 
-            groupBox6.Controls.Add(textBox2);
+            groupBox6.Controls.Add(maskedTextBox_datef);
             groupBox6.Location = new Point(201, 22);
             groupBox6.Name = "groupBox6";
             groupBox6.Size = new Size(133, 53);
-            groupBox6.TabIndex = 6;
+            groupBox6.TabIndex = 1;
             groupBox6.TabStop = false;
             groupBox6.Text = "Data Fab. (MM/YY)";
             // 
-            // textBox2
+            // maskedTextBox_datef
             // 
-            textBox2.Dock = DockStyle.Fill;
-            textBox2.Font = new Font("Segoe UI", 9F);
-            textBox2.Location = new Point(3, 19);
-            textBox2.Multiline = true;
-            textBox2.Name = "textBox2";
-            textBox2.Size = new Size(127, 31);
-            textBox2.TabIndex = 0;
-            textBox2.TextAlign = HorizontalAlignment.Center;
+            maskedTextBox_datef.Dock = DockStyle.Fill;
+            maskedTextBox_datef.Font = new Font("Segoe UI", 15F);
+            maskedTextBox_datef.Location = new Point(3, 19);
+            maskedTextBox_datef.Mask = "00/00";
+            maskedTextBox_datef.Name = "maskedTextBox_datef";
+            maskedTextBox_datef.PromptChar = '0';
+            maskedTextBox_datef.Size = new Size(127, 34);
+            maskedTextBox_datef.TabIndex = 0;
+            maskedTextBox_datef.TextAlign = HorizontalAlignment.Center;
+            maskedTextBox_datef.Leave += maskedTextBox_datef_Leave;
             // 
             // groupBox7
             // 
-            groupBox7.Controls.Add(textBox3);
+            groupBox7.Controls.Add(textBox_semf);
             groupBox7.Location = new Point(62, 81);
             groupBox7.Name = "groupBox7";
             groupBox7.Size = new Size(133, 53);
-            groupBox7.TabIndex = 6;
+            groupBox7.TabIndex = 2;
             groupBox7.TabStop = false;
             groupBox7.Text = "Semana Fab";
             // 
-            // textBox3
+            // textBox_semf
             // 
-            textBox3.Dock = DockStyle.Fill;
-            textBox3.Font = new Font("Segoe UI", 9F);
-            textBox3.Location = new Point(3, 19);
-            textBox3.Multiline = true;
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(127, 31);
-            textBox3.TabIndex = 0;
-            textBox3.TextAlign = HorizontalAlignment.Center;
+            textBox_semf.Dock = DockStyle.Fill;
+            textBox_semf.Font = new Font("Segoe UI", 15F);
+            textBox_semf.Location = new Point(3, 19);
+            textBox_semf.Multiline = true;
+            textBox_semf.Name = "textBox_semf";
+            textBox_semf.Size = new Size(127, 31);
+            textBox_semf.TabIndex = 0;
+            textBox_semf.TextAlign = HorizontalAlignment.Center;
+            textBox_semf.KeyPress += OnlyNumber;
             // 
             // groupBox5
             // 
-            groupBox5.Controls.Add(textBox1);
+            groupBox5.Controls.Add(textBox_qtd);
             groupBox5.Location = new Point(62, 22);
             groupBox5.Name = "groupBox5";
             groupBox5.Size = new Size(133, 53);
-            groupBox5.TabIndex = 6;
+            groupBox5.TabIndex = 0;
             groupBox5.TabStop = false;
             groupBox5.Text = "Quantidade";
             // 
-            // textBox1
+            // textBox_qtd
             // 
-            textBox1.Dock = DockStyle.Fill;
-            textBox1.Font = new Font("Segoe UI", 9F);
-            textBox1.Location = new Point(3, 19);
-            textBox1.Multiline = true;
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(127, 31);
-            textBox1.TabIndex = 0;
-            textBox1.TextAlign = HorizontalAlignment.Center;
+            textBox_qtd.Dock = DockStyle.Fill;
+            textBox_qtd.Font = new Font("Segoe UI", 15F);
+            textBox_qtd.Location = new Point(3, 19);
+            textBox_qtd.Multiline = true;
+            textBox_qtd.Name = "textBox_qtd";
+            textBox_qtd.Size = new Size(127, 31);
+            textBox_qtd.TabIndex = 0;
+            textBox_qtd.Text = "12312";
+            textBox_qtd.TextAlign = HorizontalAlignment.Center;
+            textBox_qtd.KeyPress += OnlyNumber;
             // 
             // button_salvar
             // 
@@ -220,6 +226,7 @@
             button_salvar.Text = "Salvar";
             button_salvar.TextAlign = ContentAlignment.BottomCenter;
             button_salvar.UseVisualStyleBackColor = true;
+            button_salvar.Click += button_salvar_Click;
             // 
             // AdicionarProduto
             // 
@@ -263,13 +270,13 @@
         private TextBox textBox_cod;
         private GroupBox groupBox2;
         private GroupBox groupBox8;
-        private TextBox textBox4;
+        private TextBox textBox_lote;
         private GroupBox groupBox6;
-        private TextBox textBox2;
         private GroupBox groupBox7;
-        private TextBox textBox3;
+        private TextBox textBox_semf;
         private GroupBox groupBox5;
-        private TextBox textBox1;
+        private TextBox textBox_qtd;
         private Button button_salvar;
+        private MaskedTextBox maskedTextBox_datef;
     }
 }

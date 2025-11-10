@@ -60,6 +60,7 @@ namespace MapaEstoqueCD.View
         private void toolStripButton_entrada_Click(object sender, EventArgs e)
         {
             (new EntradaProduto()).ShowDialog();
+            produtosCurrent = estoqueController.GetAllEstoque(ref listView1);
         }
     }
 }

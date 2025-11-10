@@ -24,7 +24,7 @@ namespace MapaEstoqueCD.Database.Models
         public string? Tipo { get; set; }
 
         [Column("data_f")]
-        public DateTime DataF { get; set; } = DateTime.Now;
+        public string DataF { get; set; }
 
         [Column("sem_f")]
         public int SemF { get; set; }   

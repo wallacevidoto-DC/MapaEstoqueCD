@@ -27,7 +27,8 @@ namespace MapaEstoqueCD.Database
 
                 // Campo computado
                 entity.Property(e => e.EnderecoId)
-                      .HasComputedColumnSql("rua || coluna || palete", stored: true);
+                      .HasComputedColumnSql("rua || coluna || palete", stored: true)
+                       .ValueGeneratedOnAddOrUpdate(); ;
 
                 entity.HasMany(e => e.Estoque)
                       .WithOne(s => s.Endereco)

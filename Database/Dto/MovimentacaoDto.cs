@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace MapaEstoqueCD.Database.Dto
+﻿namespace MapaEstoqueCD.Database.Dto
 {
     public class MovimentacaoDto
     {
@@ -17,7 +11,7 @@ namespace MapaEstoqueCD.Database.Dto
         public string? produtoDescricao { get; set; }
 
         public string? tipo { get; set; }
-        public DateTime dataF { get; set; }
+        public string dataF { get; set; }
         public int semF { get; set; }
         public int quantidade { get; set; }
         public string? lote { get; set; }

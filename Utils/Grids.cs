@@ -8,7 +8,6 @@ namespace MapaEstoqueCD.Utils
 {
     public static class Grids
     {
-        // Dicionário para armazenar o estado de ordenação por ListView
         private static readonly Dictionary<ListView, SortInfo> SortStates = new();
 
         private class SortInfo
@@ -19,7 +18,6 @@ namespace MapaEstoqueCD.Utils
 
         public static void SetDefaultListViews(List<ColumnConfig> columns, ref ListView listView)
         {
-            // ⚙️ Configuração básica
             listView.FullRowSelect = true;
             listView.GridLines = true;
             listView.MultiSelect = false;
@@ -27,17 +25,18 @@ namespace MapaEstoqueCD.Utils
             listView.View = System.Windows.Forms.View.Details;
             listView.OwnerDraw = true;
 
-            // 🔁 Remove eventos antigos
             listView.DrawColumnHeader -= ListView_DrawColumnHeader;
             listView.DrawItem -= ListView_DrawItem;
             listView.DrawSubItem -= ListView_DrawSubItem;
             listView.ColumnClick -= ListView_ColumnClick;
 
-            // 🎨 Adiciona eventos
             listView.DrawColumnHeader += ListView_DrawColumnHeader;
             listView.DrawItem += ListView_DrawItem;
             listView.DrawSubItem += ListView_DrawSubItem;
             listView.ColumnClick += ListView_ColumnClick;
+
+            // ✅ Usa sender para evitar erro com ref
+            listView.Resize += (s, e) => AutoResizeColumnsFill((ListView)s);
 
             // 🧹 Limpa colunas antigas
             listView.Columns.Clear();
@@ -48,17 +47,15 @@ namespace MapaEstoqueCD.Utils
 
             if (listView.Columns.Count == 0) return;
 
-            // 📏 Distribui largura igualmente
             int larguraTotal = listView.ClientSize.Width;
             int larguraPorColuna = larguraTotal / listView.Columns.Count;
             foreach (ColumnHeader col in listView.Columns)
                 col.Width = larguraPorColuna;
 
-            // 🔄 Inicializa estado de ordenação
+            AutoResizeColumnsFill(listView);
             SortStates[listView] = new SortInfo();
         }
 
-        // 🎨 Cabeçalho customizado
         private static void ListView_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
         {
             using (SolidBrush backBrush = new SolidBrush(Color.FromArgb(50, 50, 70)))
@@ -70,7 +67,6 @@ namespace MapaEstoqueCD.Utils
 
             string text = e.Header.Text;
 
-            // 🔽 Mostra o símbolo de ordenação
             if (sender is ListView lv && SortStates.ContainsKey(lv))
             {
                 var sortInfo = SortStates[lv];
@@ -91,7 +87,6 @@ namespace MapaEstoqueCD.Utils
             );
         }
 
-        // 🧭 Ordenação ao clicar no cabeçalho
         private static void ListView_ColumnClick(object sender, ColumnClickEventArgs e)
         {
             if (sender is not ListView listView) return;
@@ -101,7 +96,6 @@ namespace MapaEstoqueCD.Utils
 
             var sortInfo = SortStates[listView];
 
-            // Alterna entre Ascendente/Descendente
             if (sortInfo.ColumnIndex == e.Column)
             {
                 sortInfo.Order = sortInfo.Order == SortOrder.Ascending
@@ -114,10 +108,9 @@ namespace MapaEstoqueCD.Utils
                 sortInfo.Order = SortOrder.Ascending;
             }
 
-            // Define o sorter customizado
             listView.ListViewItemSorter = new ListViewItemComparer(e.Column, sortInfo.Order);
             listView.Sort();
-            listView.Invalidate(); // redesenha o cabeçalho (para o símbolo ▲▼ aparecer)
+            listView.Invalidate();
         }
 
         private class ListViewItemComparer : System.Collections.IComparer
@@ -139,24 +132,19 @@ namespace MapaEstoqueCD.Utils
                 string textX = itemX.SubItems[_col].Text;
                 string textY = itemY.SubItems[_col].Text;
 
-                // tenta comparar numericamente ou por data
                 if (decimal.TryParse(textX, out decimal numX) && decimal.TryParse(textY, out decimal numY))
                     return _order == SortOrder.Ascending ? numX.CompareTo(numY) : numY.CompareTo(numX);
 
                 if (DateTime.TryParse(textX, out DateTime dateX) && DateTime.TryParse(textY, out DateTime dateY))
                     return _order == SortOrder.Ascending ? dateX.CompareTo(dateY) : dateY.CompareTo(dateX);
 
-                // compara como string
                 return _order == SortOrder.Ascending
                     ? string.Compare(textX, textY, StringComparison.OrdinalIgnoreCase)
                     : string.Compare(textY, textX, StringComparison.OrdinalIgnoreCase);
             }
         }
 
-        private static void ListView_DrawItem(object sender, DrawListViewItemEventArgs e)
-        {
-            // e.DrawDefault = true; // opcional
-        }
+        private static void ListView_DrawItem(object sender, DrawListViewItemEventArgs e) { }
 
         private static void ListView_DrawSubItem(object sender, DrawListViewSubItemEventArgs e)
         {
@@ -181,6 +169,57 @@ namespace MapaEstoqueCD.Utils
                 Color.Black,
                 TextFormatFlags.Left | TextFormatFlags.VerticalCenter
             );
+        }
+
+        public static void AutoResizeColumnsFill(ListView listView)
+        {
+            if (listView.View !=  System.Windows.Forms.View.Details|| listView.Columns.Count == 0)
+                return;
+
+            int totalWidth = listView.ClientSize.Width;
+            int fixedWidth = 0;
+            int autoSizeCount = 0;
+
+            foreach (ColumnHeader column in listView.Columns)
+            {
+                if (column.Width <= 0)
+                    autoSizeCount++;
+                else
+                    fixedWidth += column.Width;
+            }
+
+            if (autoSizeCount == listView.Columns.Count)
+            {
+                int widthPerColumn = totalWidth / autoSizeCount;
+                foreach (ColumnHeader column in listView.Columns)
+                    column.Width = widthPerColumn;
+            }
+            else if (autoSizeCount > 0)
+            {
+                int remaining = totalWidth - fixedWidth;
+                int widthPerColumn = remaining / autoSizeCount;
+
+                foreach (ColumnHeader column in listView.Columns)
+                {
+                    if (column.Width <= 0)
+                        column.Width = widthPerColumn;
+                }
+            }
+
+            // ✅ Preenche o restante com a última coluna
+            FillLastColumn(listView);
+        }
+
+        private static void FillLastColumn(ListView listView)
+        {
+            if (listView.Columns.Count == 0)
+                return;
+
+            int totalWidth = listView.ClientSize.Width;
+            for (int i = 0; i < listView.Columns.Count - 1; i++)
+                totalWidth -= listView.Columns[i].Width;
+
+            listView.Columns[listView.Columns.Count - 1].Width = Math.Max(totalWidth - 1, 50);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using MapaEstoqueCD.Database.Dto.Ws;
+﻿using MapaEstoqueCD.Database.Dto.modal;
+using MapaEstoqueCD.Database.Dto.Ws;
 using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Services;
 using MapaEstoqueCD.Utils;
@@ -91,9 +92,15 @@ namespace MapaEstoqueCD.Controller
             return CacheMP.Instance.Db.Produtos.ToList();
         }
 
-        internal void GetEstoquetByFilter(List<FiltroItem> filtros, ref ListView listView1)
+        public void GetEstoquetByFilter(List<FiltroItem> filtros, ref ListView listView1)
         {
             throw new NotImplementedException();
+        }
+
+        public bool SetEntrada(EntradaDto entradaDto)
+        {
+            entradaDto.userId = CacheMP.Instance.UserCurrent.UserId;
+            return estoqueService.SetEntrada(entradaDto);
         }
     }
 }
