@@ -1,8 +1,10 @@
 ﻿using MapaEstoqueCD.Database.Dto;
+using MapaEstoqueCD.Database.Dto.Ws;
 using MapaEstoqueCD.Services;
 using MapaEstoqueCD.Utils;
 using MapaEstoqueCD.View.Modal;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace MapaEstoqueCD.Controller
 {
@@ -15,7 +17,7 @@ namespace MapaEstoqueCD.Controller
             Columns = new()
                 {
                     //new ColumnConfig("ID Movimentação", nameof(MovimentacaoDto.movimentacaoId)),
-                    //new ColumnConfig("Estoque ID", nameof(MovimentacaoDto.estoqueId)),
+                    new ColumnConfig("Estoque ID", nameof(MovimentacaoDto.estoqueId)),
                     new ColumnConfig("Usuário", nameof(MovimentacaoDto.usuarioNome)),
                     new ColumnConfig("Código do Produto", nameof(MovimentacaoDto.produtoCodigo)),
                     new ColumnConfig("Descrição do Produto", nameof(MovimentacaoDto.produtoDescricao)),
@@ -91,37 +93,41 @@ namespace MapaEstoqueCD.Controller
 
             foreach (var p in estoque)
             {
-                var valores = columns.Select(c =>
-                {
-                    object? val = null;
-
-                    if (c.Propriedade.Contains("."))
-                    {
-                        var parts = c.Propriedade.Split('.');
-                        object? currentObj = p;
-
-                        foreach (var part in parts)
-                        {
-                            if (currentObj == null) break;
-                            var prop = currentObj.GetType().GetProperty(part);
-                            currentObj = prop?.GetValue(currentObj);
-                        }
-
-                        val = currentObj;
-                    }
-                    else
-                    {
-                        var prop = typeof(MovimentacaoDto).GetProperty(c.Propriedade);
-                        val = prop?.GetValue(p);
-                    }
-
-                    return val?.ToString() ?? "";
-                }).ToArray();
-
-                datagrid.Rows.Add(valores);
+                datagrid.Rows.Add(
+                    p.usuarioNome,
+                    p.produtoCodigo,
+                    p.produtoDescricao,
+                    p.tipo,
+                    p.quantidade,
+                    p.dataF,
+                    p.semF,
+                    p.lote,
+                    p.obs,
+                    p.createAt);
             }
 
             return estoque;
+        }
+
+        internal void PrintPdf(List<MovimentacaoDto> produtosCurrent)
+        {
+            var pdfGenerator = new MovimentacaoPrintDocument(produtosCurrent);
+            string caminho = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                $"Estoque_{DateTime.Now:yyyyMMdd_HHmmss}.pdf");
+
+            pdfGenerator.GeneratePdf(caminho);
+            Process.Start(new ProcessStartInfo(caminho) { UseShellExecute = true });
+        }
+
+        internal void PrintExcel(List<MovimentacaoDto> produtosCurrent)
+        {
+            string caminho = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                $"Estoque_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx");
+            var exporter = new MovimentacaoExcelDocument(produtosCurrent);
+            exporter.GenerateExcel(caminho);
+            Process.Start(new ProcessStartInfo(caminho) { UseShellExecute = true });
         }
     }   
 }

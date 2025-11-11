@@ -4,6 +4,7 @@ using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Services;
 using MapaEstoqueCD.Utils;
 using MapaEstoqueCD.View.Modal;
+using System.Diagnostics;
 
 namespace MapaEstoqueCD.Controller
 {
@@ -130,6 +131,34 @@ namespace MapaEstoqueCD.Controller
         {
             saidaDto.userId = CacheMP.Instance.UserCurrent.UserId;
             return estoqueService.SetSaida(saidaDto);
+        }
+
+        public bool SetCorrecaoProduto(CorrecaoDto correcaoDto)
+        {
+            correcaoDto.userId = CacheMP.Instance.UserCurrent.UserId;
+            return estoqueService.SetCorrecaoProduto(correcaoDto);
+        }
+
+        internal void PrintPdf(List<EstoqueWsDto> produtosCurrent)
+        {
+            var pdfGenerator = new EstoquePrintDocument(produtosCurrent);
+            string caminho = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                $"Estoque_{DateTime.Now:yyyyMMdd_HHmmss}.pdf");
+
+            pdfGenerator.GeneratePdf(caminho);
+            Process.Start(new ProcessStartInfo(caminho) { UseShellExecute = true });
+        }
+
+        internal void PrintExcel(List<EstoqueWsDto> produtosCurrent)
+        {
+            var pdfGenerator = new EstoquePrintDocument(produtosCurrent);
+            string caminho = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+                $"Estoque_{DateTime.Now:yyyyMMdd_HHmmss}.xlsx");
+            var exporter = new EstoqueExcelDocument(produtosCurrent);
+            exporter.GenerateExcel(caminho);
+            Process.Start(new ProcessStartInfo(caminho) { UseShellExecute = true });
         }
     }
 }

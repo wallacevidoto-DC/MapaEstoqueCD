@@ -3,6 +3,7 @@ using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Database.Dto.modal;
 using MapaEstoqueCD.Database.Dto.Ws;
 using MapaEstoqueCD.Database.Models;
+using MapaEstoqueCD.Utils;
 using Microsoft.EntityFrameworkCore;
 
 namespace MapaEstoqueCD.Services
@@ -97,7 +98,7 @@ namespace MapaEstoqueCD.Services
                    produtoId = e.ProdutoId ?? 0,
                    semF = e.SemF ?? 0,
                    quantidade = e.Quantidade ?? 0,
-                   dataF = e.DataF,
+                   dataF = DataFormatter.FormatarData(e.DataF),
                    dataL = (e.DataL ?? DateTime.MinValue).Date,
                    lote = e.Lote,
                    obs = e.Obs,
@@ -250,6 +251,60 @@ namespace MapaEstoqueCD.Services
             }
             
           
+        }
+
+        public bool SetCorrecaoProduto(CorrecaoDto correcaoDto)
+        {
+            using var transaction = CacheMP.Instance.Db.Database.BeginTransaction();
+
+            try
+            {
+                var estoqueExistente = CacheMP.Instance.Db.Estoque.FirstOrDefault(e => e.EstoqueId == correcaoDto.enderecoId);
+
+                if (estoqueExistente == null)
+                    throw new Exception($"Estoque não encontrado.");
+
+                string Obs = correcaoDto.observacao ?? "";
+                Obs += $" {(string.IsNullOrEmpty(correcaoDto.observacao) ? "" : " | ")}Correção: (Q:{estoqueExistente.Quantidade} - DF:{DataFormatter.FormatarData(estoqueExistente.DataF)} - SF:{estoqueExistente.SemF} - LT:{estoqueExistente.Lote} )";
+
+                estoqueExistente.Quantidade = correcaoDto.produto.quantidade;
+                estoqueExistente.Lote = correcaoDto.produto.lote;
+                estoqueExistente.DataF = correcaoDto.produto.dataf;
+                estoqueExistente.SemF = correcaoDto.produto.semf;
+                estoqueExistente.Obs = correcaoDto.observacao;
+
+                CacheMP.Instance.Db.Estoque.Update(estoqueExistente);
+                CacheMP.Instance.Db.SaveChanges();
+
+
+                var movimentacao = new Movimentacao
+                {
+                    EstoqueId = estoqueExistente.EstoqueId,
+                    ProdutoId = correcaoDto.produto.id,
+                    Tipo = correcaoDto.tipo,
+                    Quantidade = correcaoDto.produto.quantidade,
+                    Obs = Obs,
+                    UserId = correcaoDto.userId,
+                    DataF = correcaoDto.produto.dataf,
+                    SemF = correcaoDto.produto.semf,
+                    Lote = correcaoDto.produto.lote,
+                    Endereco = estoqueExistente.EnderecoId,
+                    DataL = estoqueExistente.DataL?? DateTime.Now
+
+
+                };
+                CacheMP.Instance.Db.Movimentacoes.Update(movimentacao);
+                CacheMP.Instance.Db.SaveChanges();
+
+                transaction.Commit();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                Console.WriteLine("❌ Erro ao registrar entrada: " + ex.Message);
+                return false;
+            }
         }
     }
 }

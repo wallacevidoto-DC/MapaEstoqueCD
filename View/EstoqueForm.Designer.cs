@@ -135,15 +135,17 @@
             // 
             pDFToolStripMenuItem.Image = Properties.Resources.pdf;
             pDFToolStripMenuItem.Name = "pDFToolStripMenuItem";
-            pDFToolStripMenuItem.Size = new Size(107, 22);
+            pDFToolStripMenuItem.Size = new Size(224, 66);
             pDFToolStripMenuItem.Text = "PDF";
+            pDFToolStripMenuItem.Click += pDFToolStripMenuItem_Click;
             // 
             // eXCELToolStripMenuItem
             // 
             eXCELToolStripMenuItem.Image = Properties.Resources.xls;
             eXCELToolStripMenuItem.Name = "eXCELToolStripMenuItem";
-            eXCELToolStripMenuItem.Size = new Size(107, 22);
+            eXCELToolStripMenuItem.Size = new Size(224, 66);
             eXCELToolStripMenuItem.Text = "EXCEL";
+            eXCELToolStripMenuItem.Click += eXCELToolStripMenuItem_Click;
             // 
             // toolStripSeparator3
             // 
@@ -217,6 +219,7 @@
             cORREÇÃOToolStripMenuItem.Name = "cORREÇÃOToolStripMenuItem";
             cORREÇÃOToolStripMenuItem.Size = new Size(173, 32);
             cORREÇÃOToolStripMenuItem.Text = "CORREÇÃO";
+            cORREÇÃOToolStripMenuItem.Click += cORREÇÃOToolStripMenuItem_Click;
             // 
             // dataGridView1
             // 

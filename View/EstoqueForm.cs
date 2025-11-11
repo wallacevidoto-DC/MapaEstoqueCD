@@ -100,7 +100,7 @@ namespace MapaEstoqueCD.View
             {
                 tooltipSoma.Hide(dataGridView1.Parent);
             }
-        }      
+        }
 
         private void saídaToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -131,8 +131,27 @@ namespace MapaEstoqueCD.View
 
                 produtoSelecionado = produtosCurrent.FirstOrDefault(p => p.estoqueId.ToString() == valorPrimeiraCelula);
             }
-            
+
         }
 
+        private void cORREÇÃOToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (produtoSelecionado is not null)
+            {
+                (new CorrecaoProduto(produtoSelecionado)).ShowDialog();
+                produtosCurrent = estoqueController.GetAllEstoque(ref dataGridView1);
+                produtoSelecionado = null;
+            }
+        }
+
+        private void pDFToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            estoqueController.PrintPdf(produtosCurrent);
+        }
+
+        private void eXCELToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            estoqueController.PrintExcel(produtosCurrent);
+        }
     }
 }

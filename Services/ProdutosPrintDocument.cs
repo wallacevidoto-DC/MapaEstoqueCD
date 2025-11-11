@@ -9,11 +9,7 @@ using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
 using MapaEstoqueCD.Database.Models;
-using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 
 namespace MapaEstoqueCD.Services
 {
