@@ -38,11 +38,12 @@
                 return false;
             }
             if (string.IsNullOrWhiteSpace(dataf) ||
-                !System.Text.RegularExpressions.Regex.IsMatch(dataf, @"^(0[1-9]|1[0-2])\/\d{2}$"))
+                !System.Text.RegularExpressions.Regex.IsMatch(dataf, @"^(0?[1-9]|1[0-2])\/\d{2}$"))
             {
                 mensagemErro = "A data de fabricação deve estar no formato MM/AA.";
                 return false;
             }
+
             if (semf <= 0)
             {
                 mensagemErro = "O campo 'semf' deve ser maior que zero.";

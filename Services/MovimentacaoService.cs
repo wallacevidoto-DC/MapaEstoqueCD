@@ -34,7 +34,7 @@ namespace MapaEstoqueCD.Services
                   obs = m.Obs,
                   createAt = m.CreateAt
               })
-              .OrderBy(e => e.createAt)
+              .OrderByDescending(e => e.createAt)
               .ToList();
         }
     }

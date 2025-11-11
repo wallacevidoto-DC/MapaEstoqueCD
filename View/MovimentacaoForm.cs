@@ -10,7 +10,7 @@ namespace MapaEstoqueCD.View
         {
             InitializeComponent();
 
-            Grids.SetDefaultListViews(movimetacaoController.Columns, ref listView1);
+            //Grids.SetDefaultListViews(movimetacaoController.Columns, ref listView1);
             movimetacaoController.GetAllMovimentacao(ref dataGridView1);
         }
     }

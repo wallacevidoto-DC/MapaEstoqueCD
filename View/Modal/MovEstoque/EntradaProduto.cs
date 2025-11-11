@@ -154,6 +154,21 @@ namespace MapaEstoqueCD.View.Modal
                 if (estoqueController.SetEntrada(entradaDto))
                 {
                     MessageBox.Show(Text = "Entrada registrada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    var dr = MessageBox.Show("Deseja registrar outra entrada?", "Continuar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (dr == DialogResult.No) { 
+                        this.Close();
+                    }
+                    else
+                    {
+                        produtoSpDtos.Clear();
+                        ReloadGrid();
+                        comboBox_rua.Text = "";
+                        comboBox_bloco.Text = "";
+                        comboBox_apt.Text = "";
+                        richTextBox_obs.Text = "";
+                        dateTimePicker_dataEntrada.Value = DateTime.Now;
+                    }
                 }
             }
 

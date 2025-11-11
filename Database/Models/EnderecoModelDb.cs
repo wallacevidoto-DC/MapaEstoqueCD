@@ -7,8 +7,11 @@ namespace MapaEstoqueCD.Database.Models
     public class Endereco
     {
         [Key]
+        [Column("id")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        [Column("enderecoId")]
+        public int Id { get; set; }
+
+        [Required]
         public string EnderecoId { get; set; }
 
         [Column("rua")]
@@ -21,6 +24,13 @@ namespace MapaEstoqueCD.Database.Models
         public string Palete { get; set; }
 
         public ICollection<Estoque> Estoque { get; set; } = new List<Estoque>();
+
+
+
+        public void GerarEnderecoId()
+        {
+            EnderecoId = $"{Rua}{Coluna}{Palete}";
+        }
     }
 
 

@@ -23,18 +23,23 @@ namespace MapaEstoqueCD.Database
             // -------------------- ENDERECO --------------------
             modelBuilder.Entity<Endereco>(entity =>
             {
-                entity.HasKey(e => e.EnderecoId);
+                entity.HasKey(e => e.Id);
 
-                // Campo computado
+                entity.HasIndex(e => e.EnderecoId).IsUnique();
+
+                entity.Property(e => e.Id)
+                      .HasColumnName("id")
+                      .ValueGeneratedOnAdd();
+
                 entity.Property(e => e.EnderecoId)
-                      .HasComputedColumnSql("rua || coluna || palete", stored: true)
-                       .ValueGeneratedOnAddOrUpdate(); ;
+                      .HasColumnName("enderecoId")
+                      .IsRequired();
 
-                entity.HasMany(e => e.Estoque)
-                      .WithOne(s => s.Endereco)
-                      .HasForeignKey(s => s.EnderecoId)
-                      .OnDelete(DeleteBehavior.Restrict);
+                entity.Property(e => e.Rua).HasColumnName("rua");
+                entity.Property(e => e.Coluna).HasColumnName("coluna");
+                entity.Property(e => e.Palete).HasColumnName("palete");
             });
+
 
             // -------------------- PRODUTOS --------------------
             modelBuilder.Entity<Produtos>(entity =>
@@ -77,14 +82,13 @@ namespace MapaEstoqueCD.Database
                 entity.Property(e => e.CreateAt)
                       .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                // Atualização de UpdateAt precisa ser manual ou via trigger SQLite
                 entity.Property(e => e.UpdateAt);
 
                 entity.HasOne(e => e.Endereco)
-                      .WithMany(end => end.Estoque)
-                      .HasForeignKey(e => e.EnderecoId)
-                      .HasPrincipalKey(e => e.EnderecoId)
-                      .OnDelete(DeleteBehavior.Restrict);
+                       .WithMany(end => end.Estoque)
+                       .HasForeignKey(e => e.EnderecoId)
+                       .HasPrincipalKey(end => end.EnderecoId);
+
 
                 entity.HasOne(e => e.Produto)
                       .WithMany(p => p.Estoque)
@@ -121,6 +125,10 @@ namespace MapaEstoqueCD.Database
                       .OnDelete(DeleteBehavior.Restrict);
             });
         }
+
+
+       
+
 
     }
 }

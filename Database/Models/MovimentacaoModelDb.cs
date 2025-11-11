@@ -38,6 +38,12 @@ namespace MapaEstoqueCD.Database.Models
         [Column("lote")]
         public string? Lote { get; set; }
 
+        [Column("endereco")]
+        public string? Endereco { get; set; }
+
+        [Column("data_l")]
+        public DateTime DataL { get; set; }
+
         [Column("create_at")]
         public DateTime CreateAt { get; set; } = DateTime.Now;
 

@@ -4,11 +4,6 @@ using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Services;
 using MapaEstoqueCD.Utils;
 using MapaEstoqueCD.View.Modal;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace MapaEstoqueCD.Controller
 {
@@ -41,9 +36,9 @@ namespace MapaEstoqueCD.Controller
         {
             listView1.Items.Clear();
 
-            
+
             var columns = Columns.Where(c => c.Visivel).ToList();
-           
+
             listView1.Columns.Clear();
             foreach (var col in columns)
                 listView1.Columns.Add(col.Titulo);
@@ -87,6 +82,34 @@ namespace MapaEstoqueCD.Controller
             return estoque;
         }
 
+
+        public List<EstoqueWsDto>? GetAllEstoque(ref DataGridView datagrid)
+        {
+            datagrid.Rows.Clear();
+
+
+            var columns = Columns.Where(c => c.Visivel).ToList();
+
+            List<EstoqueWsDto> estoque = estoqueService.GetAllEstoque();
+
+            foreach (var p in estoque)
+            {
+                datagrid.Rows.Add(
+                    p.estoqueId,
+                    p.enderecoId,
+                    p.produto.codigo,
+                    p.produto.descricao,
+                    p.quantidade,
+                    p.dataL.ToShortDateString(),
+                    DataFormatter.FormatarMesAno(p.dataF),
+                    p.semF,
+                    p.lote,
+                    p.obs
+                    );
+            }
+
+            return estoque;
+        }
         public List<Produtos> GetAllProduct()
         {
             return CacheMP.Instance.Db.Produtos.ToList();
@@ -101,6 +124,12 @@ namespace MapaEstoqueCD.Controller
         {
             entradaDto.userId = CacheMP.Instance.UserCurrent.UserId;
             return estoqueService.SetEntrada(entradaDto);
+        }
+
+        public bool SetSaida(SaidaDto saidaDto)
+        {
+            saidaDto.userId = CacheMP.Instance.UserCurrent.UserId;
+            return estoqueService.SetSaida(saidaDto);
         }
     }
 }

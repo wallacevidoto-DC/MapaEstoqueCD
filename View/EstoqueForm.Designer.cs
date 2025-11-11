@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             toolStrip1 = new ToolStrip();
             toolStripButton_filtrar = new ToolStripButton();
             toolStripSeparator5 = new ToolStripSeparator();
@@ -42,13 +45,24 @@
             toolStripSeparator2 = new ToolStripSeparator();
             toolStripButton_exportar = new ToolStripButton();
             toolStripSeparator4 = new ToolStripSeparator();
-            listView1 = new ListView();
             contextMenuStrip1 = new ContextMenuStrip(components);
             saídaToolStripMenuItem = new ToolStripMenuItem();
             tRANSFERÊNCIAToolStripMenuItem = new ToolStripMenuItem();
             cORREÇÃOToolStripMenuItem = new ToolStripMenuItem();
+            dataGridView1 = new DataGridView();
+            Column11 = new DataGridViewTextBoxColumn();
+            Column1 = new DataGridViewTextBoxColumn();
+            Column2 = new DataGridViewTextBoxColumn();
+            Column3 = new DataGridViewTextBoxColumn();
+            Column7 = new DataGridViewTextBoxColumn();
+            Column4 = new DataGridViewTextBoxColumn();
+            Column5 = new DataGridViewTextBoxColumn();
+            Column6 = new DataGridViewTextBoxColumn();
+            Column8 = new DataGridViewTextBoxColumn();
+            Column9 = new DataGridViewTextBoxColumn();
             toolStrip1.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // toolStrip1
@@ -175,16 +189,6 @@
             toolStripSeparator4.Size = new Size(98, 6);
             toolStripSeparator4.Visible = false;
             // 
-            // listView1
-            // 
-            listView1.ContextMenuStrip = contextMenuStrip1;
-            listView1.Dock = DockStyle.Fill;
-            listView1.Location = new Point(0, 0);
-            listView1.Name = "listView1";
-            listView1.Size = new Size(1218, 561);
-            listView1.TabIndex = 3;
-            listView1.UseCompatibleStateImageBehavior = false;
-            // 
             // contextMenuStrip1
             // 
             contextMenuStrip1.ImageScalingSize = new Size(25, 25);
@@ -198,6 +202,7 @@
             saídaToolStripMenuItem.Name = "saídaToolStripMenuItem";
             saídaToolStripMenuItem.Size = new Size(173, 32);
             saídaToolStripMenuItem.Text = "SAÍDA";
+            saídaToolStripMenuItem.Click += saídaToolStripMenuItem_Click;
             // 
             // tRANSFERÊNCIAToolStripMenuItem
             // 
@@ -213,18 +218,129 @@
             cORREÇÃOToolStripMenuItem.Size = new Size(173, 32);
             cORREÇÃOToolStripMenuItem.Text = "CORREÇÃO";
             // 
+            // dataGridView1
+            // 
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToDeleteRows = false;
+            dataGridView1.AllowUserToResizeRows = false;
+            dataGridViewCellStyle1.BackColor = SystemColors.ButtonFace;
+            dataGridView1.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridView1.BackgroundColor = SystemColors.ButtonHighlight;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = Color.FromArgb(50, 50, 70);
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Column11, Column1, Column2, Column3, Column7, Column4, Column5, Column6, Column8, Column9 });
+            dataGridView1.ContextMenuStrip = contextMenuStrip1;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = Color.White;
+            dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle3.ForeColor = Color.Black;
+            dataGridViewCellStyle3.SelectionBackColor = Color.LightGray;
+            dataGridViewCellStyle3.SelectionForeColor = Color.Black;
+            dataGridViewCellStyle3.WrapMode = DataGridViewTriState.False;
+            dataGridView1.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridView1.Dock = DockStyle.Fill;
+            dataGridView1.EnableHeadersVisualStyles = false;
+            dataGridView1.GridColor = SystemColors.ScrollBar;
+            dataGridView1.Location = new Point(0, 0);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.ReadOnly = true;
+            dataGridView1.RowHeadersVisible = false;
+            dataGridView1.Size = new Size(1218, 561);
+            dataGridView1.TabIndex = 6;
+            dataGridView1.SelectionChanged += DataGridView1_SelectionChanged;
+            dataGridView1.MouseDown += dataGridView1_MouseDown;
+            // 
+            // Column11
+            // 
+            Column11.HeaderText = "xIndex";
+            Column11.Name = "Column11";
+            Column11.ReadOnly = true;
+            Column11.Visible = false;
+            // 
+            // Column1
+            // 
+            Column1.FillWeight = 50F;
+            Column1.HeaderText = "Endereco";
+            Column1.Name = "Column1";
+            Column1.ReadOnly = true;
+            // 
+            // Column2
+            // 
+            Column2.FillWeight = 50F;
+            Column2.HeaderText = "Código do Produto";
+            Column2.Name = "Column2";
+            Column2.ReadOnly = true;
+            // 
+            // Column3
+            // 
+            Column3.FillWeight = 200F;
+            Column3.HeaderText = "Descrição";
+            Column3.Name = "Column3";
+            Column3.ReadOnly = true;
+            // 
+            // Column7
+            // 
+            Column7.FillWeight = 20F;
+            Column7.HeaderText = "Qtd.";
+            Column7.Name = "Column7";
+            Column7.ReadOnly = true;
+            // 
+            // Column4
+            // 
+            Column4.FillWeight = 50F;
+            Column4.HeaderText = "Data Lan.";
+            Column4.Name = "Column4";
+            Column4.ReadOnly = true;
+            // 
+            // Column5
+            // 
+            Column5.FillWeight = 50F;
+            Column5.HeaderText = "Data Fab.";
+            Column5.Name = "Column5";
+            Column5.ReadOnly = true;
+            // 
+            // Column6
+            // 
+            Column6.FillWeight = 50F;
+            Column6.HeaderText = "Sem. Fab.";
+            Column6.Name = "Column6";
+            Column6.ReadOnly = true;
+            // 
+            // Column8
+            // 
+            Column8.FillWeight = 50F;
+            Column8.HeaderText = "Lote";
+            Column8.Name = "Column8";
+            Column8.ReadOnly = true;
+            // 
+            // Column9
+            // 
+            Column9.FillWeight = 200F;
+            Column9.HeaderText = "Observações";
+            Column9.Name = "Column9";
+            Column9.ReadOnly = true;
+            // 
             // EstoqueForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1319, 561);
-            Controls.Add(listView1);
+            Controls.Add(dataGridView1);
             Controls.Add(toolStrip1);
             Name = "EstoqueForm";
             Text = "Estoque";
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
             contextMenuStrip1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -249,5 +365,16 @@
         private ToolStripMenuItem saídaToolStripMenuItem;
         private ToolStripMenuItem tRANSFERÊNCIAToolStripMenuItem;
         private ToolStripMenuItem cORREÇÃOToolStripMenuItem;
+        private DataGridView dataGridView1;
+        private DataGridViewTextBoxColumn Column11;
+        private DataGridViewTextBoxColumn Column1;
+        private DataGridViewTextBoxColumn Column2;
+        private DataGridViewTextBoxColumn Column3;
+        private DataGridViewTextBoxColumn Column7;
+        private DataGridViewTextBoxColumn Column4;
+        private DataGridViewTextBoxColumn Column5;
+        private DataGridViewTextBoxColumn Column6;
+        private DataGridViewTextBoxColumn Column8;
+        private DataGridViewTextBoxColumn Column9;
     }
 }
