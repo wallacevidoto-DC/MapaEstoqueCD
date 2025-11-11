@@ -153,5 +153,12 @@ namespace MapaEstoqueCD.View
         {
             estoqueController.PrintExcel(produtosCurrent);
         }
+
+        private void tRANSFERÊNCIAToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            (new TransferenciaProduto(produtoSelecionado)).ShowDialog();
+            produtosCurrent = estoqueController.GetAllEstoque(ref dataGridView1);
+            produtoSelecionado = null;
+        }
     }
 }

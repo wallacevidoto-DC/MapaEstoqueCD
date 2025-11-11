@@ -4,12 +4,15 @@ using iText.Kernel.Colors;
 using iText.Kernel.Font;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Event;
 using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using MapaEstoqueCD.Controller;
 using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Database.Dto.Ws;
+using MapaEstoqueCD.Utils.Print;
 using System.Globalization;
 namespace MapaEstoqueCD.Services
 {
@@ -63,7 +66,8 @@ namespace MapaEstoqueCD.Services
             using var writer = new PdfWriter(outputPath);
             using var pdf = new PdfDocument(writer);
             var document = new Document(pdf, PageSize.A4.Rotate());
-
+            string dataHora = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+            pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new FooterEventHandler($"Gerado por {CacheMP.Instance.UserCurrent.Name} em {DateTime.Now:dd/MM/yyyy HH:mm}"));
             // Margens
             document.SetMargins(15, 10, 15, 10);
 

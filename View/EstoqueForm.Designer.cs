@@ -135,7 +135,7 @@
             // 
             pDFToolStripMenuItem.Image = Properties.Resources.pdf;
             pDFToolStripMenuItem.Name = "pDFToolStripMenuItem";
-            pDFToolStripMenuItem.Size = new Size(224, 66);
+            pDFToolStripMenuItem.Size = new Size(107, 22);
             pDFToolStripMenuItem.Text = "PDF";
             pDFToolStripMenuItem.Click += pDFToolStripMenuItem_Click;
             // 
@@ -143,7 +143,7 @@
             // 
             eXCELToolStripMenuItem.Image = Properties.Resources.xls;
             eXCELToolStripMenuItem.Name = "eXCELToolStripMenuItem";
-            eXCELToolStripMenuItem.Size = new Size(224, 66);
+            eXCELToolStripMenuItem.Size = new Size(107, 22);
             eXCELToolStripMenuItem.Text = "EXCEL";
             eXCELToolStripMenuItem.Click += eXCELToolStripMenuItem_Click;
             // 
@@ -196,13 +196,13 @@
             contextMenuStrip1.ImageScalingSize = new Size(25, 25);
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { saídaToolStripMenuItem, tRANSFERÊNCIAToolStripMenuItem, cORREÇÃOToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(174, 100);
+            contextMenuStrip1.Size = new Size(190, 122);
             // 
             // saídaToolStripMenuItem
             // 
             saídaToolStripMenuItem.Image = Properties.Resources.saida;
             saídaToolStripMenuItem.Name = "saídaToolStripMenuItem";
-            saídaToolStripMenuItem.Size = new Size(173, 32);
+            saídaToolStripMenuItem.Size = new Size(189, 32);
             saídaToolStripMenuItem.Text = "SAÍDA";
             saídaToolStripMenuItem.Click += saídaToolStripMenuItem_Click;
             // 
@@ -210,14 +210,15 @@
             // 
             tRANSFERÊNCIAToolStripMenuItem.Image = Properties.Resources.transferencia;
             tRANSFERÊNCIAToolStripMenuItem.Name = "tRANSFERÊNCIAToolStripMenuItem";
-            tRANSFERÊNCIAToolStripMenuItem.Size = new Size(173, 32);
+            tRANSFERÊNCIAToolStripMenuItem.Size = new Size(189, 32);
             tRANSFERÊNCIAToolStripMenuItem.Text = "TRANSFERÊNCIA";
+            tRANSFERÊNCIAToolStripMenuItem.Click += tRANSFERÊNCIAToolStripMenuItem_Click;
             // 
             // cORREÇÃOToolStripMenuItem
             // 
             cORREÇÃOToolStripMenuItem.Image = Properties.Resources.correcao;
             cORREÇÃOToolStripMenuItem.Name = "cORREÇÃOToolStripMenuItem";
-            cORREÇÃOToolStripMenuItem.Size = new Size(173, 32);
+            cORREÇÃOToolStripMenuItem.Size = new Size(189, 32);
             cORREÇÃOToolStripMenuItem.Text = "CORREÇÃO";
             cORREÇÃOToolStripMenuItem.Click += cORREÇÃOToolStripMenuItem_Click;
             // 

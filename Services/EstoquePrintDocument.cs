@@ -1,14 +1,18 @@
-﻿using iText.IO.Font.Constants;
+﻿using iText.Commons.Actions;
+using iText.IO.Font.Constants;
 using iText.IO.Image;
 using iText.Kernel.Colors;
 using iText.Kernel.Font;
 using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Event;
 using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using MapaEstoqueCD.Controller;
 using MapaEstoqueCD.Database.Dto.Ws;
+using MapaEstoqueCD.Utils.Print;
 using System.Globalization;
 namespace MapaEstoqueCD.Services
 {
@@ -61,6 +65,12 @@ namespace MapaEstoqueCD.Services
             using var writer = new PdfWriter(outputPath);
             using var pdf = new PdfDocument(writer);
             var document = new Document(pdf, PageSize.A4.Rotate());
+
+            string dataHora = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+            pdf.AddEventHandler(PdfDocumentEvent.END_PAGE, new FooterEventHandler($"Gerado por {CacheMP.Instance.UserCurrent.Name} em {DateTime.Now:dd/MM/yyyy HH:mm}"));
+
+
+
 
             // Margens
             document.SetMargins(15, 10, 15, 10);
@@ -161,55 +171,7 @@ namespace MapaEstoqueCD.Services
                 }
             }
 
-            //var properties = typeof(EstoqueWsDto).GetProperties().ToDictionary(p => p.Name, p => p);
-            //foreach (var produto in produtos)
-            //{
-            //    foreach (var col in columnDefinitions)
-            //    {
-            //        string value = "";
-            //        if (properties.TryGetValue(col.PropertyName, out var propInfo))
-            //        {
-            //            value = FormatValue(col.PropertyName, propInfo.GetValue(produto));
-            //            if (value.Length > 30) value = value.Substring(0, 27) + "...";
-            //        }
-
-            //        var cell = new Cell()
-            //            .Add(new Paragraph(value).SetFontSize(4))
-            //            .SetTextAlignment(TextAlignment.CENTER);
-
-            //        table.AddCell(cell);
-            //    }
-            //}
-            //foreach (var produto in produtos)
-            //{
-            //    foreach (var col in columnDefinitions)
-            //    {
-            //        object? rawValue = null;
-
-            //        // suporte para propriedades aninhadas, ex: "produto.codigo"
-            //        string[] path = col.PropertyName.Split('.');
-            //        object? current = produto;
-
-            //        foreach (var part in path)
-            //        {
-            //            if (current == null) break;
-            //            var type = current.GetType();
-            //            var propInfo = type.GetProperty(part);
-            //            if (propInfo == null) break;
-            //            current = propInfo.GetValue(current);
-            //        }
-
-            //        rawValue = current;
-            //        string value = FormatValue(col.PropertyName, rawValue);
-            //        if (value.Length > 30) value = value.Substring(0, 27) + "...";
-
-            //        var cell = new Cell()
-            //            .Add(new Paragraph(value).SetFontSize(6))
-            //            .SetTextAlignment(TextAlignment.CENTER);
-
-            //        table.AddCell(cell);
-            //    }
-            //}
+            
 
 
             document.Add(table);
