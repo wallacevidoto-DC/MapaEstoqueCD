@@ -64,7 +64,7 @@ namespace MapaEstoqueCD.Services
             {
                 produtos.Add(new ProdutoSpDto
                 {
-                    id = sprod.Estoque.ElementAt(i).Produto.ProdutoId,
+                    produtoId = sprod.Estoque.ElementAt(i).Produto.ProdutoId,
                     codigo = sprod.Estoque.ElementAt(i).Produto?.Codigo,
                     descricao = sprod.Estoque.ElementAt(i).Produto?.Descricao,
                     quantidade = sprod.Estoque.ElementAt(i).Quantidade ?? 0,
@@ -144,7 +144,7 @@ namespace MapaEstoqueCD.Services
                         throw new Exception($"Produto inválido: {p.codigo} — {msg}");
                     var novoEstoque = new Estoque
                     {
-                        ProdutoId = p.id,
+                        ProdutoId = p.produtoId,
                         EnderecoId = endereco.EnderecoId,
                         Quantidade = p.quantidade,
                         Lote = p.lote,
@@ -152,7 +152,7 @@ namespace MapaEstoqueCD.Services
                         SemF = p.semf,
                         CreateAt = DateTime.Now,
                         DataL = entradaDto.dataEntrada,
-                        Obs= entradaDto.observacao
+                        Obs = entradaDto.observacao
                     };
                     CacheMP.Instance.Db.Estoque.Add(novoEstoque);
                     CacheMP.Instance.Db.SaveChanges();
@@ -160,7 +160,7 @@ namespace MapaEstoqueCD.Services
                     var movimentacao = new Movimentacao
                     {
                         EstoqueId = novoEstoque.EstoqueId,
-                        ProdutoId = p.id,
+                        ProdutoId = p.produtoId,
                         Tipo = entradaDto.tipo,
                         Quantidade = p.quantidade,
                         Obs = entradaDto.observacao,
@@ -209,10 +209,10 @@ namespace MapaEstoqueCD.Services
                 {
 
 
-                    string Obs = saidaDto?.observacao?? "";
+                    string Obs = saidaDto?.observacao ?? "";
                     Obs += $" {(string.IsNullOrEmpty(saidaDto.observacao) ? "" : " | ")}Saída: R-{saidaDto.qtdRetirada} de E-{qtdOld}";
 
-                    if (estoque.Quantidade == 0 )
+                    if (estoque.Quantidade == 0)
                     {
                         Obs += " | Produto Zerado no Estoque";
                     }
@@ -249,8 +249,8 @@ namespace MapaEstoqueCD.Services
 
                 throw;
             }
-            
-          
+
+
         }
 
         public bool SetCorrecaoProduto(CorrecaoDto correcaoDto)
@@ -280,7 +280,7 @@ namespace MapaEstoqueCD.Services
                 var movimentacao = new Movimentacao
                 {
                     EstoqueId = estoqueExistente.EstoqueId,
-                    ProdutoId = correcaoDto.produto.id,
+                    ProdutoId = correcaoDto.produto.produtoId,
                     Tipo = correcaoDto.tipo,
                     Quantidade = correcaoDto.produto.quantidade,
                     Obs = Obs,
@@ -289,12 +289,95 @@ namespace MapaEstoqueCD.Services
                     SemF = correcaoDto.produto.semf,
                     Lote = correcaoDto.produto.lote,
                     Endereco = estoqueExistente.EnderecoId,
-                    DataL = estoqueExistente.DataL?? DateTime.Now
+                    DataL = estoqueExistente.DataL ?? DateTime.Now
 
 
                 };
                 CacheMP.Instance.Db.Movimentacoes.Update(movimentacao);
                 CacheMP.Instance.Db.SaveChanges();
+
+                transaction.Commit();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                Console.WriteLine("❌ Erro ao registrar entrada: " + ex.Message);
+                return false;
+            }
+        }
+
+        internal bool SetTransferencia(TranferenciaDto transferenciaDto)
+        {
+            using var transaction = CacheMP.Instance.Db.Database.BeginTransaction();
+
+            try
+            {
+                var endereco = CacheMP.Instance.Db.Enderecos
+                    .FirstOrDefault(e =>
+                        e.Rua == transferenciaDto.rua &&
+                        e.Coluna == transferenciaDto.bloco &&
+                        e.Palete == transferenciaDto.apt);
+
+                if (endereco == null)
+                {
+                    endereco = new Endereco
+                    {
+                        Rua = transferenciaDto.rua,
+                        Coluna = transferenciaDto.bloco,
+                        Palete = transferenciaDto.apt
+                    };
+                    endereco.GerarEnderecoId();
+                    CacheMP.Instance.Db.Enderecos.Add(endereco);
+                    CacheMP.Instance.Db.SaveChanges();
+                }
+
+                if (!transferenciaDto.produto.IsValid(out string msg))
+                    throw new Exception($"Produto inválido: {transferenciaDto.produto.codigo} — {msg}");
+                var estoqueExistente = CacheMP.Instance.Db.Estoque.FirstOrDefault(e => e.EstoqueId == transferenciaDto.estoqueID);
+
+                if (estoqueExistente != null)
+                {
+                    estoqueExistente.EnderecoId = endereco.EnderecoId;
+                    CacheMP.Instance.Db.SaveChanges();
+                }
+                else
+                {
+                    var novoEstoque = new Estoque
+                    {
+                        ProdutoId = transferenciaDto.produto.produtoId,
+                        EnderecoId = endereco.EnderecoId,
+                        Quantidade = transferenciaDto.produto.quantidade,
+                        Lote = transferenciaDto.produto.lote,
+                        DataF = transferenciaDto.produto.dataf,
+                        SemF = transferenciaDto.produto.semf,
+                        DataL = transferenciaDto.dataEntrada,
+                        Obs = transferenciaDto.observacao
+                    };
+                    CacheMP.Instance.Db.Estoque.Add(novoEstoque);
+                    CacheMP.Instance.Db.SaveChanges();
+                    estoqueExistente = novoEstoque; 
+                }
+
+                var movimentacao = new Movimentacao
+                {
+                    EstoqueId = estoqueExistente.EstoqueId,
+                    ProdutoId = transferenciaDto.produto.produtoId,
+                    Tipo = transferenciaDto.tipo,
+                    Quantidade = transferenciaDto.produto.quantidade,
+                    Obs = transferenciaDto.observacao + $" | S: {transferenciaDto.endOld} -> P: {endereco.EnderecoId} ",
+                    UserId = transferenciaDto.userId,
+                    DataF = transferenciaDto.produto.dataf,
+                    SemF = transferenciaDto.produto.semf,
+                    Lote = transferenciaDto.produto.lote,
+                    Endereco = endereco.EnderecoId,
+                    DataL = transferenciaDto.dataEntrada
+
+
+                };
+                CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
+                CacheMP.Instance.Db.SaveChanges();
+
 
                 transaction.Commit();
                 return true;

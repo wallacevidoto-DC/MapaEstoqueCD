@@ -12,6 +12,8 @@
             Propriedade = propriedade;
             Visivel = visivel;
         }
+        public override string ToString() => Titulo;
+
     }
 
 }

@@ -2,6 +2,7 @@
 using MapaEstoqueCD.Database.Dto.Ws;
 using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Utils;
+using MapaEstoqueCD.Utils.Print;
 using MapaEstoqueCD.View.Modal;
 
 namespace MapaEstoqueCD.View
@@ -40,14 +41,11 @@ namespace MapaEstoqueCD.View
         private void toolStripButton_filtrar_Click(object sender, EventArgs e)
         {
 
-            using var filtro = new FiltroAvancadoForm(estoqueController.Columns, filtrosAtivos);
+            var filtrosSelecionados = FiltroAvancado.ShowDialogAndReturn(estoqueController.Columns, filtrosAtivos);
+            filtrosAtivos = filtrosSelecionados;
+            produtosCurrent = estoqueController.GetEstoquetByFilter(filtrosAtivos, ref dataGridView1);
 
-            if (filtro.ShowDialog() == DialogResult.OK)
-            {
-                var filtros = filtro.Resultado;
 
-                estoqueController.GetEstoquetByFilter(filtros, ref listView1);
-            }
         }
 
         private async void toolStripButton_importar_Click(object sender, EventArgs e)
@@ -59,7 +57,7 @@ namespace MapaEstoqueCD.View
             {
                 List<Produtos> sd = estoqueController.GetAllProduct();
                 await ExcelImporter.ImportarEstoque(ofd.FileName, sd);
-                estoqueController.GetAllEstoque(ref listView1);
+                estoqueController.GetAllEstoque(ref dataGridView1);
                 MessageBox.Show("Importação concluída com sucesso!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
@@ -67,7 +65,7 @@ namespace MapaEstoqueCD.View
         private void toolStripButton_entrada_Click(object sender, EventArgs e)
         {
             (new EntradaProduto()).ShowDialog();
-            produtosCurrent = estoqueController.GetAllEstoque(ref dataGridView1);
+            produtosCurrent = produtosCurrent = estoqueController.GetAllEstoque(ref dataGridView1);
         }
         private void DataGridView1_SelectionChanged(object sender, EventArgs e)
         {
@@ -147,6 +145,12 @@ namespace MapaEstoqueCD.View
         private void pDFToolStripMenuItem_Click(object sender, EventArgs e)
         {
             estoqueController.PrintPdf(produtosCurrent);
+
+            //string path = @"D:\Downloads\estoque_exportado.pdf";
+            //string directory = Path.GetDirectoryName(path)!;
+            //Directory.CreateDirectory(directory); // Cria se não existir
+
+            //ExportDataGridViewToPdf.ExportDataGridViewStyled(dataGridView1, path);
         }
 
         private void eXCELToolStripMenuItem_Click(object sender, EventArgs e)

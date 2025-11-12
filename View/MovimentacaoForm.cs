@@ -15,7 +15,7 @@ namespace MapaEstoqueCD.View
             InitializeComponent();
 
             //Grids.SetDefaultListViews(movimetacaoController.Columns, ref listView1);
-            movimentacoesCurrent= movimetacaoController.GetAllMovimentacao(ref dataGridView1);
+            movimentacoesCurrent = movimetacaoController.GetAllMovimentacao(ref dataGridView1);
         }
 
         private void pDFToolStripMenuItem_Click(object sender, EventArgs e)
@@ -26,6 +26,13 @@ namespace MapaEstoqueCD.View
         private void eXCELToolStripMenuItem_Click(object sender, EventArgs e)
         {
             movimetacaoController.PrintExcel(movimentacoesCurrent);
+        }
+
+        private void toolStripButton_filtrar_Click(object sender, EventArgs e)
+        {
+            var filtrosSelecionados = FiltroAvancado.ShowDialogAndReturn(movimetacaoController.Columns, filtrosAtivos);
+            filtrosAtivos = filtrosSelecionados;
+            movimentacoesCurrent = movimetacaoController.GetEstoquetByFilter(filtrosAtivos, ref dataGridView1);
         }
     }
 }

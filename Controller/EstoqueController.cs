@@ -116,10 +116,93 @@ namespace MapaEstoqueCD.Controller
             return CacheMP.Instance.Db.Produtos.ToList();
         }
 
-        public void GetEstoquetByFilter(List<FiltroItem> filtros, ref ListView listView1)
+        public List<EstoqueWsDto>? GetEstoquetByFilter(List<FiltroItem> filtros, ref DataGridView datagrid)
         {
-            throw new NotImplementedException();
+
+            if (filtros.Count == 0)
+            {
+                return GetAllEstoque(ref datagrid);
+            }
+            datagrid.Rows.Clear();
+
+            var columns = Columns.Where(c => c.Visivel).ToList();
+
+            List<EstoqueWsDto> estoque = estoqueService.GetAllEstoque();
+
+            // --- 🔍 APLICA OS FILTROS ---
+            foreach (var filtro in filtros)
+            {
+                if (string.IsNullOrWhiteSpace(filtro.Valor))
+                    continue;
+
+                switch (filtro.Coluna.ToLower())
+                {
+                    case "produto.codigo":
+                        estoque = filtro.Tipo switch
+                        {
+                            "contém" => estoque.Where(e => e.produto?.codigo?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
+                            "igual" => estoque.Where(e => string.Equals(e.produto?.codigo, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
+                            _ => estoque
+                        };
+                        break;
+
+                    case "produto.descricao":
+                        estoque = filtro.Tipo switch
+                        {
+                            "contém" => estoque.Where(e => e.produto?.descricao?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
+                            "igual" => estoque.Where(e => string.Equals(e.produto?.descricao, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
+                            _ => estoque
+                        };
+                        break;
+
+                    case "quantidade":
+                        if (int.TryParse(filtro.Valor, out int qtd))
+                        {
+                            estoque = filtro.Tipo switch
+                            {
+                                "maior" => estoque.Where(e => e.quantidade > qtd).ToList(),
+                                "menor" => estoque.Where(e => e.quantidade < qtd).ToList(),
+                                "igual" => estoque.Where(e => e.quantidade == qtd).ToList(),
+                                _ => estoque
+                            };
+                        }
+                        break;
+
+                    case "semf":
+                        if (int.TryParse(filtro.Valor, out int semF))
+                            estoque = estoque.Where(e => e.semF == semF).ToList();
+                        break;
+
+                    case "enderecoid":
+                        estoque = estoque.Where(e => e.enderecoId?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList();
+                        break;
+
+                    case "lote":
+                        estoque = estoque.Where(e => e.lote?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList();
+                        break;
+                }
+            }
+
+            // --- 🧾 PREENCHER O GRID ---
+            foreach (var p in estoque)
+            {
+                datagrid.Rows.Add(
+                    p.estoqueId,
+                    p.enderecoId,
+                    p.produto?.codigo,
+                    p.produto?.descricao,
+                    p.quantidade,
+                    p.dataL.ToShortDateString(),
+                    DataFormatter.FormatarMesAno(p.dataF),
+                    p.semF,
+                    p.lote,
+                    p.obs
+                );
+            }
+
+            return estoque;
         }
+
 
         public bool SetEntrada(EntradaDto entradaDto)
         {
@@ -159,6 +242,12 @@ namespace MapaEstoqueCD.Controller
             var exporter = new EstoqueExcelDocument(produtosCurrent);
             exporter.GenerateExcel(caminho);
             Process.Start(new ProcessStartInfo(caminho) { UseShellExecute = true });
+        }
+
+        internal bool SetTranferencia(TranferenciaDto transferenciaDto)
+        {
+            transferenciaDto.userId = CacheMP.Instance.UserCurrent.UserId;
+            return estoqueService.SetTransferencia(transferenciaDto);
         }
     }
 }

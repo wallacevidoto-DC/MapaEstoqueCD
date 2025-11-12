@@ -40,7 +40,7 @@ namespace MapaEstoqueCD.View.Modal
 
                 dto = new ProdutoSpDto
                 {
-                    id = estoqueWsDto.produtoId,
+                    produtoId = estoqueWsDto.produtoId,
                     codigo = estoqueWsDto.produto.codigo,
                     descricao = estoqueWsDto.produto.descricao
                 };

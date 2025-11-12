@@ -23,24 +23,24 @@ namespace MapaEstoqueCD.View.Modal
             MontarLayout();
 
             // Adiciona filtros depois do Load
-            Load += (s, e) =>
+            _panelFiltros.SuspendLayout();
+
+            if (filtrosExistentes != null && filtrosExistentes.Any())
             {
-                _panelFiltros.SuspendLayout();
+                foreach (var f in filtrosExistentes)
+                    AdicionarLinha(f.Coluna, f.Valor, f.Tipo, f.Tabela);
+            }
+            else
+            {
+                AdicionarLinha();
+            }
 
-                if (filtrosExistentes != null && filtrosExistentes.Any())
-                {
-                    foreach (var f in filtrosExistentes)
-                        AdicionarLinha(f.Coluna, f.Valor, f.Tipo, f.Tabela);
-                }
-                else
-                {
-                    AdicionarLinha();
-                }
-
-                _panelFiltros.ResumeLayout();
-                _panelFiltros.PerformLayout();
-                _panelFiltros.Refresh();
-            };
+            _panelFiltros.ResumeLayout(true);
+            _panelFiltros.PerformLayout();
+            Application.DoEvents();
+            _panelFiltros.Refresh();
+            _panelFiltros.Refresh();
+            
         }
 
         private void MontarLayout()

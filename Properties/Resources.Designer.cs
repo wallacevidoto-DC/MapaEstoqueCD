@@ -163,6 +163,16 @@ namespace MapaEstoqueCD.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap cancelar1 {
+            get {
+                object obj = ResourceManager.GetObject("cancelar1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap correcao {
             get {
                 object obj = ResourceManager.GetObject("correcao", resourceCulture);
@@ -233,6 +243,16 @@ namespace MapaEstoqueCD.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap filtro_limpo {
+            get {
+                object obj = ResourceManager.GetObject("filtro-limpo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap filtrolimpo {
             get {
                 object obj = ResourceManager.GetObject("filtrolimpo", resourceCulture);
@@ -266,6 +286,16 @@ namespace MapaEstoqueCD.Properties {
         internal static System.Drawing.Bitmap limpar_limpo {
             get {
                 object obj = ResourceManager.GetObject("limpar-limpo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap motor_de_busca {
+            get {
+                object obj = ResourceManager.GetObject("motor-de-busca", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

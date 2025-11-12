@@ -34,7 +34,7 @@
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             textBox_atualx = new TextBox();
             groupBox1 = new GroupBox();
-            dateTimePicker1 = new DateTimePicker();
+            dateTimePicker_dataEntrada = new DateTimePicker();
             groupBox2 = new GroupBox();
             button_bucar_end = new Button();
             groupBox5 = new GroupBox();
@@ -101,7 +101,7 @@
             // groupBox1
             // 
             groupBox1.Controls.Add(textBox1);
-            groupBox1.Controls.Add(dateTimePicker1);
+            groupBox1.Controls.Add(dateTimePicker_dataEntrada);
             groupBox1.Location = new Point(12, 10);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(692, 60);
@@ -109,14 +109,15 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Informação";
             // 
-            // dateTimePicker1
+            // dateTimePicker_dataEntrada
             // 
-            dateTimePicker1.Dock = DockStyle.Left;
-            dateTimePicker1.Font = new Font("Segoe UI", 15F);
-            dateTimePicker1.Location = new Point(3, 19);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(405, 34);
-            dateTimePicker1.TabIndex = 0;
+            dateTimePicker_dataEntrada.Dock = DockStyle.Left;
+            dateTimePicker_dataEntrada.Enabled = false;
+            dateTimePicker_dataEntrada.Font = new Font("Segoe UI", 15F);
+            dateTimePicker_dataEntrada.Location = new Point(3, 19);
+            dateTimePicker_dataEntrada.Name = "dateTimePicker_dataEntrada";
+            dateTimePicker_dataEntrada.Size = new Size(405, 34);
+            dateTimePicker_dataEntrada.TabIndex = 0;
             // 
             // groupBox2
             // 
@@ -143,6 +144,7 @@
             button_bucar_end.Size = new Size(75, 76);
             button_bucar_end.TabIndex = 11;
             button_bucar_end.UseVisualStyleBackColor = true;
+            button_bucar_end.Click += button_bucar_end_Click;
             // 
             // groupBox5
             // 
@@ -242,6 +244,7 @@
             button_salvar.Text = "Salvar";
             button_salvar.TextAlign = ContentAlignment.BottomCenter;
             button_salvar.UseVisualStyleBackColor = true;
+            button_salvar.Click += button_salvar_Click;
             // 
             // groupBox6
             // 
@@ -407,6 +410,8 @@
             button_addProd.TabIndex = 8;
             button_addProd.TextAlign = ContentAlignment.BottomCenter;
             button_addProd.UseVisualStyleBackColor = true;
+            button_addProd.Visible = false;
+            button_addProd.Click += button_addProd_Click;
             // 
             // TransferenciaProduto
             // 
@@ -445,7 +450,7 @@
         #endregion
 
         private GroupBox groupBox1;
-        private DateTimePicker dateTimePicker1;
+        private DateTimePicker dateTimePicker_dataEntrada;
         private GroupBox groupBox2;
         private GroupBox groupBox7;
         private RichTextBox richTextBox_obs;

@@ -1,16 +1,6 @@
 ﻿using MapaEstoqueCD.Controller;
 using MapaEstoqueCD.Database.Dto.modal;
 using MapaEstoqueCD.Database.Dto.Ws;
-using MapaEstoqueCD.Utils;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace MapaEstoqueCD.View.Modal
 {
@@ -19,6 +9,7 @@ namespace MapaEstoqueCD.View.Modal
         private readonly EstoqueWsDto estoqueDto;
         private readonly EstoqueController estoqueController = new();
         private List<ProdutoSpDto> produtoSpDtos = new();
+        private TranferenciaDto transferenciaDto;
 
         public TransferenciaProduto(EstoqueWsDto estoqueWsDto)
         {
@@ -36,9 +27,20 @@ namespace MapaEstoqueCD.View.Modal
 
             produtoSpDtos.Add(new ProdutoSpDto
             {
-                
+                produtoId = estoqueWsDto.produtoId,
+                codigo = estoqueWsDto.produto.codigo,
+                descricao = estoqueWsDto.produto.descricao,
+                quantidade = estoqueWsDto.quantidade,
+                dataf = estoqueWsDto.dataF,
+                semf = estoqueWsDto.semF,
+                lote = estoqueWsDto.lote,
+                propsPST =
+                                      {
+                                        isModified = false,
+                                        origem = Origem.OUT
+                                      }
             });
-
+            ReloadGrid();
 
 
 
@@ -89,14 +91,94 @@ namespace MapaEstoqueCD.View.Modal
             dataGridView_produtos.ClearSelection();
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void button_addProd_Click(object sender, EventArgs e)
         {
-            (new AdicionarProduto()).ShowDialog();
+            var produto = AdicionarProduto.ShowDialogAndReturn();
+
+            if (produto != null)
+            {
+
+
+                produtoSpDtos.Add(produto);
+                ReloadGrid();
+            }
+            else
+            {
+                MessageBox.Show("Operação cancelada.");
+            }
+
         }
+
+        public void RemoveIN()
+        {
+            produtoSpDtos = produtoSpDtos.Where(p => p.propsPST.origem != Origem.IN).ToList();
+        }
+        private void button_bucar_end_Click(object sender, EventArgs e)
+        {
+            if (comboBox_rua.Text != "" && comboBox_bloco.Text != "" && comboBox_apt.Text != "")
+            {
+                List<ProdutoSpDto> endereco = estoqueController.estoqueService.GetEnderecoByDetails(
+                    comboBox_rua.Text,
+                    comboBox_bloco.Text,
+                    comboBox_apt.Text
+                );
+                if (endereco != null)
+                {
+                    RemoveIN();
+                    produtoSpDtos.AddRange(endereco);
+                    ReloadGrid();
+                }
+                else
+                {
+                    //MessageBox.Show("Endereço não encontrado.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Por favor, preencha Rua, Bloco e Apt antes de buscar o endereço.", "Atenção", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+        }
+
+        private void button_salvar_Click(object sender, EventArgs e)
+        {
+            if (comboBox_rua.Text != "" && comboBox_bloco.Text != "" && comboBox_apt.Text != "")
+            {
+                transferenciaDto = new TranferenciaDto
+                {
+                    estoqueID = estoqueDto.estoqueId,
+                    rua = comboBox_rua.Text,
+                    bloco = comboBox_bloco.Text,
+                    apt = comboBox_apt.Text,
+                    endOld = estoqueDto.enderecoId,
+                    observacao = richTextBox_obs.Text,
+                    dataEntrada= estoqueDto.dataL,
+                    produto = produtoSpDtos.FirstOrDefault(p => p.propsPST.origem == Origem.OUT),
+                };
+
+                if (estoqueController.SetTranferencia(transferenciaDto))
+                {
+                    this.Close();
+                    //MessageBox.Show(Text = "Transferência registrada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                    //var dr = MessageBox.Show("Deseja registrar outra entrada?", "Continuar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    //if (dr == DialogResult.No)
+                    //{
+                    //    this.Close();
+                    //}
+                    //else
+                    //{
+                    //    produtoSpDtos.Clear();
+                    //    ReloadGrid();
+                    //    comboBox_rua.Text = "";
+                    //    comboBox_bloco.Text = "";
+                    //    comboBox_apt.Text = "";
+                    //    richTextBox_obs.Text = "";
+                    //    dateTimePicker_dataEntrada.Value = DateTime.Now;
+                    //}
+                }
+            }
+
+        }
+
     }
 }

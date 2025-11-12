@@ -37,7 +37,7 @@ namespace MapaEstoqueCD.View.Modal
                     textBox_decricao.Text = prod.Descricao;
                     dto = new ProdutoSpDto
                     {
-                        id = prod.ProdutoId,
+                        produtoId = prod.ProdutoId,
                         codigo = prod.Codigo,
                         descricao = prod.Descricao,
                         propsPST =
