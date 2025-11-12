@@ -1,6 +1,6 @@
 ﻿namespace MapaEstoqueCD.Database.Dto.Ws
 {
-    public class ProdutoWsDto
+    public class ProdutoSgDto
     {
         public string? codigo { get; set; } = string.Empty;
         public string? descricao { get; set; } = string.Empty;
@@ -18,6 +18,6 @@
         public string? obs { get; set; }
         public DateTime createAt { get; set; }
         public DateTime updateAt { get; set; }
-        public ProdutoWsDto? produto { get; set; }
+        public ProdutoSgDto? produto { get; set; }
     }
 }

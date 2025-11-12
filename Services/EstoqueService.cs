@@ -40,7 +40,7 @@ namespace MapaEstoqueCD.Services
                     obs = e.Obs,
                     createAt = e.CreateAt ?? DateTime.MinValue,
                     updateAt = e.UpdateAt ?? DateTime.MinValue,
-                    produto = e.Produto == null ? null : new ProdutoWsDto
+                    produto = e.Produto == null ? null : new ProdutoSgDto
                     {
                         codigo = e.Produto.Codigo,
                         descricao = e.Produto.Descricao
@@ -49,7 +49,7 @@ namespace MapaEstoqueCD.Services
                 .ToList();
         }
 
-        public List<ProdutoSpDto> GetEnderecoByDetails(string rua, string bloco, string apt)
+        public List<Database.Dto.modal.ProdutoSpDto> GetEnderecoByDetails(string rua, string bloco, string apt)
         {
             Endereco sprod = CacheMP.Instance.Db.Enderecos.FirstOrDefault(e => e.Rua == rua && e.Coluna == bloco && e.Palete == apt);
 
@@ -58,11 +58,11 @@ namespace MapaEstoqueCD.Services
                 return null;
             }
 
-            List<ProdutoSpDto> produtos = new List<ProdutoSpDto>();
+            List<Database.Dto.modal.ProdutoSpDto> produtos = new List<Database.Dto.modal.ProdutoSpDto>();
 
             for (int i = 0; i < sprod.Estoque.Count; i++)
             {
-                produtos.Add(new ProdutoSpDto
+                produtos.Add(new Database.Dto.modal.ProdutoSpDto
                 {
                     produtoId = sprod.Estoque.ElementAt(i).Produto.ProdutoId,
                     codigo = sprod.Estoque.ElementAt(i).Produto?.Codigo,
@@ -104,7 +104,7 @@ namespace MapaEstoqueCD.Services
                    obs = e.Obs,
                    createAt = e.CreateAt ?? DateTime.MinValue,
                    updateAt = e.UpdateAt ?? DateTime.MinValue,
-                   produto = e.Produto == null ? null : new ProdutoWsDto
+                   produto = e.Produto == null ? null : new ProdutoSgDto
                    {
                        codigo = e.Produto.Codigo,
                        descricao = e.Produto.Descricao

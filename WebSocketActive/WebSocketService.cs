@@ -19,6 +19,9 @@ namespace MapaEstoqueCD.WebSocketActive
                {
                     new GetEstoqueHandler(),
                     new LoginHandler(),
+                    new EntradaHandler(),
+                    new EnderecoHandler(),
+                    new ProdutoHandler(),
                });
         }
 
