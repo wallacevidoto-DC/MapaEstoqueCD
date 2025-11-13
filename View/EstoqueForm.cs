@@ -65,7 +65,7 @@ namespace MapaEstoqueCD.View
         private void toolStripButton_entrada_Click(object sender, EventArgs e)
         {
             (new EntradaProduto()).ShowDialog();
-            produtosCurrent = produtosCurrent = estoqueController.GetAllEstoque(ref dataGridView1);
+            ReloadGrid();
         }
         private void DataGridView1_SelectionChanged(object sender, EventArgs e)
         {
@@ -105,8 +105,7 @@ namespace MapaEstoqueCD.View
             if (produtoSelecionado is not null)
             {
                 (new SaidaProduto(produtoSelecionado)).ShowDialog();
-                produtosCurrent = estoqueController.GetAllEstoque(ref dataGridView1);
-                produtoSelecionado = null;
+                ReloadGrid();
             }
         }
 
@@ -137,8 +136,7 @@ namespace MapaEstoqueCD.View
             if (produtoSelecionado is not null)
             {
                 (new CorrecaoProduto(produtoSelecionado)).ShowDialog();
-                produtosCurrent = estoqueController.GetAllEstoque(ref dataGridView1);
-                produtoSelecionado = null;
+                ReloadGrid();
             }
         }
 
@@ -161,7 +159,18 @@ namespace MapaEstoqueCD.View
         private void tRANSFERÊNCIAToolStripMenuItem_Click(object sender, EventArgs e)
         {
             (new TransferenciaProduto(produtoSelecionado)).ShowDialog();
-            produtosCurrent = estoqueController.GetAllEstoque(ref dataGridView1);
+            ReloadGrid();
+        }
+
+        private void pICKINGToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            (new Picking()).ShowDialog();
+            ReloadGrid();
+        }
+
+        private void ReloadGrid()
+        {
+            produtosCurrent = filtrosAtivos.Count > 0 ? estoqueController.GetEstoquetByFilter(filtrosAtivos, ref dataGridView1) : estoqueController.GetAllEstoque(ref dataGridView1);
             produtoSelecionado = null;
         }
     }

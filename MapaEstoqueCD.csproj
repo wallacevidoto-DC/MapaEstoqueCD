@@ -43,6 +43,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="View\Modal\MovEstoque\Picking.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="View\Modal\MovEstoque\SaidaProduto.cs">
       <SubType>Form</SubType>
     </Compile>

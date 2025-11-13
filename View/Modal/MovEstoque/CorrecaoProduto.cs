@@ -26,6 +26,7 @@ namespace MapaEstoqueCD.View.Modal
             maskedTextBox_datef.Clear();
             textBox_semf.Clear();
             textBox_lote.Clear();
+            richTextBox_obs.Clear();
 
             if (estoqueWsDto is not null)
             {
@@ -35,7 +36,7 @@ namespace MapaEstoqueCD.View.Modal
                 maskedTextBox_datef.Text = DataFormatter.FormatarData(estoqueWsDto.dataF);
                 textBox_semf.Text = estoqueWsDto.semF.ToString();
                 textBox_lote.Text = estoqueWsDto.lote;
-
+                richTextBox_obs.Text = estoqueWsDto.obs;
                 richTextBox_obs.Focus();
 
                 dto = new ProdutoSpDto

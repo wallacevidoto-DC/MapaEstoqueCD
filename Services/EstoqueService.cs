@@ -49,7 +49,7 @@ namespace MapaEstoqueCD.Services
                 .ToList();
         }
 
-        public List<Database.Dto.modal.ProdutoSpDto> GetEnderecoByDetails(string rua, string bloco, string apt)
+        public List<ProdutoSpDto> GetEnderecoByDetails(string rua, string bloco, string apt)
         {
             Endereco sprod = CacheMP.Instance.Db.Enderecos.FirstOrDefault(e => e.Rua == rua && e.Coluna == bloco && e.Palete == apt);
 
@@ -119,7 +119,7 @@ namespace MapaEstoqueCD.Services
 
             try
             {
-                var endereco = CacheMP.Instance.Db.Enderecos
+                var endereco = CacheMP.Instance.Db.Enderecos.Local
                     .FirstOrDefault(e =>
                         e.Rua == entradaDto.rua &&
                         e.Coluna == entradaDto.bloco &&
@@ -150,16 +150,22 @@ namespace MapaEstoqueCD.Services
                         Lote = p.lote,
                         DataF = p.dataf,
                         SemF = p.semf,
-                        CreateAt = DateTime.Now,
+                        //CreateAt = DateTime.Now,
                         DataL = entradaDto.dataEntrada,
                         Obs = entradaDto.observacao
                     };
+
+                    //novoEstoque.Endereco = null;
+                    //novoEstoque.Produto = null;
+                    //novoEstoque.Movimentacoes = null;
+
                     CacheMP.Instance.Db.Estoque.Add(novoEstoque);
-                    CacheMP.Instance.Db.SaveChanges();
+                    //CacheMP.Instance.Db.SaveChanges();
 
                     var movimentacao = new Movimentacao
                     {
-                        EstoqueId = novoEstoque.EstoqueId,
+                        //EstoqueId = novoEstoque.EstoqueId,
+                        Estoque = novoEstoque,
                         ProdutoId = p.produtoId,
                         Tipo = entradaDto.tipo,
                         Quantidade = p.quantidade,
@@ -174,8 +180,8 @@ namespace MapaEstoqueCD.Services
 
                     };
                     CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
-                    CacheMP.Instance.Db.SaveChanges();
                 }
+                    CacheMP.Instance.Db.SaveChanges();
 
                 transaction.Commit();
                 return true;
@@ -192,7 +198,7 @@ namespace MapaEstoqueCD.Services
         {
             try
             {
-                var estoque = CacheMP.Instance.Db.Estoque.FirstOrDefault(e => e.EstoqueId == saidaDto.estoqueId);
+                var estoque = CacheMP.Instance.Db.Estoque.Include(e =>e.Endereco).FirstOrDefault(e => e.EstoqueId == saidaDto.estoqueId);
 
                 if (estoque == null || estoque.Quantidade == null)
                 {
@@ -220,7 +226,7 @@ namespace MapaEstoqueCD.Services
                     var movimentacao = new Movimentacao
                     {
                         EstoqueId = estoque.EstoqueId,
-                        ProdutoId = estoque.Produto.ProdutoId,
+                        ProdutoId = (int)estoque.ProdutoId,
                         Tipo = saidaDto.tipo,
                         Quantidade = qtdNew,
                         Obs = Obs,
@@ -356,7 +362,7 @@ namespace MapaEstoqueCD.Services
                     };
                     CacheMP.Instance.Db.Estoque.Add(novoEstoque);
                     CacheMP.Instance.Db.SaveChanges();
-                    estoqueExistente = novoEstoque; 
+                    estoqueExistente = novoEstoque;
                 }
 
                 var movimentacao = new Movimentacao
@@ -386,6 +392,43 @@ namespace MapaEstoqueCD.Services
             {
                 transaction.Rollback();
                 Console.WriteLine("❌ Erro ao registrar entrada: " + ex.Message);
+                return false;
+            }
+        }
+
+        internal bool SetPicking(PickingDto pickingDto)
+        {
+            try
+            {
+
+                foreach (var p in pickingDto.produtos)
+                {
+                    
+                    var movimentacao = new Movimentacao
+                    {
+                        //EstoqueId = n,
+                        ProdutoId = p.produtoId,
+                        Tipo = pickingDto.tipo,
+                        Quantidade = p.quantidade,
+                        Obs = pickingDto.observacao,
+                        UserId = pickingDto.userId,
+                        DataF = p.dataf,
+                        SemF = p.semf,
+                        Lote = p.lote,
+                        Endereco = "N/A",
+                        DataL = pickingDto.dataEntrada
+
+
+                    };
+                    CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
+                    CacheMP.Instance.Db.SaveChanges();
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("❌ Erro ao registrar picking: " + ex.Message);
                 return false;
             }
         }

@@ -121,11 +121,14 @@
   <data name="administrador" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\administrador.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="caixa1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\caixa1.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="pdf" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\pdf.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="editar-codigo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\editar-codigo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="movimentacao" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\movimentacao.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="armazem" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\armazem.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -169,6 +172,9 @@
   <data name="produtos" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\produtos.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="editar-codigo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\editar-codigo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="add_prod" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\add_prod.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -190,8 +196,8 @@
   <data name="adicionar-usuario" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\adicionar-usuario.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="movimentacao" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\movimentacao.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="filtro-limpo" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\filtro-limpo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="xls" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\xls.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -220,7 +226,7 @@
   <data name="entrada" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\entrada.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="filtro-limpo" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\filtro-limpo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="escolha" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\escolha.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

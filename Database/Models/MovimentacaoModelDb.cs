@@ -12,7 +12,7 @@ namespace MapaEstoqueCD.Database.Models
         public int MovimentacaoId { get; set; }
 
         [Column("estoqueId")]
-        public int EstoqueId { get; set; }
+        public int? EstoqueId { get; set; }
 
         [Column("userId")]
         public int UserId { get; set; }

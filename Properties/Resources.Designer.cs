@@ -153,6 +153,16 @@ namespace MapaEstoqueCD.Properties {
         /// <summary>
         ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap caixa1 {
+            get {
+                object obj = ResourceManager.GetObject("caixa1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap cancelar {
             get {
                 object obj = ResourceManager.GetObject("cancelar", resourceCulture);
@@ -216,6 +226,16 @@ namespace MapaEstoqueCD.Properties {
         internal static System.Drawing.Bitmap entrada {
             get {
                 object obj = ResourceManager.GetObject("entrada", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap escolha {
+            get {
+                object obj = ResourceManager.GetObject("escolha", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

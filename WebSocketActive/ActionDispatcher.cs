@@ -20,7 +20,6 @@ namespace MapaEstoqueCD.WebSocketActive
         {
             if (!_handlers.TryGetValue(action, out var handler))
                 return null;
-                //throw new InvalidOperationException($"Ação desconhecida: {action}");
 
             return await handler.ExecuteAsync(data, socket);
         }

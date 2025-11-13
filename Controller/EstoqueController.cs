@@ -249,5 +249,11 @@ namespace MapaEstoqueCD.Controller
             transferenciaDto.userId = CacheMP.Instance.UserCurrent.UserId;
             return estoqueService.SetTransferencia(transferenciaDto);
         }
+
+        internal bool SetPicking(PickingDto pickingDto)
+        {
+            pickingDto.userId = CacheMP.Instance.UserCurrent.UserId;
+            return estoqueService.SetPicking(pickingDto);
+        }
     }
 }

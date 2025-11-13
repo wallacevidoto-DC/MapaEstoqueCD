@@ -7,6 +7,7 @@ using MapaEstoqueCD.WebSocketActive.Dto;
 using MapaEstoqueCD.WebSocketActive.Interface;
 using System.Net.WebSockets;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace MapaEstoqueCD.WebSocketActive
 {
@@ -59,25 +60,38 @@ namespace MapaEstoqueCD.WebSocketActive
 
     public class EntradaHandler : IActionHandler
     {
-        public readonly UserService userService = new();
+
         public string ActionName => ActionsWs.ENTRADA;
+        public EstoqueService estoqueService = new();
+
 
         public async Task<WebSocketResponse?> ExecuteAsync(JsonElement data, WebSocket socket)
         {
             try
             {
-                var user = userService.Login(data.GetProperty("username").GetString(), data.GetProperty("password").GetString());
-
-                if (user != null)
+                var options = new JsonSerializerOptions
                 {
-                    user.Password = null;
-                    return new WebSocketResponse { type = "login_resposta", status = "ok", mensagem = "Login realizado com sucesso", dados = user };
+                    PropertyNameCaseInsensitive = true,
+                    Converters = { new JsonStringEnumConverter() }
+                };
+
+                EntradaDto entrada = JsonSerializer.Deserialize<EntradaDto>(data.GetRawText(), options);
+
+                if (entrada != null)
+                {
+                    entrada.observacao = $"(REMOTO) - {entrada.observacao}";
+                    if (estoqueService.SetEntrada(entrada))
+                    {
+                        return new WebSocketResponse { type = "entrada_resposta", status = "ok", mensagem = "Entrada realizado com sucesso", dados = null };
+                    }
+
+
                 }
-                return new WebSocketResponse { type = "login_resposta", status = "erro", mensagem = "Algum dado errado" };
+                return new WebSocketResponse { type = "entrada_resposta", status = "erro", mensagem = "Algum dado errado" };
             }
             catch (Exception ex)
             {
-                return new WebSocketResponse { type = "login_resposta", status = "erro", mensagem = ex.Message };
+                return new WebSocketResponse { type = "entrada_resposta", status = "erro", mensagem = ex.Message };
             }
 
         }
@@ -188,7 +202,7 @@ namespace MapaEstoqueCD.WebSocketActive
                 // 🔹 Mapeia só os campos necessários
                 var dto = new ProdutoWsDto
                 {
-                    
+
                     ProdutoId = produto.ProdutoId,
                     Codigo = produto.Codigo,
                     Descricao = produto.Descricao
@@ -216,4 +230,43 @@ namespace MapaEstoqueCD.WebSocketActive
 
     }
 
+
+    public class SaidaHandler : IActionHandler
+    {
+
+        public string ActionName => ActionsWs.SAIDA;
+        public EstoqueService estoqueService = new();
+
+
+        public async Task<WebSocketResponse?> ExecuteAsync(JsonElement data, WebSocket socket)
+        {
+            try
+            {
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    Converters = { new JsonStringEnumConverter() }
+                };
+
+                SaidaDto saida = JsonSerializer.Deserialize<SaidaDto>(data.GetRawText(), options);
+
+                if (saida != null)
+                {
+                    saida.observacao = $"(REMOTO) - {saida.observacao}";
+                    if (estoqueService.SetSaida(saida))
+                    {
+                        return new WebSocketResponse { type = "saida_resposta", status = "ok", mensagem = "Saída realizado com sucesso", dados = null };
+                    }
+
+
+                }
+                return new WebSocketResponse { type = "saida_resposta", status = "erro", mensagem = "Algum dado errado" };
+            }
+            catch (Exception ex)
+            {
+                return new WebSocketResponse { type = "saida_resposta", status = "erro", mensagem = ex.Message };
+            }
+
+        }
+    }
 }

@@ -3,7 +3,7 @@
     public class MovimentacaoDto
     {
         public int movimentacaoId { get; set; }
-        public int estoqueId { get; set; }
+        public int? estoqueId { get; set; }
 
         public string? usuarioNome { get; set; }
 
