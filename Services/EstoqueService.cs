@@ -222,7 +222,7 @@ namespace MapaEstoqueCD.Services
                     {
                         Obs += " | Produto Zerado no Estoque";
                     }
-
+                    estoque = CacheMP.Instance.Db.Estoque.Include(e => e.Endereco).FirstOrDefault(e => e.EstoqueId == saidaDto.estoqueId);
                     var movimentacao = new Movimentacao
                     {
                         EstoqueId = estoque.EstoqueId,
@@ -319,7 +319,7 @@ namespace MapaEstoqueCD.Services
 
             try
             {
-                var endereco = CacheMP.Instance.Db.Enderecos
+                var endereco = CacheMP.Instance.Db.Enderecos.Local
                     .FirstOrDefault(e =>
                         e.Rua == transferenciaDto.rua &&
                         e.Coluna == transferenciaDto.bloco &&
@@ -349,20 +349,7 @@ namespace MapaEstoqueCD.Services
                 }
                 else
                 {
-                    var novoEstoque = new Estoque
-                    {
-                        ProdutoId = transferenciaDto.produto.produtoId,
-                        EnderecoId = endereco.EnderecoId,
-                        Quantidade = transferenciaDto.produto.quantidade,
-                        Lote = transferenciaDto.produto.lote,
-                        DataF = transferenciaDto.produto.dataf,
-                        SemF = transferenciaDto.produto.semf,
-                        DataL = transferenciaDto.dataEntrada,
-                        Obs = transferenciaDto.observacao
-                    };
-                    CacheMP.Instance.Db.Estoque.Add(novoEstoque);
-                    CacheMP.Instance.Db.SaveChanges();
-                    estoqueExistente = novoEstoque;
+                    throw new Exception("Estoque ID não existe");
                 }
 
                 var movimentacao = new Movimentacao

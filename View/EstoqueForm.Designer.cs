@@ -35,6 +35,9 @@
             toolStrip1 = new ToolStrip();
             toolStripButton_filtrar = new ToolStripButton();
             toolStripSeparator5 = new ToolStripSeparator();
+            toolStripButton_entrada = new ToolStripDropDownButton();
+            cOMUMToolStripMenuItem = new ToolStripMenuItem();
+            pICKINGToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator1 = new ToolStripSeparator();
             toolStripButton_remoto = new ToolStripDropDownButton();
             pDFToolStripMenuItem = new ToolStripMenuItem();
@@ -59,9 +62,6 @@
             Column6 = new DataGridViewTextBoxColumn();
             Column8 = new DataGridViewTextBoxColumn();
             Column9 = new DataGridViewTextBoxColumn();
-            toolStripButton_entrada = new ToolStripDropDownButton();
-            cOMUMToolStripMenuItem = new ToolStripMenuItem();
-            pICKINGToolStripMenuItem = new ToolStripMenuItem();
             toolStrip1.SuspendLayout();
             contextMenuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
@@ -100,6 +100,40 @@
             toolStripSeparator5.Name = "toolStripSeparator5";
             toolStripSeparator5.Size = new Size(98, 6);
             // 
+            // toolStripButton_entrada
+            // 
+            toolStripButton_entrada.AutoSize = false;
+            toolStripButton_entrada.DropDownItems.AddRange(new ToolStripItem[] { cOMUMToolStripMenuItem, pICKINGToolStripMenuItem });
+            toolStripButton_entrada.Image = Properties.Resources.entrada;
+            toolStripButton_entrada.ImageTransparentColor = Color.Magenta;
+            toolStripButton_entrada.Name = "toolStripButton_entrada";
+            toolStripButton_entrada.RightToLeft = RightToLeft.Yes;
+            toolStripButton_entrada.Size = new Size(100, 100);
+            toolStripButton_entrada.Text = "Entrada";
+            toolStripButton_entrada.TextAlign = ContentAlignment.BottomCenter;
+            toolStripButton_entrada.TextImageRelation = TextImageRelation.Overlay;
+            toolStripButton_entrada.ToolTipText = "Cadastrar Nova Entrada";
+            // 
+            // cOMUMToolStripMenuItem
+            // 
+            cOMUMToolStripMenuItem.Image = Properties.Resources.caixa1;
+            cOMUMToolStripMenuItem.ImageAlign = ContentAlignment.MiddleLeft;
+            cOMUMToolStripMenuItem.Name = "cOMUMToolStripMenuItem";
+            cOMUMToolStripMenuItem.Size = new Size(121, 22);
+            cOMUMToolStripMenuItem.Text = "COMUM";
+            cOMUMToolStripMenuItem.TextAlign = ContentAlignment.MiddleRight;
+            cOMUMToolStripMenuItem.Click += toolStripButton_entrada_Click;
+            // 
+            // pICKINGToolStripMenuItem
+            // 
+            pICKINGToolStripMenuItem.Image = Properties.Resources.escolha;
+            pICKINGToolStripMenuItem.ImageAlign = ContentAlignment.MiddleLeft;
+            pICKINGToolStripMenuItem.Name = "pICKINGToolStripMenuItem";
+            pICKINGToolStripMenuItem.Size = new Size(121, 22);
+            pICKINGToolStripMenuItem.Text = "PICKING";
+            pICKINGToolStripMenuItem.TextAlign = ContentAlignment.MiddleRight;
+            pICKINGToolStripMenuItem.Click += pICKINGToolStripMenuItem_Click;
+            // 
             // toolStripSeparator1
             // 
             toolStripSeparator1.Name = "toolStripSeparator1";
@@ -123,7 +157,7 @@
             // 
             pDFToolStripMenuItem.Image = Properties.Resources.pdf;
             pDFToolStripMenuItem.Name = "pDFToolStripMenuItem";
-            pDFToolStripMenuItem.Size = new Size(224, 66);
+            pDFToolStripMenuItem.Size = new Size(107, 22);
             pDFToolStripMenuItem.Text = "PDF";
             pDFToolStripMenuItem.Click += pDFToolStripMenuItem_Click;
             // 
@@ -131,7 +165,7 @@
             // 
             eXCELToolStripMenuItem.Image = Properties.Resources.xls;
             eXCELToolStripMenuItem.Name = "eXCELToolStripMenuItem";
-            eXCELToolStripMenuItem.Size = new Size(224, 66);
+            eXCELToolStripMenuItem.Size = new Size(107, 22);
             eXCELToolStripMenuItem.Text = "EXCEL";
             eXCELToolStripMenuItem.Click += eXCELToolStripMenuItem_Click;
             // 
@@ -259,15 +293,15 @@
             // 
             // Column1
             // 
-            Column1.FillWeight = 50F;
+            Column1.FillWeight = 30F;
             Column1.HeaderText = "Endereco";
             Column1.Name = "Column1";
             Column1.ReadOnly = true;
             // 
             // Column2
             // 
-            Column2.FillWeight = 50F;
-            Column2.HeaderText = "Código do Produto";
+            Column2.FillWeight = 30F;
+            Column2.HeaderText = "Código";
             Column2.Name = "Column2";
             Column2.ReadOnly = true;
             // 
@@ -320,40 +354,6 @@
             Column9.Name = "Column9";
             Column9.ReadOnly = true;
             // 
-            // toolStripButton_entrada
-            // 
-            toolStripButton_entrada.AutoSize = false;
-            toolStripButton_entrada.DropDownItems.AddRange(new ToolStripItem[] { cOMUMToolStripMenuItem, pICKINGToolStripMenuItem });
-            toolStripButton_entrada.Image = Properties.Resources.entrada;
-            toolStripButton_entrada.ImageTransparentColor = Color.Magenta;
-            toolStripButton_entrada.Name = "toolStripButton_entrada";
-            toolStripButton_entrada.RightToLeft = RightToLeft.Yes;
-            toolStripButton_entrada.Size = new Size(100, 100);
-            toolStripButton_entrada.Text = "Entrada";
-            toolStripButton_entrada.TextAlign = ContentAlignment.BottomCenter;
-            toolStripButton_entrada.TextImageRelation = TextImageRelation.Overlay;
-            toolStripButton_entrada.ToolTipText = "Cadastrar Nova Entrada";
-            // 
-            // cOMUMToolStripMenuItem
-            // 
-            cOMUMToolStripMenuItem.Image = Properties.Resources.caixa1;
-            cOMUMToolStripMenuItem.ImageAlign = ContentAlignment.MiddleLeft;
-            cOMUMToolStripMenuItem.Name = "cOMUMToolStripMenuItem";
-            cOMUMToolStripMenuItem.Size = new Size(224, 66);
-            cOMUMToolStripMenuItem.Text = "COMUM";
-            cOMUMToolStripMenuItem.TextAlign = ContentAlignment.MiddleRight;
-            cOMUMToolStripMenuItem.Click += toolStripButton_entrada_Click;
-            // 
-            // pICKINGToolStripMenuItem
-            // 
-            pICKINGToolStripMenuItem.Image = Properties.Resources.escolha;
-            pICKINGToolStripMenuItem.ImageAlign = ContentAlignment.MiddleLeft;
-            pICKINGToolStripMenuItem.Name = "pICKINGToolStripMenuItem";
-            pICKINGToolStripMenuItem.Size = new Size(224, 66);
-            pICKINGToolStripMenuItem.Text = "PICKING";
-            pICKINGToolStripMenuItem.TextAlign = ContentAlignment.MiddleRight;
-            pICKINGToolStripMenuItem.Click += pICKINGToolStripMenuItem_Click;
-            // 
             // EstoqueForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -391,6 +391,9 @@
         private ToolStripMenuItem tRANSFERÊNCIAToolStripMenuItem;
         private ToolStripMenuItem cORREÇÃOToolStripMenuItem;
         private DataGridView dataGridView1;
+        private ToolStripDropDownButton toolStripButton_entrada;
+        private ToolStripMenuItem cOMUMToolStripMenuItem;
+        private ToolStripMenuItem pICKINGToolStripMenuItem;
         private DataGridViewTextBoxColumn Column11;
         private DataGridViewTextBoxColumn Column1;
         private DataGridViewTextBoxColumn Column2;
@@ -401,8 +404,5 @@
         private DataGridViewTextBoxColumn Column6;
         private DataGridViewTextBoxColumn Column8;
         private DataGridViewTextBoxColumn Column9;
-        private ToolStripDropDownButton toolStripButton_entrada;
-        private ToolStripMenuItem cOMUMToolStripMenuItem;
-        private ToolStripMenuItem pICKINGToolStripMenuItem;
     }
 }

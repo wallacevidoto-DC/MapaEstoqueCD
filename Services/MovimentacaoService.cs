@@ -23,8 +23,9 @@ namespace MapaEstoqueCD.Services
               .Select(m => new MovimentacaoDto
               {
                   movimentacaoId = m.MovimentacaoId,
-                  estoqueId = m.EstoqueId ,
+                  estoqueId = m.EstoqueId,
                   usuarioNome = m.User != null ? m.User.Name : string.Empty,
+                  endereco = m.Endereco,
                   produtoCodigo = m.Produto != null ? m.Produto.Codigo : string.Empty,
                   produtoDescricao = m.Produto != null ? m.Produto.Descricao : string.Empty,
                   tipo = m.Tipo.ToUpper(),

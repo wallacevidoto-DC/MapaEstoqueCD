@@ -18,6 +18,7 @@ namespace MapaEstoqueCD.Controller
                 {
                     //new ColumnConfig("ID Movimentação", nameof(MovimentacaoDto.movimentacaoId)),
                     new ColumnConfig("Estoque ID", nameof(MovimentacaoDto.estoqueId)),
+                    new ColumnConfig("Endereço", nameof(MovimentacaoDto.endereco)),
                     new ColumnConfig("Usuário", nameof(MovimentacaoDto.usuarioNome)),
                     new ColumnConfig("Código do Produto", nameof(MovimentacaoDto.produtoCodigo)),
                     new ColumnConfig("Descrição do Produto", nameof(MovimentacaoDto.produtoDescricao)),
@@ -95,6 +96,7 @@ namespace MapaEstoqueCD.Controller
             {
                 datagrid.Rows.Add(
                     p.usuarioNome,
+                    p.endereco,
                     p.produtoCodigo,
                     p.produtoDescricao,
                     p.tipo,
@@ -234,13 +236,12 @@ namespace MapaEstoqueCD.Controller
                         break;
                 }
             }
-
-            // --- 🧾 PREENCHER O GRID ---
             foreach (var m in movimentacoes)
             {
                 datagrid.Rows.Add(
                     //m.estoqueId,
                     m.usuarioNome,
+                    m.endereco,
                     m.produtoCodigo,
                     m.produtoDescricao,
                     m.tipo,

@@ -41,6 +41,7 @@
             listView1 = new ListView();
             dataGridView1 = new DataGridView();
             Column1 = new DataGridViewTextBoxColumn();
+            Column11 = new DataGridViewTextBoxColumn();
             Column2 = new DataGridViewTextBoxColumn();
             Column3 = new DataGridViewTextBoxColumn();
             Column4 = new DataGridViewTextBoxColumn();
@@ -149,7 +150,7 @@
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
             dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Column1, Column2, Column3, Column4, Column7, Column5, Column6, Column8, Column9, Column10 });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Column1, Column11, Column2, Column3, Column4, Column7, Column5, Column6, Column8, Column9, Column10 });
             dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = Color.White;
             dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
@@ -171,15 +172,22 @@
             // 
             // Column1
             // 
-            Column1.FillWeight = 50F;
+            Column1.FillWeight = 30F;
             Column1.HeaderText = "Usuário";
             Column1.Name = "Column1";
             Column1.ReadOnly = true;
             // 
+            // Column11
+            // 
+            Column11.FillWeight = 30F;
+            Column11.HeaderText = "Endereço";
+            Column11.Name = "Column11";
+            Column11.ReadOnly = true;
+            // 
             // Column2
             // 
-            Column2.FillWeight = 50F;
-            Column2.HeaderText = "Código do Produto";
+            Column2.FillWeight = 30F;
+            Column2.HeaderText = "Código";
             Column2.Name = "Column2";
             Column2.ReadOnly = true;
             // 
@@ -280,5 +288,6 @@
         private DataGridViewTextBoxColumn Column8;
         private DataGridViewTextBoxColumn Column9;
         private DataGridViewTextBoxColumn Column10;
+        private DataGridViewTextBoxColumn Column11;
     }
 }

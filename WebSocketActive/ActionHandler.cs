@@ -1,7 +1,6 @@
 ﻿using MapaEstoqueCD.Controller;
 using MapaEstoqueCD.Database.Dto.modal;
 using MapaEstoqueCD.Database.Dto.Ws;
-using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Services;
 using MapaEstoqueCD.WebSocketActive.Dto;
 using MapaEstoqueCD.WebSocketActive.Interface;
@@ -45,7 +44,7 @@ namespace MapaEstoqueCD.WebSocketActive
 
                 if (user != null)
                 {
-                    user.Password = null;
+                    //user.Password = null;
                     return new WebSocketResponse { type = "login_resposta", status = "ok", mensagem = "Login realizado com sucesso", dados = user };
                 }
                 return new WebSocketResponse { type = "login_resposta", status = "erro", mensagem = "Algum dado errado" };
@@ -230,6 +229,83 @@ namespace MapaEstoqueCD.WebSocketActive
 
     }
 
+    public class ProdutoEanHandler : IActionHandler
+    {
+        public string ActionName => ActionsWs.GET_PRODUTO_EAN;
+
+        public async Task<WebSocketResponse?> ExecuteAsync(JsonElement data, WebSocket socket)
+        {
+            try
+            {
+                if (!data.TryGetProperty("codigo", out var codigoProp))
+                {
+                    return new WebSocketResponse
+                    {
+                        type = "get_produto_cod_resposta",
+                        status = "erro",
+                        mensagem = "Campo 'codigo' ausente no JSON"
+                    };
+                }
+
+                string cod = data.GetProperty("codigo").ToString();
+                if (string.IsNullOrWhiteSpace(cod))
+                {
+                    return new WebSocketResponse
+                    {
+                        type = "get_produto_cod_resposta",
+                        status = "erro",
+                        mensagem = "Código vazio"
+                    };
+                }
+
+                var produto = CacheMP.Instance.Db.Produtos
+                    .FirstOrDefault(x =>
+                        x.UCodigoBarras == cod ||
+                        x.DCodigoBarras == cod ||
+                        x.CCodigoBarras == cod
+                    );
+
+
+                if (produto is null)
+                {
+                    return new WebSocketResponse
+                    {
+                        type = "get_produto_cod_resposta",
+                        status = "ok",
+                        mensagem = "Nenhum produto encontrado com esse código"
+                    };
+                }
+
+                // 🔹 Mapeia só os campos necessários
+                var dto = new ProdutoWsDto
+                {
+
+                    ProdutoId = produto.ProdutoId,
+                    Codigo = produto.Codigo,
+                    Descricao = produto.Descricao
+                };
+
+                return new WebSocketResponse
+                {
+                    type = "get_produto_resposta",
+                    status = "ok",
+                    mensagem = "Produto encontrado",
+                    dados = dto
+                };
+            }
+            catch (Exception ex)
+            {
+                return new WebSocketResponse
+                {
+                    type = "get_produto_resposta",
+                    status = "erro",
+                    mensagem = ex.Message
+                };
+            }
+        }
+
+
+    }
 
     public class SaidaHandler : IActionHandler
     {
@@ -269,4 +345,44 @@ namespace MapaEstoqueCD.WebSocketActive
 
         }
     }
+
+    public class TransferenciaHandler : IActionHandler
+    {
+
+        public string ActionName => ActionsWs.TRANSFERENCIA;
+        public EstoqueService estoqueService = new();
+
+
+        public async Task<WebSocketResponse?> ExecuteAsync(JsonElement data, WebSocket socket)
+        {
+            try
+            {
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    Converters = { new JsonStringEnumConverter() }
+                };
+
+                TranferenciaDto transferencia = JsonSerializer.Deserialize<TranferenciaDto>(data.GetRawText(), options);
+
+                if (transferencia != null)
+                {
+                    transferencia.observacao = $"(REMOTO) - {transferencia.observacao}";
+                    if (estoqueService.SetTransferencia(transferencia))
+                    {
+                        return new WebSocketResponse { type = "transferencia_resposta", status = "ok", mensagem = "Tranferência realizado com sucesso", dados = null };
+                    }
+
+
+                }
+                return new WebSocketResponse { type = "transferencia_resposta", status = "erro", mensagem = "Algum dado errado" };
+            }
+            catch (Exception ex)
+            {
+                return new WebSocketResponse { type = "transferencia_resposta", status = "erro", mensagem = ex.Message,dados= ex.ToString() };
+            }
+
+        }
+    }
+
 }

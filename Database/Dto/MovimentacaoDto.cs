@@ -4,9 +4,9 @@
     {
         public int movimentacaoId { get; set; }
         public int? estoqueId { get; set; }
-
+        public string? estoque { get; set; }
         public string? usuarioNome { get; set; }
-
+        public string? endereco { get; set; }
         public string? produtoCodigo { get; set; }
         public string? produtoDescricao { get; set; }
 
