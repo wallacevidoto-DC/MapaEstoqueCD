@@ -286,7 +286,7 @@ namespace MapaEstoqueCD.WebSocketActive
 
                 return new WebSocketResponse
                 {
-                    type = "get_produto_resposta",
+                    type = "get_produto_cod_resposta",
                     status = "ok",
                     mensagem = "Produto encontrado",
                     dados = dto
@@ -296,7 +296,7 @@ namespace MapaEstoqueCD.WebSocketActive
             {
                 return new WebSocketResponse
                 {
-                    type = "get_produto_resposta",
+                    type = "get_produto_cod_resposta",
                     status = "erro",
                     mensagem = ex.Message
                 };
