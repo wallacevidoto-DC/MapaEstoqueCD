@@ -276,7 +276,6 @@ namespace MapaEstoqueCD.WebSocketActive
                     };
                 }
 
-                // 🔹 Mapeia só os campos necessários
                 var dto = new ProdutoWsDto
                 {
 

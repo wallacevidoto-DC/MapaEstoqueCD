@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MapaEstoqueCD.Database.Models
@@ -123,6 +121,8 @@ namespace MapaEstoqueCD.Database.Models
 
         public ICollection<Estoque> Estoque { get; set; } = new List<Estoque>();
         public ICollection<Movimentacao> Movimentacao { get; set; } = new List<Movimentacao>();
+        public ICollection<Cifs> Cifs { get; set; } = new List<Cifs>();
+
     }
-    
+
 }

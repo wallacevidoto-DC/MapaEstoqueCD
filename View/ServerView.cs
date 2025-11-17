@@ -1,7 +1,7 @@
 ﻿using MapaEstoqueCD.Controller;
-using Microsoft.VisualBasic.Logging;
+using MapaEstoqueCD.View.Modal;
+using QRCoder;
 using Server.Models;
-using Server.Service;
 
 namespace MapaEstoqueCD.View
 {
@@ -15,7 +15,7 @@ namespace MapaEstoqueCD.View
             { LogType.SUCESSO, Color.LimeGreen },
             { LogType.ENVIADO, Color.Cyan },
             { LogType.RECEBIDO, Color.Orange },
-            { LogType.ATIVO, Color.Lime },
+            { LogType.ATIVO,    Color.Lime },
             { LogType.INATIVO, Color.Gray },
             { LogType.CONECTADO, Color.LightGreen },
             { LogType.DESCONECTADO, Color.OrangeRed }
@@ -86,6 +86,44 @@ namespace MapaEstoqueCD.View
             }
 
             e.DrawFocusRectangle();
+        }
+
+        private void toolStripButton_qr_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string payload = $"https://{CacheMP.Instance.server.Host}:{CacheMP.Instance.server.HttpPort}/home?ws_ip={CacheMP.Instance.server.Host}&ws_port={CacheMP.Instance.server.WebSocketPort}&app=angular";
+
+
+                using var qrGenerator = new QRCodeGenerator();
+
+                var qrData = qrGenerator.CreateQrCode(payload, QRCodeGenerator.ECCLevel.Q);
+                using var qrCode = new QRCode(qrData);                
+
+                Bitmap qrBitmap = qrCode.GetGraphic(20);
+
+
+                (new QrViewer(qrBitmap)).ShowDialog();
+                // Mostra no PictureBox
+                //picQr.Image?.Dispose();
+                //picQr.Image = (Bitmap)qrBitmap.Clone(); // clone para evitar conflito de disposal
+
+                //// Habilita salvar e exibe informações básicas
+                //btnSave.Enabled = true;
+                //lblInfo.Text = $"Conteúdo: {Truncate(payload, 60)}\n\nECC: Q\nTamanho: {picQr.Image.Width}x{picQr.Image.Height} px\nGerado em: {DateTime.Now}";
+
+                // Não descartar o qrBitmap aqui se for usar a imagem (já clonamos para o PictureBox)
+                qrBitmap.Dispose();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erro ao gerar QR code:\n{ex.Message}", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void toolStripButton_reload_Click(object sender, EventArgs e)
+        {
+            CacheMP.Instance.server.RestartAsync();
         }
     }
 }

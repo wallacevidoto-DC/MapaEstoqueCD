@@ -10,6 +10,9 @@ namespace MapaEstoqueCD.Database
         public DbSet<User> Users { get; set; }
         public DbSet<Estoque> Estoque { get; set; }
         public DbSet<Movimentacao> Movimentacoes { get; set; }
+        public DbSet<Cifs> Cifs { get; set; }
+        public DbSet<Entradas> Entradas { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -123,6 +126,39 @@ namespace MapaEstoqueCD.Database
                       .WithMany(u => u.Movimentacoes)
                       .HasForeignKey(m => m.UserId)
                       .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            // -------------------- CIFS --------------------
+            modelBuilder.Entity<Cifs>(entity =>
+            {
+                entity.HasKey(c => c.CifId);
+
+                entity.Property(c => c.CreateAt)
+                      .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.HasOne(c => c.Produto)
+                      .WithMany(p => p.Cifs)
+                      .HasForeignKey(c => c.ProdutoId)
+                      .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasMany(c => c.Entradas)
+                      .WithOne(e => e.Cifs)
+                      .HasForeignKey(e => e.CifsId)
+                      .OnDelete(DeleteBehavior.SetNull);
+            });
+
+            // -------------------- ENTRADAS --------------------
+            modelBuilder.Entity<Entradas>(entity =>
+            {
+                entity.HasKey(e => e.EntradaId);
+
+                entity.Property(e => e.CreateAt)
+                      .HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.HasOne(e => e.Cifs)
+                      .WithMany(c => c.Entradas)
+                      .HasForeignKey(e => e.CifsId)
+                      .OnDelete(DeleteBehavior.SetNull);
             });
         }
 
