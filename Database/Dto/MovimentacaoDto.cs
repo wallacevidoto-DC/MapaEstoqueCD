@@ -12,7 +12,7 @@
 
         public string? tipo { get; set; }
         public string dataF { get; set; }
-        public int semF { get; set; }
+        public int? semF { get; set; }
         public int quantidade { get; set; }
         public string? lote { get; set; }
         public string? obs { get; set; }

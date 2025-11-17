@@ -18,6 +18,7 @@ namespace MapaEstoqueCD.Database.Models
         public DateTime CreateAt { get; set; } = DateTime.Now;
 
         public ICollection<Movimentacao> Movimentacoes { get; set; } = new List<Movimentacao>();
+        public ICollection<Entradas> Entradas { get; set; } = new List<Entradas>();
     }
 
     public enum UserRole

@@ -155,9 +155,19 @@ namespace MapaEstoqueCD.Database
                 entity.Property(e => e.CreateAt)
                       .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+                entity.HasOne(e => e.Produto)
+                     .WithMany() 
+                     .HasForeignKey(e => e.ProdutoId)
+                     .OnDelete(DeleteBehavior.SetNull);
+
                 entity.HasOne(e => e.Cifs)
                       .WithMany(c => c.Entradas)
                       .HasForeignKey(e => e.CifsId)
+                      .OnDelete(DeleteBehavior.SetNull);
+
+                entity.HasOne(m => m.User)
+                      .WithMany(u => u.Entradas)
+                      .HasForeignKey(m => m.UserId)
                       .OnDelete(DeleteBehavior.SetNull);
             });
         }

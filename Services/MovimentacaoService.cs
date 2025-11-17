@@ -29,7 +29,7 @@ namespace MapaEstoqueCD.Services
                   produtoCodigo = m.Produto != null ? m.Produto.Codigo : string.Empty,
                   produtoDescricao = m.Produto != null ? m.Produto.Descricao : string.Empty,
                   tipo = m.Tipo.ToUpper(),
-                  dataF = DataFormatter.FormatarMesAno(m.DataF),
+                  dataF = DataFormatter.FormatarMesAno(m.DataF),    
                   semF = m.SemF,
                   quantidade = m.Quantidade,
                   lote = m.Lote,

@@ -19,6 +19,7 @@ namespace MapaEstoqueCD.WebSocketActive.Interface
         public const string GET_PRODUTO = "get_produto";
         public const string GET_PRODUTO_EAN = "get_produto_cod";
         public const string LOGIN = "login";
+        public const string CONFERENCIA_LIVRE = "conferencia_livre";
     }
 
     public class WebSocketResponse

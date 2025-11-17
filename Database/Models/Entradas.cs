@@ -14,6 +14,13 @@ namespace MapaEstoqueCD.Database.Models
         [Column("tipo")]
         public string Tipo { get; set; }
 
+        [Column("userId")]
+        public int UserId { get; set; }
+
+        [Column("produtoId")]
+        public int? ProdutoId { get; set; }
+        public Produtos Produto { get; set; }
+
         [Column("qtd_conferida")]
         public int? QtdConferida { get; set; }
 
@@ -30,5 +37,7 @@ namespace MapaEstoqueCD.Database.Models
 
         [Column("update_at")]
         public DateTime? UpdateAt { get; set; }
+
+        public User? User { get; set; }
     }
 }

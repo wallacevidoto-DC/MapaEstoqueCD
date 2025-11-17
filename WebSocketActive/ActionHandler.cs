@@ -1,6 +1,8 @@
 ﻿using MapaEstoqueCD.Controller;
+using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Database.Dto.modal;
 using MapaEstoqueCD.Database.Dto.Ws;
+using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Services;
 using MapaEstoqueCD.WebSocketActive.Dto;
 using MapaEstoqueCD.WebSocketActive.Interface;
@@ -382,6 +384,48 @@ namespace MapaEstoqueCD.WebSocketActive
             }
 
         }
+    }
+
+    public class EnderecoConferenciaLivreHandler : IActionHandler
+    {
+        public string ActionName => ActionsWs.CONFERENCIA_LIVRE;
+
+        public EntradasService entradasService = new();
+        public async Task<WebSocketResponse?> ExecuteAsync(JsonElement data, WebSocket socket)
+        {
+            try
+            {
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    Converters = { new JsonStringEnumConverter() }
+                };
+
+                EntradaLvDto entrdaLivre = JsonSerializer.Deserialize<EntradaLvDto>(data.GetRawText(), options);
+
+                if (entrdaLivre != null)
+                {
+                    if (entradasService.SetEntradaLivre(entrdaLivre))
+                    {
+                        return new WebSocketResponse { type = "conferencia_livre_resposta", status = "ok", mensagem = "Entrada realizado com sucesso", dados = null };
+                    }
+
+
+                }
+                return new WebSocketResponse { type = "conferencia_livre_resposta", status = "erro", mensagem = "Algum dado errado" };
+            }
+            catch (Exception ex)
+            {
+                return new WebSocketResponse
+                {
+                    type = "conferencia_livre_resposta",
+                    status = "erro",
+                    mensagem = ex.Message
+                };
+            }
+        }
+
+
     }
 
 }
