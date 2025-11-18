@@ -405,6 +405,8 @@ namespace MapaEstoqueCD.WebSocketActive
 
                 if (entrdaLivre != null)
                 {
+
+                    entrdaLivre.obs = "(REMOTO)";
                     if (entradasService.SetEntradaLivre(entrdaLivre))
                     {
                         return new WebSocketResponse { type = "conferencia_livre_resposta", status = "ok", mensagem = "Entrada realizado com sucesso", dados = null };

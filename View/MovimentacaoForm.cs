@@ -1,6 +1,5 @@
 ﻿using MapaEstoqueCD.Controller;
 using MapaEstoqueCD.Database.Dto;
-using MapaEstoqueCD.Utils;
 using MapaEstoqueCD.View.Modal;
 
 namespace MapaEstoqueCD.View

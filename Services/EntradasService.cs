@@ -1,6 +1,8 @@
 ﻿using MapaEstoqueCD.Controller;
 using MapaEstoqueCD.Database.Dto;
+using MapaEstoqueCD.Database.Dto.modal;
 using MapaEstoqueCD.Database.Models;
+using System.Data.Entity;
 
 namespace MapaEstoqueCD.Services
 {
@@ -18,9 +20,12 @@ namespace MapaEstoqueCD.Services
                     Tipo = entradaLvDto.tipo,
                     QtdConferida = entradaLvDto.qtd_conferida,
                     UserId = entradaLvDto.userId,
+                    DataF = entradaLvDto.dataf,
+                    SemF = entradaLvDto.semf,
+                    Lote = entradaLvDto.lote,
+
                 };
                 CacheMP.Instance.Db.Entradas.Add(novaEntrada);
-                //CacheMP.Instance.Db.SaveChanges();
 
                 var movimentacao = new Movimentacao
                 {
@@ -29,7 +34,10 @@ namespace MapaEstoqueCD.Services
                     Quantidade = entradaLvDto.qtd_conferida,
                     UserId = entradaLvDto.userId,
                     DataL = DateTime.Now,
-
+                    DataF= entradaLvDto.dataf,
+                    SemF= entradaLvDto.semf,
+                    Lote= entradaLvDto.lote,
+                    Obs= entradaLvDto.obs,
 
                 };
                 CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
@@ -45,6 +53,41 @@ namespace MapaEstoqueCD.Services
                 transaction.Rollback();
                 Console.WriteLine("❌ Erro ao registrar entrada: " + ex.Message);
                 return false;
+            }
+        }
+
+        public List<EntradasViewerDto> GetAllEntradas()
+        {
+            return CacheMP.Instance.Db.Entradas
+                .Include(e => e.User)
+                .Include(e => e.Produto)
+                .Include(e => e.Cifs)
+                .Where(e => e.IsConf == false)
+                .Select(e => new EntradasViewerDto
+                {
+                    EntradaId = e.EntradaId,
+                    Tipo = e.Tipo,
+                    ProdutoId = e.ProdutoId,   
+                    UserNome = e.User != null ? e.User.Name : null,
+                    ProdutoCodigo = e.Produto != null ? e.Produto.Codigo : null,
+                    ProdutoDescricao = e.Produto != null ? e.Produto.Descricao : null,
+                    QtdConferida = e.QtdConferida,
+                    QtdEntrada = e.QtdEntrada,
+                    Lote = e.Lote,
+                    DataF = e.DataF,
+                    SemF = e.SemF,
+                    CreateAt = e.CreateAt,
+                    UpdateAt = e.UpdateAt
+                })
+                .ToList();
+        }
+
+        public void SetEntradaLivreConferida(EntradasViewerDto entradaSelecionado)
+        {
+            Entradas model = CacheMP.Instance.Db.Entradas.FirstOrDefault(x => x.EntradaId == entradaSelecionado.EntradaId);
+            if (model != null) {
+                model.IsConf = true;
+                CacheMP.Instance.Db.SaveChanges();
             }
         }
     }

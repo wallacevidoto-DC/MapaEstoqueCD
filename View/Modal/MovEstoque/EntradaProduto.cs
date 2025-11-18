@@ -1,6 +1,9 @@
 ﻿using MapaEstoqueCD.Controller;
+using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Database.Dto.modal;
+using MapaEstoqueCD.Database.Dto.Ws;
 using MapaEstoqueCD.Database.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace MapaEstoqueCD.View.Modal
 {
@@ -11,10 +14,38 @@ namespace MapaEstoqueCD.View.Modal
         private List<ProdutoSpDto> produtoSpDtos = new();
 
         private EntradaDto entradaDto;
-
+        private bool isEntrada=false;
         public EntradaProduto()
         {
             InitializeComponent();
+        }
+        public EntradaProduto(EntradasViewerDto entradasViewerDto)
+        {
+            InitializeComponent();
+            Entrada(entradasViewerDto);
+        }
+
+
+
+        private void Entrada(EntradasViewerDto entradasViewerDto)
+        {
+            produtoSpDtos.Add(new ProdutoSpDto
+            {
+                codigo= entradasViewerDto.ProdutoCodigo,
+                produtoId= entradasViewerDto.ProdutoId,
+                dataf= entradasViewerDto.DataF,
+                semf= entradasViewerDto.SemF??0,
+                descricao= entradasViewerDto.ProdutoDescricao,
+                lote= entradasViewerDto.Lote,
+                quantidade= entradasViewerDto.QtdConferida ?? 0,
+                propsPST= new PropsPST
+                {
+                    isModified= false,
+                    origem=Origem.OUT
+                }
+            });
+            isEntrada =true;
+            ReloadGrid();
         }
 
         public void ReloadGrid()
@@ -155,6 +186,12 @@ namespace MapaEstoqueCD.View.Modal
                 {
                     MessageBox.Show(Text = "Entrada registrada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                    if (isEntrada)
+                    {
+                        DialogResult = DialogResult.OK;
+                        this.Close();
+                        return;
+                    }
                     var dr = MessageBox.Show("Deseja registrar outra entrada?", "Continuar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
                     if (dr == DialogResult.No) { 
                         this.Close();

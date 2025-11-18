@@ -17,8 +17,7 @@ namespace MapaEstoqueCD.Database
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlite("Data Source=db_dc.db").EnableSensitiveDataLogging()
-        .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
-            ;
+            .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information).EnableSensitiveDataLogging();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -61,6 +60,14 @@ namespace MapaEstoqueCD.Database
                       .WithOne(m => m.Produto)
                       .HasForeignKey(m => m.ProdutoId)
                       .OnDelete(DeleteBehavior.Restrict);
+
+
+                entity.HasMany(p => p.Entradas)
+                     .WithOne(m => m.Produto)
+                     .HasForeignKey(m => m.ProdutoId)
+                     .OnDelete(DeleteBehavior.Restrict);
+
+
             });
 
             // -------------------- USERS --------------------
@@ -156,9 +163,10 @@ namespace MapaEstoqueCD.Database
                       .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                 entity.HasOne(e => e.Produto)
-                     .WithMany() 
-                     .HasForeignKey(e => e.ProdutoId)
-                     .OnDelete(DeleteBehavior.SetNull);
+                       .WithMany(p => p.Entradas)
+                       .HasForeignKey(e => e.ProdutoId)
+                       .OnDelete(DeleteBehavior.SetNull);
+
 
                 entity.HasOne(e => e.Cifs)
                       .WithMany(c => c.Entradas)

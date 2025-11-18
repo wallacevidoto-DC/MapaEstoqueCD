@@ -57,11 +57,6 @@ namespace MapaEstoqueCD.Controller
                 new ColumnConfig("Data de Criação", nameof(Produtos.CreateAt))
             };
         }
-
-        // ----------------------------
-        // MÉTODOS PRINCIPAIS
-        // ----------------------------
-
         public List<Produtos> GetAllProduct(ref ListView listView)
         {
             var produtos = CacheMP.Instance.Db.Produtos.ToList();
@@ -78,10 +73,6 @@ namespace MapaEstoqueCD.Controller
             PopularListView(produtos, ref listView);
             return produtos;
         }
-
-        // ----------------------------
-        // FUNÇÕES AUXILIARES
-        // ----------------------------
 
         private void PopularListView(List<Produtos> produtos, ref ListView listView)
         {

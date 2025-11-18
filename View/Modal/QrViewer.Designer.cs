@@ -52,6 +52,7 @@
             MaximizeBox = false;
             MinimizeBox = false;
             Name = "QrViewer";
+            StartPosition = FormStartPosition.CenterParent;
             Text = "QrViewer";
             ((System.ComponentModel.ISupportInitialize)pictureBox_qr).EndInit();
             ResumeLayout(false);

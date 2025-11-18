@@ -51,33 +51,28 @@ namespace MapaEstoqueCD.Services
 
         public List<ProdutoSpDto> GetEnderecoByDetails(string rua, string bloco, string apt)
         {
-            Endereco sprod = CacheMP.Instance.Db.Enderecos.FirstOrDefault(e => e.Rua == rua && e.Coluna == bloco && e.Palete == apt);
+            Endereco sprod = CacheMP.Instance.Db.Enderecos.Include(x=>x.Estoque).ThenInclude(x=>x.Produto).FirstOrDefault(e => e.Rua == rua && e.Coluna == bloco && e.Palete == apt);
 
             if (sprod == null)
             {
                 return null;
             }
 
-            List<Database.Dto.modal.ProdutoSpDto> produtos = new List<Database.Dto.modal.ProdutoSpDto>();
-
-            for (int i = 0; i < sprod.Estoque.Count; i++)
+            List<ProdutoSpDto> produtos = sprod.Estoque.Select(est => new ProdutoSpDto
             {
-                produtos.Add(new Database.Dto.modal.ProdutoSpDto
+                produtoId = est.Produto.ProdutoId,
+                codigo = est.Produto.Codigo,
+                descricao = est.Produto.Descricao,
+                quantidade = est.Quantidade ?? 0,
+                dataf = est.DataF ?? "",
+                semf = est.SemF ?? 0,
+                lote = est.Lote ?? "",
+                propsPST = new()
                 {
-                    produtoId = sprod.Estoque.ElementAt(i).Produto.ProdutoId,
-                    codigo = sprod.Estoque.ElementAt(i).Produto?.Codigo,
-                    descricao = sprod.Estoque.ElementAt(i).Produto?.Descricao,
-                    quantidade = sprod.Estoque.ElementAt(i).Quantidade ?? 0,
-                    dataf = sprod.Estoque.ElementAt(i).DataF ?? "",
-                    semf = sprod.Estoque.ElementAt(i).SemF ?? 0,
-                    lote = sprod.Estoque.ElementAt(i).Lote ?? "",
-                    propsPST = new()
-                    {
-                        origem = Origem.IN,
-                        isModified = false
-                    }
-                });
-            }
+                    origem = Origem.IN,
+                    isModified = false
+                }
+            }).ToList();
             return produtos;
 
 
@@ -393,7 +388,6 @@ namespace MapaEstoqueCD.Services
                     
                     var movimentacao = new Movimentacao
                     {
-                        //EstoqueId = n,
                         ProdutoId = p.produtoId,
                         Tipo = pickingDto.tipo,
                         Quantidade = p.quantidade,
@@ -402,7 +396,6 @@ namespace MapaEstoqueCD.Services
                         DataF = p.dataf,
                         SemF = p.semf,
                         Lote = p.lote,
-                        Endereco = "N/A",
                         DataL = pickingDto.dataEntrada
 
 

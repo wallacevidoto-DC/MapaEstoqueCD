@@ -32,9 +32,11 @@
             toolStrip1 = new ToolStrip();
             toolStripSeparator6 = new ToolStripSeparator();
             toolStripButton_movimentacao = new ToolStripButton();
-            toolStripSeparator1 = new ToolStripSeparator();
+            toolStripSeparator7 = new ToolStripSeparator();
             toolStripButton_estoque = new ToolStripButton();
             toolStripSeparator2 = new ToolStripSeparator();
+            toolStripButton_entrada = new ToolStripButton();
+            toolStripSeparator1 = new ToolStripSeparator();
             toolStripButton_produto = new ToolStripButton();
             toolStripSeparator3 = new ToolStripSeparator();
             toolStripButton_remoto = new ToolStripButton();
@@ -51,9 +53,10 @@
             // toolStrip1
             // 
             toolStrip1.BackColor = Color.FromArgb(248, 250, 255);
+            toolStrip1.BackgroundImageLayout = ImageLayout.None;
             toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
-            toolStrip1.ImageScalingSize = new Size(60, 60);
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripSeparator6, toolStripButton_movimentacao, toolStripSeparator1, toolStripButton_estoque, toolStripSeparator2, toolStripButton_produto, toolStripSeparator3, toolStripButton_remoto, toolStripSeparator4, toolStripButton_adm, toolStripSeparator5 });
+            toolStrip1.ImageScalingSize = new Size(60, 65);
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripSeparator6, toolStripButton_movimentacao, toolStripSeparator7, toolStripButton_estoque, toolStripSeparator2, toolStripButton_entrada, toolStripSeparator1, toolStripButton_produto, toolStripSeparator3, toolStripButton_remoto, toolStripSeparator4, toolStripButton_adm, toolStripSeparator5 });
             toolStrip1.Location = new Point(0, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.RenderMode = ToolStripRenderMode.System;
@@ -70,7 +73,7 @@
             // 
             toolStripButton_movimentacao.AutoSize = false;
             toolStripButton_movimentacao.BackColor = Color.WhiteSmoke;
-            toolStripButton_movimentacao.BackgroundImageLayout = ImageLayout.None;
+            toolStripButton_movimentacao.BackgroundImageLayout = ImageLayout.Stretch;
             toolStripButton_movimentacao.Image = Properties.Resources.movimentacao;
             toolStripButton_movimentacao.ImageTransparentColor = Color.Magenta;
             toolStripButton_movimentacao.Name = "toolStripButton_movimentacao";
@@ -79,19 +82,19 @@
             toolStripButton_movimentacao.Text = "Movimentação";
             toolStripButton_movimentacao.TextAlign = ContentAlignment.BottomCenter;
             toolStripButton_movimentacao.TextImageRelation = TextImageRelation.Overlay;
-            toolStripButton_movimentacao.ToolTipText = "Movimentação";
+            toolStripButton_movimentacao.ToolTipText = "Todas as movimentações do CD";
             toolStripButton_movimentacao.Click += toolStripButton_movimentacao_Click;
             // 
-            // toolStripSeparator1
+            // toolStripSeparator7
             // 
-            toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(6, 103);
+            toolStripSeparator7.Name = "toolStripSeparator7";
+            toolStripSeparator7.Size = new Size(6, 103);
             // 
             // toolStripButton_estoque
             // 
             toolStripButton_estoque.AutoSize = false;
             toolStripButton_estoque.BackColor = Color.WhiteSmoke;
-            toolStripButton_estoque.BackgroundImageLayout = ImageLayout.None;
+            toolStripButton_estoque.BackgroundImageLayout = ImageLayout.Stretch;
             toolStripButton_estoque.Image = Properties.Resources.armazem;
             toolStripButton_estoque.ImageTransparentColor = Color.Magenta;
             toolStripButton_estoque.Name = "toolStripButton_estoque";
@@ -100,7 +103,7 @@
             toolStripButton_estoque.Text = "Estoque";
             toolStripButton_estoque.TextAlign = ContentAlignment.BottomCenter;
             toolStripButton_estoque.TextImageRelation = TextImageRelation.Overlay;
-            toolStripButton_estoque.ToolTipText = "Estoque";
+            toolStripButton_estoque.ToolTipText = "Onde da entrada, picking, saída, transferência e correção";
             toolStripButton_estoque.Click += toolStripButton_estoque_Click;
             // 
             // toolStripSeparator2
@@ -108,11 +111,32 @@
             toolStripSeparator2.Name = "toolStripSeparator2";
             toolStripSeparator2.Size = new Size(6, 103);
             // 
+            // toolStripButton_entrada
+            // 
+            toolStripButton_entrada.AutoSize = false;
+            toolStripButton_entrada.BackColor = Color.WhiteSmoke;
+            toolStripButton_entrada.BackgroundImageLayout = ImageLayout.Stretch;
+            toolStripButton_entrada.Image = Properties.Resources.mercadorias;
+            toolStripButton_entrada.ImageTransparentColor = Color.Magenta;
+            toolStripButton_entrada.Name = "toolStripButton_entrada";
+            toolStripButton_entrada.RightToLeft = RightToLeft.Yes;
+            toolStripButton_entrada.Size = new Size(100, 100);
+            toolStripButton_entrada.Text = "Entrada/CIF";
+            toolStripButton_entrada.TextAlign = ContentAlignment.BottomCenter;
+            toolStripButton_entrada.TextImageRelation = TextImageRelation.Overlay;
+            toolStripButton_entrada.ToolTipText = "Entrada de mercadoria da fabrica para o CD";
+            toolStripButton_entrada.Click += toolStripButton_entrada_Click;
+            // 
+            // toolStripSeparator1
+            // 
+            toolStripSeparator1.Name = "toolStripSeparator1";
+            toolStripSeparator1.Size = new Size(6, 103);
+            // 
             // toolStripButton_produto
             // 
             toolStripButton_produto.AutoSize = false;
             toolStripButton_produto.BackColor = Color.WhiteSmoke;
-            toolStripButton_produto.BackgroundImageLayout = ImageLayout.None;
+            toolStripButton_produto.BackgroundImageLayout = ImageLayout.Stretch;
             toolStripButton_produto.Image = Properties.Resources.produtos;
             toolStripButton_produto.ImageTransparentColor = Color.Magenta;
             toolStripButton_produto.Name = "toolStripButton_produto";
@@ -121,7 +145,7 @@
             toolStripButton_produto.Text = "Produtos";
             toolStripButton_produto.TextAlign = ContentAlignment.BottomCenter;
             toolStripButton_produto.TextImageRelation = TextImageRelation.Overlay;
-            toolStripButton_produto.ToolTipText = "Produtos";
+            toolStripButton_produto.ToolTipText = "Produtos cadastrados";
             toolStripButton_produto.Click += toolStripButton_produto_Click;
             // 
             // toolStripSeparator3
@@ -133,7 +157,7 @@
             // 
             toolStripButton_remoto.AutoSize = false;
             toolStripButton_remoto.BackColor = Color.WhiteSmoke;
-            toolStripButton_remoto.BackgroundImageLayout = ImageLayout.None;
+            toolStripButton_remoto.BackgroundImageLayout = ImageLayout.Stretch;
             toolStripButton_remoto.Image = Properties.Resources.smartphone;
             toolStripButton_remoto.ImageTransparentColor = Color.Magenta;
             toolStripButton_remoto.Name = "toolStripButton_remoto";
@@ -142,7 +166,7 @@
             toolStripButton_remoto.Text = "Remoto";
             toolStripButton_remoto.TextAlign = ContentAlignment.BottomCenter;
             toolStripButton_remoto.TextImageRelation = TextImageRelation.Overlay;
-            toolStripButton_remoto.ToolTipText = "Remoto";
+            toolStripButton_remoto.ToolTipText = "Acesso remoto";
             toolStripButton_remoto.Click += toolStripButton_remoto_Click;
             // 
             // toolStripSeparator4
@@ -154,7 +178,7 @@
             // 
             toolStripButton_adm.AutoSize = false;
             toolStripButton_adm.BackColor = Color.WhiteSmoke;
-            toolStripButton_adm.BackgroundImageLayout = ImageLayout.None;
+            toolStripButton_adm.BackgroundImageLayout = ImageLayout.Stretch;
             toolStripButton_adm.Image = Properties.Resources.administrador;
             toolStripButton_adm.ImageTransparentColor = Color.Magenta;
             toolStripButton_adm.Name = "toolStripButton_adm";
@@ -236,5 +260,7 @@
         private ToolStripSeparator toolStripSeparator5;
         private ToolStripStatusLabel toolStripStatusLabel_infoUser;
         public StatusStrip statusStrip1;
+        private ToolStripSeparator toolStripSeparator7;
+        private ToolStripButton toolStripButton_entrada;
     }
 }

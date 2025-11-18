@@ -122,7 +122,7 @@ namespace MapaEstoqueCD.Database.Models
         public ICollection<Estoque> Estoque { get; set; } = new List<Estoque>();
         public ICollection<Movimentacao> Movimentacao { get; set; } = new List<Movimentacao>();
         public ICollection<Cifs> Cifs { get; set; } = new List<Cifs>();
-
+        public ICollection<Entradas> Entradas { get; set; } = new List<Entradas>();
     }
 
 }

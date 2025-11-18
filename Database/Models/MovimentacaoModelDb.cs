@@ -24,7 +24,7 @@ namespace MapaEstoqueCD.Database.Models
         public string? Tipo { get; set; }
 
         [Column("data_f")]
-        public string DataF { get; set; }
+        public string? DataF { get; set; }
 
         [Column("sem_f")]
         public int? SemF { get; set; }   
