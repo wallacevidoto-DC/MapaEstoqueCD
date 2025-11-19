@@ -239,6 +239,7 @@
             panel3.Name = "panel3";
             panel3.Size = new Size(23, 23);
             panel3.TabIndex = 9;
+            panel3.Visible = false;
             // 
             // panel2
             // 
@@ -247,6 +248,7 @@
             panel2.Name = "panel2";
             panel2.Size = new Size(23, 23);
             panel2.TabIndex = 9;
+            panel2.Visible = false;
             // 
             // button_addProd
             // 

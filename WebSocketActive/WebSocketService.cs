@@ -18,12 +18,14 @@ namespace MapaEstoqueCD.WebSocketActive
             _dispatcher = new ActionDispatcher(new IActionHandler[]
                {
                     new GetEstoqueHandler(),
+                    new GetEstoqueEntradaHandler(),
                     new LoginHandler(),
                     new EntradaHandler(),
                     new EnderecoHandler(),
                     new ProdutoHandler(),
                     new SaidaHandler(),
                     new TransferenciaHandler(),
+                    new CorrecaoHandler(),
                     new ProdutoEanHandler(),
                     new EnderecoConferenciaLivreHandler()
                });

@@ -7,7 +7,7 @@
         public string bloco { get; set; }
         public string apt { get; set; }
 
-
+        public int? entradaId { get; set; }
         public DateTime dataEntrada { get; set; }
 
         public string observacao { get; set; }

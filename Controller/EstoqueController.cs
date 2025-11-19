@@ -129,7 +129,6 @@ namespace MapaEstoqueCD.Controller
 
             List<EstoqueWsDto> estoque = estoqueService.GetAllEstoque();
 
-            // --- 🔍 APLICA OS FILTROS ---
             foreach (var filtro in filtros)
             {
                 if (string.IsNullOrWhiteSpace(filtro.Valor))
@@ -183,7 +182,6 @@ namespace MapaEstoqueCD.Controller
                 }
             }
 
-            // --- 🧾 PREENCHER O GRID ---
             foreach (var p in estoque)
             {
                 datagrid.Rows.Add(

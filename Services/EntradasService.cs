@@ -90,5 +90,18 @@ namespace MapaEstoqueCD.Services
                 CacheMP.Instance.Db.SaveChanges();
             }
         }
+        public void SetEntradaLivreConferida(int? id)
+        {
+            if (id is null)
+            {
+                return;
+            }
+            Entradas model = CacheMP.Instance.Db.Entradas.FirstOrDefault(x => x.EntradaId == id);
+            if (model != null)
+            {
+                model.IsConf = true;
+                CacheMP.Instance.Db.SaveChanges();
+            }
+        }
     }
 }

@@ -184,7 +184,7 @@ namespace MapaEstoqueCD.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                Console.WriteLine("❌ Erro ao registrar entrada: " + ex.Message);
+                throw ex;
                 return false;
             }
         }
@@ -238,17 +238,17 @@ namespace MapaEstoqueCD.Services
                     CacheMP.Instance.Db.SaveChanges();
 
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
 
-                    throw;
+                    throw ex;
                 }
                 return true;
             }
             catch (Exception ex)
             {
 
-                throw;
+                throw ex;
             }
 
 
@@ -260,7 +260,7 @@ namespace MapaEstoqueCD.Services
 
             try
             {
-                var estoqueExistente = CacheMP.Instance.Db.Estoque.FirstOrDefault(e => e.EstoqueId == correcaoDto.enderecoId);
+                var estoqueExistente = CacheMP.Instance.Db.Estoque.FirstOrDefault(e => e.EstoqueId == correcaoDto.estoqueId);
 
                 if (estoqueExistente == null)
                     throw new Exception($"Estoque não encontrado.");
@@ -303,7 +303,7 @@ namespace MapaEstoqueCD.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                Console.WriteLine("❌ Erro ao registrar entrada: " + ex.Message);
+                throw ex;
                 return false;
             }
         }
@@ -373,7 +373,7 @@ namespace MapaEstoqueCD.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                Console.WriteLine("❌ Erro ao registrar entrada: " + ex.Message);
+                throw ex;
                 return false;
             }
         }
@@ -408,7 +408,7 @@ namespace MapaEstoqueCD.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine("❌ Erro ao registrar picking: " + ex.Message);
+                throw ex;
                 return false;
             }
         }

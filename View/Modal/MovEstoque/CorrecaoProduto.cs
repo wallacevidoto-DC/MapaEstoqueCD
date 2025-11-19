@@ -66,7 +66,7 @@ namespace MapaEstoqueCD.View.Modal
                 return;
             }
 
-            if (estoqueController.SetCorrecaoProduto(new CorrecaoDto { observacao=richTextBox_obs.Text,produto=dto,enderecoId=estoqueDto.estoqueId}))
+            if (estoqueController.SetCorrecaoProduto(new CorrecaoDto { observacao=richTextBox_obs.Text,produto=dto,estoqueId=estoqueDto.estoqueId}))
             {
                 MessageBox.Show("Correção realizada com sucesso!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();

@@ -2,7 +2,6 @@
 using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Database.Dto.modal;
 using MapaEstoqueCD.Database.Dto.Ws;
-using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Services;
 using MapaEstoqueCD.WebSocketActive.Dto;
 using MapaEstoqueCD.WebSocketActive.Interface;
@@ -33,6 +32,29 @@ namespace MapaEstoqueCD.WebSocketActive
         }
     }
 
+    public class GetEstoqueEntradaHandler : IActionHandler
+    {
+        public readonly EntradasService entradasService = new();
+        public string ActionName => ActionsWs.GET_ESTOQUE_ENTRADA;
+
+        public async Task<WebSocketResponse?> ExecuteAsync(JsonElement data, WebSocket socket)
+        {
+            try
+            {
+                List<EntradasViewerDto> estoque = entradasService.GetAllEntradas();
+
+
+
+                return new WebSocketResponse { type = "get_estoque_entrada_resposta", status = "ok", mensagem = "Estoque de entradas", dados = estoque };
+            }
+            catch (Exception ex)
+            {
+                return new WebSocketResponse { type = $"get_estoque_entrada_resposta", status = "erro", mensagem = ex.Message };
+            }
+
+        }
+    }
+
     public class LoginHandler : IActionHandler
     {
         public readonly UserService userService = new();
@@ -46,10 +68,9 @@ namespace MapaEstoqueCD.WebSocketActive
 
                 if (user != null)
                 {
-                    //user.Password = null;
                     return new WebSocketResponse { type = "login_resposta", status = "ok", mensagem = "Login realizado com sucesso", dados = user };
                 }
-                return new WebSocketResponse { type = "login_resposta", status = "erro", mensagem = "Algum dado errado" };
+                return new WebSocketResponse { type = "login_resposta", status = "erro", mensagem = "Usuário ou senha estão erradas" };
             }
             catch (Exception ex)
             {
@@ -64,6 +85,7 @@ namespace MapaEstoqueCD.WebSocketActive
 
         public string ActionName => ActionsWs.ENTRADA;
         public EstoqueService estoqueService = new();
+        public EntradasService entradasService = new();
 
 
         public async Task<WebSocketResponse?> ExecuteAsync(JsonElement data, WebSocket socket)
@@ -78,17 +100,16 @@ namespace MapaEstoqueCD.WebSocketActive
 
                 EntradaDto entrada = JsonSerializer.Deserialize<EntradaDto>(data.GetRawText(), options);
 
-                if (entrada != null)
+                if (entrada != null) { throw new Exception("Erro ao receber os dados"); }
+
+                entrada.observacao = $"(REMOTO) - {entrada.observacao}";
+                estoqueService.SetEntrada(entrada);
+
+                if (entrada.entradaId is not null)
                 {
-                    entrada.observacao = $"(REMOTO) - {entrada.observacao}";
-                    if (estoqueService.SetEntrada(entrada))
-                    {
-                        return new WebSocketResponse { type = "entrada_resposta", status = "ok", mensagem = "Entrada realizado com sucesso", dados = null };
-                    }
-
-
+                    entradasService.SetEntradaLivreConferida(entrada.entradaId);
                 }
-                return new WebSocketResponse { type = "entrada_resposta", status = "erro", mensagem = "Algum dado errado" };
+                return new WebSocketResponse { type = "entrada_resposta", status = "ok", mensagem = "Entrada realizado com sucesso", dados = null };
             }
             catch (Exception ex)
             {
@@ -327,17 +348,15 @@ namespace MapaEstoqueCD.WebSocketActive
 
                 SaidaDto saida = JsonSerializer.Deserialize<SaidaDto>(data.GetRawText(), options);
 
-                if (saida != null)
-                {
-                    saida.observacao = $"(REMOTO) - {saida.observacao}";
-                    if (estoqueService.SetSaida(saida))
-                    {
-                        return new WebSocketResponse { type = "saida_resposta", status = "ok", mensagem = "Saída realizado com sucesso", dados = null };
-                    }
+                if (saida != null) { throw new Exception("Erro ao receber os dados"); }
+
+                saida.observacao = $"(REMOTO) - {saida.observacao}";
+                estoqueService.SetSaida(saida);
+
+                return new WebSocketResponse { type = "saida_resposta", status = "ok", mensagem = "Saída realizado com sucesso", dados = null };
 
 
-                }
-                return new WebSocketResponse { type = "saida_resposta", status = "erro", mensagem = "Algum dado errado" };
+
             }
             catch (Exception ex)
             {
@@ -366,21 +385,51 @@ namespace MapaEstoqueCD.WebSocketActive
 
                 TranferenciaDto transferencia = JsonSerializer.Deserialize<TranferenciaDto>(data.GetRawText(), options);
 
-                if (transferencia != null)
-                {
-                    transferencia.observacao = $"(REMOTO) - {transferencia.observacao}";
-                    if (estoqueService.SetTransferencia(transferencia))
-                    {
-                        return new WebSocketResponse { type = "transferencia_resposta", status = "ok", mensagem = "Tranferência realizado com sucesso", dados = null };
-                    }
+                if (transferencia != null) { throw new Exception("Erro ao receber os dados"); }
 
+                transferencia.observacao = $"(REMOTO) - {transferencia.observacao}";
+                estoqueService.SetTransferencia(transferencia);
+                return new WebSocketResponse { type = "transferencia_resposta", status = "ok", mensagem = "Tranferência realizado com sucesso", dados = null };
 
-                }
-                return new WebSocketResponse { type = "transferencia_resposta", status = "erro", mensagem = "Algum dado errado" };
             }
             catch (Exception ex)
             {
-                return new WebSocketResponse { type = "transferencia_resposta", status = "erro", mensagem = ex.Message,dados= ex.ToString() };
+                return new WebSocketResponse { type = "transferencia_resposta", status = "erro", mensagem = ex.Message, dados = ex.ToString() };
+            }
+
+        }
+    }
+
+    public class CorrecaoHandler : IActionHandler
+    {
+
+        public string ActionName => ActionsWs.CORRECAO;
+        public EstoqueService estoqueService = new();
+
+
+        public async Task<WebSocketResponse?> ExecuteAsync(JsonElement data, WebSocket socket)
+        {
+            try
+            {
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    Converters = { new JsonStringEnumConverter() }
+                };
+
+                CorrecaoDto correcao = JsonSerializer.Deserialize<CorrecaoDto>(data.GetRawText(), options);
+
+                if (correcao != null) { throw new Exception("Erro ao receber os dados"); }
+                correcao.observacao = correcao.observacao.Replace("(REMOTO)", string.Empty);
+                correcao.observacao = $"(REMOTO){correcao.observacao}";
+
+                estoqueService.SetCorrecaoProduto(correcao);
+                return new WebSocketResponse { type = "correcao_resposta", status = "ok", mensagem = "Correção realizado com sucesso", dados = null };
+
+            }
+            catch (Exception ex)
+            {
+                return new WebSocketResponse { type = "correcao_resposta", status = "erro", mensagem = ex.Message };
             }
 
         }
@@ -403,18 +452,12 @@ namespace MapaEstoqueCD.WebSocketActive
 
                 EntradaLvDto entrdaLivre = JsonSerializer.Deserialize<EntradaLvDto>(data.GetRawText(), options);
 
-                if (entrdaLivre != null)
-                {
+                if (entrdaLivre != null) { throw new Exception("Erro ao receber os dados"); }
 
-                    entrdaLivre.obs = "(REMOTO)";
-                    if (entradasService.SetEntradaLivre(entrdaLivre))
-                    {
-                        return new WebSocketResponse { type = "conferencia_livre_resposta", status = "ok", mensagem = "Entrada realizado com sucesso", dados = null };
-                    }
+                entrdaLivre.obs = "(REMOTO)";
+                entradasService.SetEntradaLivre(entrdaLivre);
+                return new WebSocketResponse { type = "conferencia_livre_resposta", status = "ok", mensagem = "Entrada realizado com sucesso", dados = null };
 
-
-                }
-                return new WebSocketResponse { type = "conferencia_livre_resposta", status = "erro", mensagem = "Algum dado errado" };
             }
             catch (Exception ex)
             {

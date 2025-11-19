@@ -1,5 +1,6 @@
 ﻿using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Database.Dto.Ws;
+using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Services;
 using MapaEstoqueCD.Utils;
 using MapaEstoqueCD.View.Modal;
@@ -219,7 +220,9 @@ namespace MapaEstoqueCD.Controller
                             _ => movimentacoes
                         };
                         break;
-
+                    case "endereco":
+                        movimentacoes = movimentacoes.Where(e => e.endereco?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList();
+                        break;
                     case "dataf":
                         if (DateTime.TryParse(filtro.Valor, out DateTime dataF))
                         {
@@ -245,9 +248,9 @@ namespace MapaEstoqueCD.Controller
                     m.produtoCodigo,
                     m.produtoDescricao,
                     m.tipo,
+                    m.quantidade,
                     m.dataF,
                     m.semF,
-                    m.quantidade,
                     m.lote,
                     m.obs,
                     m.createAt.ToString("g")
