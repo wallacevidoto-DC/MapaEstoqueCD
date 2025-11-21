@@ -2,6 +2,7 @@
 using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Database.Dto.modal;
 using MapaEstoqueCD.Database.Dto.Ws;
+using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Services;
 using MapaEstoqueCD.Utils;
 using MapaEstoqueCD.WebSocketActive.Dto;
@@ -67,11 +68,17 @@ namespace MapaEstoqueCD.WebSocketActive
         {
             try
             {
-                var user = userService.Login(data.GetProperty("username").GetString(), data.GetProperty("password").GetString());
+                User user = userService.Login(data.GetProperty("username").GetString(), data.GetProperty("password").GetString());
 
-                if (user != null)
+                if (user is not null)
                 {
-                    return new WebSocketResponse { type = "login_resposta", status = "ok", mensagem = "Login realizado com sucesso", dados = user };
+                    UserDto repUser = new UserDto
+                    {
+                        Name = user.Name,
+                        Role = user.Role.ToString(),
+                        UserId = user?.UserId,
+                    };
+                    return new WebSocketResponse { type = "login_resposta", status = "ok", mensagem = "Login realizado com sucesso", dados = repUser };
                 }
                 return new WebSocketResponse { type = "login_resposta", status = "erro", mensagem = "Usuário ou senha estão erradas" };
             }

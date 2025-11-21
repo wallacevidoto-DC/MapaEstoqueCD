@@ -162,8 +162,7 @@ namespace MapaEstoqueCD.Database
                 entity.Property(e => e.CreateAt)
                       .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
-                entity.Property(e => e.UpdateAt)
-                        .ValueGeneratedOnUpdate();
+                entity.Property(e => e.UpdateAt);
 
                 entity.HasOne(e => e.Produto)
                        .WithMany(p => p.Entradas)
@@ -184,8 +183,38 @@ namespace MapaEstoqueCD.Database
         }
 
 
-       
+        public override int SaveChanges()
+        {
+            UpdateTimestamps();
+            return base.SaveChanges();
+        }
+
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            UpdateTimestamps();
+            return base.SaveChangesAsync(cancellationToken);
+        }
+        private void UpdateTimestamps()
+        {
+            var entries = ChangeTracker
+                .Entries<Entradas>()
+                .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified);
+
+            var now = DateTime.Now;
+
+            foreach (var entry in entries)
+            {
+                if (entry.State == EntityState.Added)
+                    entry.Entity.CreateAt = now;
+
+                entry.Entity.UpdateAt = now;
+            }
+        }
+
+
+
 
 
     }
+
 }
