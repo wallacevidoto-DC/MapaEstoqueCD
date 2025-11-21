@@ -72,5 +72,26 @@ namespace MapaEstoqueCD.View
                 entradaSelecionado = entradasCurrent.FirstOrDefault(p => p.EntradaId.ToString() == valorPrimeiraCelula);
             }
         }
+
+        private void cORREÇÃOToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (entradaSelecionado is not null)
+            {
+                var tt = (new CorrecaoEntrada(new CorrecaoEntradaDto
+                {
+                    conferenciaId= entradaSelecionado.EntradaId,
+                    qtd_conferida= (int)entradaSelecionado.QtdConferida,
+                    dataf= entradaSelecionado.DataF,
+                    semf= (int)entradaSelecionado.SemF,
+                    lote= entradaSelecionado.Lote
+                })).ShowDialog();
+                if (tt == DialogResult.OK)
+                {
+                    entradaSelecionado = null;
+                    entradasCurrent = entradasControllers.GetEntradasByFilter(filtrosAtivos, ref dataGridView1);
+
+                }
+            }
+        }
     }
 }

@@ -28,10 +28,16 @@ namespace MapaEstoqueCD.Controller
         {
             Db = new AppDbContext();
             InitServerAsync().GetAwaiter().GetResult();
+            Db.Users.ToList();
+            Db.Produtos.ToList();
+            Db.Movimentacoes.ToList();
+            Db.Estoque.ToList();
+            Db.Entradas.ToList();
+            Db.Cifs.ToList();
 
 
 
-            
+
         }
 
         #region Server       

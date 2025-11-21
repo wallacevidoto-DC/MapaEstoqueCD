@@ -110,6 +110,10 @@ namespace MapaEstoqueCD.Services
 
         internal bool SetEntrada(EntradaDto entradaDto)
         {
+            if (DtoValidator.Validate(entradaDto, out var erros).Any())
+            {
+                throw new Exception(string.Join("\n", erros.Select(x => "\n" + x.ErrorMessage)));
+            }
             using var transaction = CacheMP.Instance.Db.Database.BeginTransaction();
 
             try
@@ -143,7 +147,7 @@ namespace MapaEstoqueCD.Services
                         EnderecoId = endereco.EnderecoId,
                         Quantidade = p.quantidade,
                         Lote = p.lote,
-                        DataF = p.dataf,
+                        DataF = p.dataf.Replace(" ",""),
                         SemF = p.semf,
                         //CreateAt = DateTime.Now,
                         DataL = entradaDto.dataEntrada,
@@ -166,7 +170,7 @@ namespace MapaEstoqueCD.Services
                         Quantidade = p.quantidade,
                         Obs = entradaDto.observacao,
                         UserId = entradaDto.userId,
-                        DataF = p.dataf,
+                        DataF = p.dataf.Replace(" ", ""),
                         SemF = p.semf,
                         Lote = p.lote,
                         Endereco = endereco.EnderecoId,
@@ -185,7 +189,6 @@ namespace MapaEstoqueCD.Services
             {
                 transaction.Rollback();
                 throw ex;
-                return false;
             }
         }
 
@@ -193,6 +196,13 @@ namespace MapaEstoqueCD.Services
         {
             try
             {
+
+                if (DtoValidator.Validate(saidaDto ,out var erros).Any())
+                {
+                    throw new Exception(string.Join("\n", erros.Select(x => "\n" + x.ErrorMessage)));
+                }
+
+
                 var estoque = CacheMP.Instance.Db.Estoque.Include(e =>e.Endereco).FirstOrDefault(e => e.EstoqueId == saidaDto.estoqueId);
 
                 if (estoque == null || estoque.Quantidade == null)
@@ -256,6 +266,10 @@ namespace MapaEstoqueCD.Services
 
         public bool SetCorrecaoProduto(CorrecaoDto correcaoDto)
         {
+            if (DtoValidator.Validate(correcaoDto, out var erros).Any())
+            {
+                throw new Exception(string.Join("\n", erros.Select(x => "\n" + x.ErrorMessage)));
+            }
             using var transaction = CacheMP.Instance.Db.Database.BeginTransaction();
 
             try
@@ -308,8 +322,12 @@ namespace MapaEstoqueCD.Services
             }
         }
 
-        internal bool SetTransferencia(TranferenciaDto transferenciaDto)
+        public bool SetTransferencia(TranferenciaDto transferenciaDto)
         {
+            if (DtoValidator.Validate(transferenciaDto, out var erros).Any())
+            {
+                throw new Exception(string.Join("\n", erros.Select(x => "\n" + x.ErrorMessage)));
+            }
             using var transaction = CacheMP.Instance.Db.Database.BeginTransaction();
 
             try
@@ -378,10 +396,14 @@ namespace MapaEstoqueCD.Services
             }
         }
 
-        internal bool SetPicking(PickingDto pickingDto)
+        public bool SetPicking(PickingDto pickingDto)
         {
             try
             {
+                if (DtoValidator.Validate(pickingDto, out var erros).Any())
+                {
+                    throw new Exception(string.Join("\n", erros.Select(x => "\n" + x.ErrorMessage)));
+                }
 
                 foreach (var p in pickingDto.produtos)
                 {

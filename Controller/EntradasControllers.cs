@@ -1,9 +1,7 @@
 ﻿using MapaEstoqueCD.Database.Dto;
-using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Services;
 using MapaEstoqueCD.Utils;
 using MapaEstoqueCD.View.Modal;
-using System.Data.Entity;
 using System.Diagnostics;
 
 namespace MapaEstoqueCD.Controller
@@ -104,7 +102,7 @@ namespace MapaEstoqueCD.Controller
             Process.Start(new ProcessStartInfo(caminho) { UseShellExecute = true });
         }
 
-        internal List<EntradasViewerDto> GetEntradasByFilter(List<FiltroItem> filtros, ref DataGridView datagrid)
+        public List<EntradasViewerDto> GetEntradasByFilter(List<FiltroItem> filtros, ref DataGridView datagrid)
         {
             if (filtros.Count == 0)
                 return AllGetEntradas(ref datagrid);
@@ -271,9 +269,16 @@ namespace MapaEstoqueCD.Controller
             return entradas;
         }
 
-        internal void SetEntradaLivreConferida(EntradasViewerDto entradaSelecionado)
+        public void SetEntradaLivreConferida(EntradasViewerDto entradaSelecionado)
         {
             entradasService.SetEntradaLivreConferida(entradaSelecionado);
+        }
+
+        public bool SetCorrecaoEntrada(CorrecaoEntradaDto correcao)
+        {
+            correcao.userId = CacheMP.Instance.UserCurrent.UserId;
+            return entradasService.SetCorrecaoEntrada(correcao);
+
         }
     }
 }

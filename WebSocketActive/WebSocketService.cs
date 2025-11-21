@@ -26,6 +26,7 @@ namespace MapaEstoqueCD.WebSocketActive
                     new SaidaHandler(),
                     new TransferenciaHandler(),
                     new CorrecaoHandler(),
+                    new CorrecaoEntradaHandler(),
                     new ProdutoEanHandler(),
                     new EnderecoConferenciaLivreHandler()
                });

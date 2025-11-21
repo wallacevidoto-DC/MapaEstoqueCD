@@ -2,6 +2,7 @@
 using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Database.Dto.modal;
 using MapaEstoqueCD.Database.Models;
+using MapaEstoqueCD.Utils;
 using System.Data.Entity;
 
 namespace MapaEstoqueCD.Services
@@ -101,6 +102,56 @@ namespace MapaEstoqueCD.Services
             {
                 model.IsConf = true;
                 CacheMP.Instance.Db.SaveChanges();
+            }
+        }
+
+        public bool SetCorrecaoEntrada(CorrecaoEntradaDto correcaoDto)
+        {
+            using var transaction = CacheMP.Instance.Db.Database.BeginTransaction();
+
+            try
+            {
+                var entradaExistente = CacheMP.Instance.Db.Entradas.Include(X=>X.Produto).FirstOrDefault(e => e.EntradaId == correcaoDto.conferenciaId);
+
+                if (entradaExistente == null)
+                    throw new Exception($"Estoque não encontrado.");
+
+                string Obs = $"Correção: (Q:{entradaExistente.QtdConferida} - DF:{DataFormatter.FormatarData(entradaExistente.DataF)} - SF:{entradaExistente.SemF} - LT:{entradaExistente.Lote} )";
+
+                entradaExistente.QtdConferida = correcaoDto.qtd_conferida;
+                entradaExistente.Lote = correcaoDto.lote;
+                entradaExistente.DataF = correcaoDto.dataf.Replace(" ", "");
+                entradaExistente.SemF = correcaoDto.semf;
+
+                CacheMP.Instance.Db.Entradas.Update(entradaExistente);
+                CacheMP.Instance.Db.SaveChanges();
+
+
+                var movimentacao = new Movimentacao
+                {
+                    ProdutoId = entradaExistente.Produto.ProdutoId,
+                    Tipo = correcaoDto.tipo,
+                    Quantidade = correcaoDto.qtd_conferida,
+                    Obs = Obs,
+                    UserId = correcaoDto.userId,
+                    DataF = correcaoDto.dataf.Replace(" ", ""),
+                    SemF = correcaoDto.semf,
+                    Lote = correcaoDto.lote,
+                    DataL =  DateTime.Now
+
+
+                };
+                CacheMP.Instance.Db.Movimentacoes.Update(movimentacao);
+                CacheMP.Instance.Db.SaveChanges();
+
+                transaction.Commit();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                throw ex;
+                return false;
             }
         }
     }

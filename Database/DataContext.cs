@@ -146,12 +146,12 @@ namespace MapaEstoqueCD.Database
                 entity.HasOne(c => c.Produto)
                       .WithMany(p => p.Cifs)
                       .HasForeignKey(c => c.ProdutoId)
-                      .OnDelete(DeleteBehavior.SetNull);
+                      .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasMany(c => c.Entradas)
                       .WithOne(e => e.Cifs)
                       .HasForeignKey(e => e.CifsId)
-                      .OnDelete(DeleteBehavior.SetNull);
+                      .OnDelete(DeleteBehavior.Restrict);
             });
 
             // -------------------- ENTRADAS --------------------
@@ -162,21 +162,24 @@ namespace MapaEstoqueCD.Database
                 entity.Property(e => e.CreateAt)
                       .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
+                entity.Property(e => e.UpdateAt)
+                        .ValueGeneratedOnUpdate();
+
                 entity.HasOne(e => e.Produto)
                        .WithMany(p => p.Entradas)
                        .HasForeignKey(e => e.ProdutoId)
-                       .OnDelete(DeleteBehavior.SetNull);
+                       .OnDelete(DeleteBehavior.Restrict);
 
 
                 entity.HasOne(e => e.Cifs)
                       .WithMany(c => c.Entradas)
                       .HasForeignKey(e => e.CifsId)
-                      .OnDelete(DeleteBehavior.SetNull);
+                      .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(m => m.User)
                       .WithMany(u => u.Entradas)
                       .HasForeignKey(m => m.UserId)
-                      .OnDelete(DeleteBehavior.SetNull);
+                      .OnDelete(DeleteBehavior.Restrict);
             });
         }
 

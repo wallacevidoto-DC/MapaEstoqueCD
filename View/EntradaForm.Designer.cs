@@ -53,6 +53,7 @@
             Column10 = new DataGridViewTextBoxColumn();
             contextMenuStrip1 = new ContextMenuStrip(components);
             entrdaToolStripMenuItem = new ToolStripMenuItem();
+            cORREÇÃOToolStripMenuItem = new ToolStripMenuItem();
             toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             contextMenuStrip1.SuspendLayout();
@@ -247,9 +248,9 @@
             // contextMenuStrip1
             // 
             contextMenuStrip1.ImageScalingSize = new Size(25, 25);
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { entrdaToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { entrdaToolStripMenuItem, cORREÇÃOToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(190, 58);
+            contextMenuStrip1.Size = new Size(190, 90);
             // 
             // entrdaToolStripMenuItem
             // 
@@ -258,6 +259,14 @@
             entrdaToolStripMenuItem.Size = new Size(189, 32);
             entrdaToolStripMenuItem.Text = "ENTRADA";
             entrdaToolStripMenuItem.Click += entrdaToolStripMenuItem_Click;
+            // 
+            // cORREÇÃOToolStripMenuItem
+            // 
+            cORREÇÃOToolStripMenuItem.Image = Properties.Resources.correcao;
+            cORREÇÃOToolStripMenuItem.Name = "cORREÇÃOToolStripMenuItem";
+            cORREÇÃOToolStripMenuItem.Size = new Size(189, 32);
+            cORREÇÃOToolStripMenuItem.Text = "CORREÇÃO";
+            cORREÇÃOToolStripMenuItem.Click += cORREÇÃOToolStripMenuItem_Click;
             // 
             // EntradaForm
             // 
@@ -299,5 +308,6 @@
         private DataGridViewTextBoxColumn Column10;
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem entrdaToolStripMenuItem;
+        private ToolStripMenuItem cORREÇÃOToolStripMenuItem;
     }
 }

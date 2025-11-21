@@ -1,4 +1,5 @@
 ﻿using MapaEstoqueCD.Controller;
+using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Database.Dto.modal;
 using MapaEstoqueCD.Database.Dto.Ws;
 using MapaEstoqueCD.Utils;
@@ -50,6 +51,7 @@ namespace MapaEstoqueCD.View.Modal
 
         private void button_salvar_Click(object sender, EventArgs e)
         {
+
             if (textBox_qtd_ret.Text == "" || int.Parse(textBox_qtd_ret.Text) <= 0)
             {
                 MessageBox.Show("Quantidade inválida!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -66,11 +68,7 @@ namespace MapaEstoqueCD.View.Modal
                 MessageBox.Show("Saída registrada com sucesso!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 this.Close();
             }
-            else
-            {
-                MessageBox.Show("Erro ao registrar saída!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
-
-            }
+           
         }
     }
 }

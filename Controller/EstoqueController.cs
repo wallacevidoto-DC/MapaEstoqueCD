@@ -1,4 +1,5 @@
-﻿using MapaEstoqueCD.Database.Dto.modal;
+﻿using MapaEstoqueCD.Database.Dto;
+using MapaEstoqueCD.Database.Dto.modal;
 using MapaEstoqueCD.Database.Dto.Ws;
 using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Services;
@@ -210,8 +211,19 @@ namespace MapaEstoqueCD.Controller
 
         public bool SetSaida(SaidaDto saidaDto)
         {
-            saidaDto.userId = CacheMP.Instance.UserCurrent.UserId;
-            return estoqueService.SetSaida(saidaDto);
+            try
+            {
+                saidaDto.userId = CacheMP.Instance.UserCurrent.UserId;
+                return estoqueService.SetSaida(saidaDto);
+            }
+            catch (Exception ex)
+            {
+
+                ex.GetErro(saidaDto);
+                return false;
+                   
+            }
+           
         }
 
         public bool SetCorrecaoProduto(CorrecaoDto correcaoDto)

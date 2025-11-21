@@ -14,6 +14,7 @@ namespace MapaEstoqueCD
             Cache = CacheMP.Instance;
             InitializeComponent();
             ChekcedLogin();
+            ResetIMG();
             WebSocketService.Instance.ConnectEvents();
         }
 
@@ -43,6 +44,13 @@ namespace MapaEstoqueCD
             toolStripButton_remoto.BackgroundImage = null;
             toolStripButton_estoque.BackgroundImage = null;
             toolStripButton_entrada.BackgroundImage = null;
+
+            toolStripButton_movimentacao.TextAlign = ContentAlignment.BottomCenter;
+            toolStripButton_produto.TextAlign = ContentAlignment.BottomCenter;
+            toolStripButton_adm.TextAlign = ContentAlignment.BottomCenter;
+            toolStripButton_remoto.TextAlign = ContentAlignment.BottomCenter;
+            toolStripButton_estoque.TextAlign = ContentAlignment.BottomCenter;
+            toolStripButton_entrada.TextAlign = ContentAlignment.BottomCenter;
         }
 
         private void toolStripButton_movimentacao_Click(object sender, EventArgs e)
@@ -50,6 +58,7 @@ namespace MapaEstoqueCD
             OpenForm.OpenFormToForm(new MovimentacaoForm(), ref paneL_center);
             ResetIMG();
             toolStripButton_movimentacao.BackgroundImage = Properties.Resources.select;
+            toolStripButton_movimentacao.TextAlign = ContentAlignment.TopCenter;
         }
 
         private void toolStripButton_produto_Click(object sender, EventArgs e)
@@ -57,6 +66,7 @@ namespace MapaEstoqueCD
             OpenForm.OpenFormToForm(new ProdutoForm(), ref paneL_center);
             ResetIMG();
             toolStripButton_produto.BackgroundImage = Properties.Resources.select;
+            toolStripButton_produto.TextAlign = ContentAlignment.TopCenter;
         }
 
         private void toolStripButton_adm_Click(object sender, EventArgs e)
@@ -64,6 +74,7 @@ namespace MapaEstoqueCD
             OpenForm.OpenFormToForm(new Administrador(), ref paneL_center);
             ResetIMG();
             toolStripButton_adm.BackgroundImage = Properties.Resources.select;
+            toolStripButton_adm.TextAlign = ContentAlignment.TopCenter;
         }
 
         private void toolStripButton_remoto_Click(object sender, EventArgs e)
@@ -71,6 +82,7 @@ namespace MapaEstoqueCD
             OpenForm.OpenFormToForm(new ServerView(), ref paneL_center);
             ResetIMG();
             toolStripButton_remoto.BackgroundImage = Properties.Resources.select;
+            toolStripButton_remoto.TextAlign = ContentAlignment.TopCenter;
         }
 
         private void toolStripButton_estoque_Click(object sender, EventArgs e)
@@ -78,6 +90,7 @@ namespace MapaEstoqueCD
             OpenForm.OpenFormToForm(new EstoqueForm(), ref paneL_center);
             ResetIMG();
             toolStripButton_estoque.BackgroundImage = Properties.Resources.select;
+            toolStripButton_estoque.TextAlign = ContentAlignment.TopCenter;
         }
 
         private void toolStripButton_entrada_Click(object sender, EventArgs e)
@@ -85,6 +98,7 @@ namespace MapaEstoqueCD
             OpenForm.OpenFormToForm(new EntradaForm(), ref paneL_center);
             ResetIMG();
             toolStripButton_entrada.BackgroundImage = Properties.Resources.select;
+            toolStripButton_entrada.TextAlign = ContentAlignment.TopCenter;
         }
     }
 }

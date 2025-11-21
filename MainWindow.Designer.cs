@@ -80,7 +80,7 @@
             toolStripButton_movimentacao.RightToLeft = RightToLeft.Yes;
             toolStripButton_movimentacao.Size = new Size(100, 100);
             toolStripButton_movimentacao.Text = "Movimentação";
-            toolStripButton_movimentacao.TextAlign = ContentAlignment.BottomCenter;
+            toolStripButton_movimentacao.TextAlign = ContentAlignment.TopCenter;
             toolStripButton_movimentacao.TextImageRelation = TextImageRelation.Overlay;
             toolStripButton_movimentacao.ToolTipText = "Todas as movimentações do CD";
             toolStripButton_movimentacao.Click += toolStripButton_movimentacao_Click;

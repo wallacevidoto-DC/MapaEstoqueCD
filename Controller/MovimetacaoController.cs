@@ -1,10 +1,7 @@
 ﻿using MapaEstoqueCD.Database.Dto;
-using MapaEstoqueCD.Database.Dto.Ws;
-using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Services;
 using MapaEstoqueCD.Utils;
 using MapaEstoqueCD.View.Modal;
-using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace MapaEstoqueCD.Controller

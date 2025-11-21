@@ -3,13 +3,7 @@ using MapaEstoqueCD.Services;
 using MapaEstoqueCD.Utils;
 using MapaEstoqueCD.Utils.Excel;
 using MapaEstoqueCD.View.Modal;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace MapaEstoqueCD.Controller
 {
