@@ -54,6 +54,7 @@
             contextMenuStrip1 = new ContextMenuStrip(components);
             entrdaToolStripMenuItem = new ToolStripMenuItem();
             cORREÇÃOToolStripMenuItem = new ToolStripMenuItem();
+            rEMOVERToolStripMenuItem = new ToolStripMenuItem();
             toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             contextMenuStrip1.SuspendLayout();
@@ -248,9 +249,9 @@
             // contextMenuStrip1
             // 
             contextMenuStrip1.ImageScalingSize = new Size(25, 25);
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { entrdaToolStripMenuItem, cORREÇÃOToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { entrdaToolStripMenuItem, cORREÇÃOToolStripMenuItem, rEMOVERToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(190, 90);
+            contextMenuStrip1.Size = new Size(190, 122);
             // 
             // entrdaToolStripMenuItem
             // 
@@ -267,6 +268,14 @@
             cORREÇÃOToolStripMenuItem.Size = new Size(189, 32);
             cORREÇÃOToolStripMenuItem.Text = "CORREÇÃO";
             cORREÇÃOToolStripMenuItem.Click += cORREÇÃOToolStripMenuItem_Click;
+            // 
+            // rEMOVERToolStripMenuItem
+            // 
+            rEMOVERToolStripMenuItem.Image = Properties.Resources.cancelar1;
+            rEMOVERToolStripMenuItem.Name = "rEMOVERToolStripMenuItem";
+            rEMOVERToolStripMenuItem.Size = new Size(189, 32);
+            rEMOVERToolStripMenuItem.Text = "REMOVER";
+            rEMOVERToolStripMenuItem.Click += rEMOVERToolStripMenuItem_Click;
             // 
             // EntradaForm
             // 
@@ -309,5 +318,6 @@
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem entrdaToolStripMenuItem;
         private ToolStripMenuItem cORREÇÃOToolStripMenuItem;
+        private ToolStripMenuItem rEMOVERToolStripMenuItem;
     }
 }

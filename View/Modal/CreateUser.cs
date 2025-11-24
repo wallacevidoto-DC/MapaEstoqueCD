@@ -18,7 +18,6 @@ namespace MapaEstoqueCD.View.Modal
                 isEdit = true;
                 this.Text = "Editar Usuário";
                 textBox_user.Text = user.Name;
-                groupBox1.Visible = false;
                 comboBox_acesso.SelectedItem = user.Role?.ToString();
             }
         }
@@ -34,7 +33,11 @@ namespace MapaEstoqueCD.View.Modal
         {
             if (isEdit)
             {
-                bool x = _adminController.UpdateUser(new User { UserId = UserCurrent.UserId, Name = textBox_user.Text,Password= UserCurrent.Password, Role = (UserRole)Enum.Parse(typeof(UserRole), comboBox_acesso.SelectedItem.ToString()!) });
+                bool x = _adminController.UpdateUser(new User { UserId = UserCurrent.UserId,
+                    Name = textBox_user.Text,
+                    Password= !string.IsNullOrEmpty(textBox_pass.Text) ? textBox_pass.Text : UserCurrent.Password,
+                    Role = (UserRole)Enum.Parse(typeof(UserRole),
+                    comboBox_acesso.SelectedItem.ToString()!) });
                 if (x)
                 {
                     MessageBox.Show("Usuário atualizado com sucesso!");

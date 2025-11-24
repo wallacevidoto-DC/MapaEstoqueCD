@@ -77,7 +77,7 @@
             groupBox2.Location = new Point(12, 207);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(403, 142);
-            groupBox2.TabIndex = 4;
+            groupBox2.TabIndex = 0;
             groupBox2.TabStop = false;
             groupBox2.Text = "Informações";
             // 
@@ -87,7 +87,7 @@
             groupBox8.Location = new Point(201, 81);
             groupBox8.Name = "groupBox8";
             groupBox8.Size = new Size(133, 53);
-            groupBox8.TabIndex = 6;
+            groupBox8.TabIndex = 3;
             groupBox8.TabStop = false;
             groupBox8.Text = "Lote";
             // 
@@ -108,7 +108,7 @@
             groupBox6.Location = new Point(201, 22);
             groupBox6.Name = "groupBox6";
             groupBox6.Size = new Size(133, 53);
-            groupBox6.TabIndex = 6;
+            groupBox6.TabIndex = 1;
             groupBox6.TabStop = false;
             groupBox6.Text = "Data Fab. (MM/YY)";
             // 
@@ -121,7 +121,7 @@
             maskedTextBox_datef.Name = "maskedTextBox_datef";
             maskedTextBox_datef.PromptChar = '0';
             maskedTextBox_datef.Size = new Size(127, 34);
-            maskedTextBox_datef.TabIndex = 1;
+            maskedTextBox_datef.TabIndex = 0;
             maskedTextBox_datef.TextAlign = HorizontalAlignment.Center;
             // 
             // groupBox7
@@ -130,7 +130,7 @@
             groupBox7.Location = new Point(62, 81);
             groupBox7.Name = "groupBox7";
             groupBox7.Size = new Size(133, 53);
-            groupBox7.TabIndex = 6;
+            groupBox7.TabIndex = 2;
             groupBox7.TabStop = false;
             groupBox7.Text = "Semana Fab";
             // 
@@ -152,7 +152,7 @@
             groupBox5.Location = new Point(62, 22);
             groupBox5.Name = "groupBox5";
             groupBox5.Size = new Size(133, 53);
-            groupBox5.TabIndex = 6;
+            groupBox5.TabIndex = 0;
             groupBox5.TabStop = false;
             groupBox5.Text = "Quantidade";
             // 

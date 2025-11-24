@@ -259,7 +259,7 @@
             button_addProd.Location = new Point(619, 3);
             button_addProd.Name = "button_addProd";
             button_addProd.Size = new Size(64, 58);
-            button_addProd.TabIndex = 8;
+            button_addProd.TabIndex = 0;
             button_addProd.TextAlign = ContentAlignment.BottomCenter;
             button_addProd.UseVisualStyleBackColor = true;
             button_addProd.Click += button_addProd_Click;
@@ -270,7 +270,7 @@
             groupBox7.Location = new Point(12, 352);
             groupBox7.Name = "groupBox7";
             groupBox7.Size = new Size(692, 100);
-            groupBox7.TabIndex = 3;
+            groupBox7.TabIndex = 1;
             groupBox7.TabStop = false;
             groupBox7.Text = "Observação";
             // 
@@ -292,7 +292,7 @@
             button_salvar.Location = new Point(601, 451);
             button_salvar.Name = "button_salvar";
             button_salvar.Size = new Size(103, 103);
-            button_salvar.TabIndex = 7;
+            button_salvar.TabIndex = 2;
             button_salvar.Text = "Salvar";
             button_salvar.TextAlign = ContentAlignment.BottomCenter;
             button_salvar.UseVisualStyleBackColor = true;

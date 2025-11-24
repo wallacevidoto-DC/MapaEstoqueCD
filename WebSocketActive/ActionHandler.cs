@@ -526,4 +526,38 @@ namespace MapaEstoqueCD.WebSocketActive
 
     }
 
+    public class RemoveConferenciaHandler : IActionHandler
+    {
+
+        public string ActionName => ActionsWs.REMOVE_CONFERENCIA;
+        public EntradasService entradaService = new();
+
+
+        public async Task<WebSocketResponse?> ExecuteAsync(JsonElement data, WebSocket socket)
+        {
+            try
+            {
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    Converters = { new JsonStringEnumConverter() }
+                };
+
+                EntradasViewerDto remove = JsonSerializer.Deserialize<EntradasViewerDto>(data.GetRawText(), options);
+
+                if (remove is null) { throw new Exception("Erro ao receber os dados"); }
+
+                entradaService.RemoveConferencia(remove);
+                return new WebSocketResponse { type = "remove_estoque_entrada_resposta", status = "ok", mensagem = "Correção realizado com sucesso", dados = null };
+
+            }
+            catch (Exception ex)
+            {
+                ex.GetErroSr(data, false);
+                return new WebSocketResponse { type = "remove_estoque_entrada_resposta", status = "erro", mensagem = ex.Message };
+            }
+
+        }
+    }
+
 }

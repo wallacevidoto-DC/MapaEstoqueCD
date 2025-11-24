@@ -201,7 +201,7 @@
             // Column4
             // 
             Column4.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
-            Column4.FillWeight = 50F;
+            Column4.FillWeight = 55F;
             Column4.HeaderText = "Tipo";
             Column4.Name = "Column4";
             Column4.ReadOnly = true;
@@ -279,15 +279,15 @@
         private ListView listView1;
         private DataGridView dataGridView1;
         private DataGridViewTextBoxColumn Column1;
+        private DataGridViewTextBoxColumn Column11;
         private DataGridViewTextBoxColumn Column2;
         private DataGridViewTextBoxColumn Column3;
         private DataGridViewTextBoxColumn Column4;
+        private DataGridViewTextBoxColumn Column7;
         private DataGridViewTextBoxColumn Column5;
         private DataGridViewTextBoxColumn Column6;
-        private DataGridViewTextBoxColumn Column7;
         private DataGridViewTextBoxColumn Column8;
         private DataGridViewTextBoxColumn Column9;
         private DataGridViewTextBoxColumn Column10;
-        private DataGridViewTextBoxColumn Column11;
     }
 }

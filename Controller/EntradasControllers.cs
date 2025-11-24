@@ -280,5 +280,10 @@ namespace MapaEstoqueCD.Controller
             return entradasService.SetCorrecaoEntrada(correcao);
 
         }
+
+        public void RemoveConferencia(EntradasViewerDto entradaSelecionado)
+        {
+            entradasService.RemoveConferencia(entradaSelecionado);
+        }
     }
 }

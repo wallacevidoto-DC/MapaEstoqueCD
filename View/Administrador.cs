@@ -76,6 +76,10 @@ namespace MapaEstoqueCD.View
             listView.Items.Clear();
 
             var users = _db.Users.ToList();
+            if (CacheMP.Instance.UserCurrent.Role != UserRole.DEV)
+            {
+                users = users.Where(x => x.Role != UserRole.DEV).ToList();
+            }
             var columns = ColumnsUser.Where(c => c.Visivel).ToList();
 
             listView.Columns.Clear();
@@ -88,7 +92,6 @@ namespace MapaEstoqueCD.View
                 {
                     object? val = null;
 
-                    // Suporte a propriedades aninhadas (ex: "Endereco.Cidade")
                     if (c.Propriedade.Contains("."))
                     {
                         var parts = c.Propriedade.Split('.');
@@ -114,8 +117,11 @@ namespace MapaEstoqueCD.View
 
                 listView.Items.Add(new ListViewItem(valores));
             }
-
+            listView.Font = new Font(listView.Font.FontFamily, 20); // tamanho 14
             listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+
+
+            
             return users;
         }
 
@@ -134,7 +140,7 @@ namespace MapaEstoqueCD.View
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao criar usuário: {ex.Message}");
+                ex.GetErro(user);
                 return false;
             }
         }
@@ -147,13 +153,18 @@ namespace MapaEstoqueCD.View
                 if (local != null)
                     _db.Entry(local).State = EntityState.Detached;
 
+                if (local.Password != user.Password)
+                {
+
+                    user .Password = AuthHelper.HashPassword(user.Password);
+                }
                 _db.Users.Update(user);
                 _db.SaveChanges();
                 return true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Erro ao atualizar usuário: {ex.Message}");
+                ex.GetErro(user);
                 return false;
             }
         }

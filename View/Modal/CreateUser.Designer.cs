@@ -46,7 +46,7 @@
             groupBox3.Location = new Point(12, 12);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(390, 100);
-            groupBox3.TabIndex = 3;
+            groupBox3.TabIndex = 0;
             groupBox3.TabStop = false;
             groupBox3.Text = "Usuário";
             // 
@@ -68,7 +68,7 @@
             groupBox1.Location = new Point(12, 112);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(390, 100);
-            groupBox1.TabIndex = 4;
+            groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Senha";
             // 
@@ -90,7 +90,7 @@
             groupBox2.Location = new Point(12, 212);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(390, 100);
-            groupBox2.TabIndex = 5;
+            groupBox2.TabIndex = 2;
             groupBox2.TabStop = false;
             groupBox2.Text = "Nivel de Acesso";
             // 
@@ -116,7 +116,7 @@
             button_salvar.Location = new Point(299, 321);
             button_salvar.Name = "button_salvar";
             button_salvar.Size = new Size(103, 103);
-            button_salvar.TabIndex = 6;
+            button_salvar.TabIndex = 3;
             button_salvar.Text = "Salvar";
             button_salvar.TextAlign = ContentAlignment.BottomCenter;
             button_salvar.UseVisualStyleBackColor = true;

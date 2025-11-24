@@ -7,7 +7,7 @@ namespace MapaEstoqueCD.View
     public partial class AccessUser : Form
     {
         public bool isLoagin = false;
-        
+
         public readonly UserController userController = new();
         public AccessUser()
         {
@@ -32,10 +32,20 @@ namespace MapaEstoqueCD.View
                     isLoagin = true;
                     this.Close();
                 }
-                else { MessageBox.Show("Usuário ou senha inválidos!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                else
+                {
+                    MessageBox.Show("Usuário ou senha inválidos!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
 
+        }
+
+        private void textBox_pass_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                button_accept_Click(null, null);
+            }
         }
     }
 }

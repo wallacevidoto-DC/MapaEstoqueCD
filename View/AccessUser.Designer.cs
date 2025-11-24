@@ -71,12 +71,12 @@
             textBox_pass.Dock = DockStyle.Fill;
             textBox_pass.Font = new Font("Segoe UI", 30F);
             textBox_pass.Location = new Point(3, 39);
-            textBox_pass.Multiline = true;
             textBox_pass.Name = "textBox_pass";
             textBox_pass.PasswordChar = '*';
-            textBox_pass.Size = new Size(444, 58);
+            textBox_pass.Size = new Size(444, 61);
             textBox_pass.TabIndex = 0;
             textBox_pass.TextAlign = HorizontalAlignment.Center;
+            textBox_pass.KeyDown += textBox_pass_KeyDown;
             // 
             // button1
             // 
@@ -125,9 +125,8 @@
             textBox_user.Dock = DockStyle.Fill;
             textBox_user.Font = new Font("Segoe UI", 30F);
             textBox_user.Location = new Point(3, 39);
-            textBox_user.Multiline = true;
             textBox_user.Name = "textBox_user";
-            textBox_user.Size = new Size(444, 58);
+            textBox_user.Size = new Size(444, 61);
             textBox_user.TabIndex = 0;
             textBox_user.TextAlign = HorizontalAlignment.Center;
             // 

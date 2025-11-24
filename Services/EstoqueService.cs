@@ -188,7 +188,7 @@ namespace MapaEstoqueCD.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw ex;
+                throw ;
             }
         }
 
@@ -251,14 +251,14 @@ namespace MapaEstoqueCD.Services
                 catch (Exception ex)
                 {
 
-                    throw ex;
+                    throw ;
                 }
                 return true;
             }
             catch (Exception ex)
             {
 
-                throw ex;
+                throw ;
             }
 
 
@@ -317,7 +317,7 @@ namespace MapaEstoqueCD.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw ex;
+                throw ;
                 return false;
             }
         }
@@ -391,7 +391,7 @@ namespace MapaEstoqueCD.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw ex;
+                throw ;
                 return false;
             }
         }
@@ -430,9 +430,11 @@ namespace MapaEstoqueCD.Services
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw ;
                 return false;
             }
         }
+
+        
     }
 }

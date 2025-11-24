@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             TextBox textBox1;
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
             groupBox1 = new GroupBox();
             dateTimePicker_dataEntrada = new DateTimePicker();
             groupBox2 = new GroupBox();
@@ -114,7 +114,7 @@
             groupBox2.Location = new Point(12, 66);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(692, 100);
-            groupBox2.TabIndex = 1;
+            groupBox2.TabIndex = 0;
             groupBox2.TabStop = false;
             groupBox2.Text = "Localização";
             // 
@@ -127,7 +127,7 @@
             button_bucar_end.Location = new Point(521, 18);
             button_bucar_end.Name = "button_bucar_end";
             button_bucar_end.Size = new Size(75, 76);
-            button_bucar_end.TabIndex = 1;
+            button_bucar_end.TabIndex = 3;
             button_bucar_end.UseVisualStyleBackColor = true;
             button_bucar_end.Click += button_bucar_end_Click;
             // 
@@ -137,7 +137,7 @@
             groupBox5.Location = new Point(391, 22);
             groupBox5.Name = "groupBox5";
             groupBox5.Size = new Size(75, 60);
-            groupBox5.TabIndex = 0;
+            groupBox5.TabIndex = 2;
             groupBox5.TabStop = false;
             groupBox5.Text = "APT";
             // 
@@ -151,7 +151,7 @@
             comboBox_apt.Location = new Point(3, 19);
             comboBox_apt.Name = "comboBox_apt";
             comboBox_apt.Size = new Size(69, 36);
-            comboBox_apt.TabIndex = 1;
+            comboBox_apt.TabIndex = 0;
             // 
             // groupBox4
             // 
@@ -159,7 +159,7 @@
             groupBox4.Location = new Point(259, 22);
             groupBox4.Name = "groupBox4";
             groupBox4.Size = new Size(75, 60);
-            groupBox4.TabIndex = 0;
+            groupBox4.TabIndex = 1;
             groupBox4.TabStop = false;
             groupBox4.Text = "BLOCO";
             // 
@@ -215,14 +215,14 @@
             dataGridView_produtos.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dataGridView_produtos.BackgroundColor = SystemColors.ButtonHighlight;
             dataGridView_produtos.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = Color.FromArgb(50, 50, 70);
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle4.ForeColor = Color.White;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.True;
-            dataGridView_produtos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = Color.FromArgb(50, 50, 70);
+            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle1.ForeColor = Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = DataGridViewTriState.True;
+            dataGridView_produtos.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             dataGridView_produtos.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridView_produtos.Columns.AddRange(new DataGridViewColumn[] { idIndex, cod, dec, Qtd, detaf, semf, Column1, acao });
             dataGridView_produtos.Dock = DockStyle.Fill;
@@ -232,17 +232,17 @@
             dataGridView_produtos.MultiSelect = false;
             dataGridView_produtos.Name = "dataGridView_produtos";
             dataGridView_produtos.ReadOnly = true;
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.BackColor = SystemColors.Control;
-            dataGridViewCellStyle5.Font = new Font("Segoe UI", 9F);
-            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
-            dataGridView_produtos.RowHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = SystemColors.Control;
+            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F);
+            dataGridViewCellStyle2.ForeColor = SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
+            dataGridView_produtos.RowHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dataGridView_produtos.RowHeadersVisible = false;
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleCenter;
-            dataGridView_produtos.RowsDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleCenter;
+            dataGridView_produtos.RowsDefaultCellStyle = dataGridViewCellStyle3;
             dataGridView_produtos.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView_produtos.Size = new Size(686, 188);
             dataGridView_produtos.TabIndex = 1;
@@ -359,7 +359,7 @@
             button_addProd.Location = new Point(619, 3);
             button_addProd.Name = "button_addProd";
             button_addProd.Size = new Size(64, 58);
-            button_addProd.TabIndex = 8;
+            button_addProd.TabIndex = 0;
             button_addProd.TextAlign = ContentAlignment.BottomCenter;
             button_addProd.UseVisualStyleBackColor = true;
             button_addProd.Click += button_addProd_Click;
@@ -370,7 +370,7 @@
             groupBox7.Location = new Point(12, 440);
             groupBox7.Name = "groupBox7";
             groupBox7.Size = new Size(692, 100);
-            groupBox7.TabIndex = 3;
+            groupBox7.TabIndex = 1;
             groupBox7.TabStop = false;
             groupBox7.Text = "Observação";
             // 

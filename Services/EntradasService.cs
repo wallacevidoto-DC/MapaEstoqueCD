@@ -141,7 +141,7 @@ namespace MapaEstoqueCD.Services
 
 
                 };
-                CacheMP.Instance.Db.Movimentacoes.Update(movimentacao);
+                CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
                 CacheMP.Instance.Db.SaveChanges();
 
                 transaction.Commit();
@@ -152,6 +152,43 @@ namespace MapaEstoqueCD.Services
                 transaction.Rollback();
                 throw ex;
                 return false;
+            }
+        }
+
+        public void RemoveConferencia(EntradasViewerDto remove)
+        {
+            try
+            {
+
+                var temp = CacheMP.Instance.Db.Entradas.FirstOrDefault(c => c.EntradaId == remove.EntradaId);
+
+                if (temp == null) { throw new Exception("Conferencia não existe."); }
+
+                CacheMP.Instance.Db.Entradas.Remove(temp);
+
+
+                var movimentacao = new Movimentacao
+                {
+                    ProdutoId = temp.Produto.ProdutoId,
+                    Tipo = "RM. CONFERÊNCIA",
+                    Quantidade = (int)temp.QtdConferida,
+                    UserId = CacheMP.Instance.UserCurrent.UserId,
+                    DataL = (DateTime)temp.CreateAt,
+                    DataF = temp.DataF,
+                    SemF = temp.SemF,
+                    Lote = temp.Lote,
+                    Obs = "REMOVIDO",
+
+                };
+                CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
+
+                CacheMP.Instance.Db.SaveChanges();
+
+                CacheMP.Instance.Db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                throw;
             }
         }
     }

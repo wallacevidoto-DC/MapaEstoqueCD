@@ -79,11 +79,11 @@ namespace MapaEstoqueCD.View
             {
                 var tt = (new CorrecaoEntrada(new CorrecaoEntradaDto
                 {
-                    conferenciaId= entradaSelecionado.EntradaId,
-                    qtd_conferida= (int)entradaSelecionado.QtdConferida,
-                    dataf= entradaSelecionado.DataF,
-                    semf= (int)entradaSelecionado.SemF,
-                    lote= entradaSelecionado.Lote
+                    conferenciaId = entradaSelecionado.EntradaId,
+                    qtd_conferida = (int)entradaSelecionado.QtdConferida,
+                    dataf = entradaSelecionado.DataF,
+                    semf = (int)entradaSelecionado.SemF,
+                    lote = entradaSelecionado.Lote
                 })).ShowDialog();
                 if (tt == DialogResult.OK)
                 {
@@ -91,6 +91,16 @@ namespace MapaEstoqueCD.View
                     entradasCurrent = entradasControllers.GetEntradasByFilter(filtrosAtivos, ref dataGridView1);
 
                 }
+            }
+        }
+
+        private void rEMOVERToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Deseja remover essa conferência ?","Confirmação",MessageBoxButtons.YesNo,MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                entradasControllers.RemoveConferencia(entradaSelecionado);
+                entradaSelecionado = null;
+                entradasCurrent = entradasControllers.GetEntradasByFilter(filtrosAtivos, ref dataGridView1);
             }
         }
     }

@@ -1,9 +1,6 @@
 ﻿using MapaEstoqueCD.Controller;
 using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Database.Dto.modal;
-using MapaEstoqueCD.Database.Dto.Ws;
-using MapaEstoqueCD.Database.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace MapaEstoqueCD.View.Modal
 {
@@ -12,9 +9,10 @@ namespace MapaEstoqueCD.View.Modal
         private readonly EstoqueController estoqueController = new();
 
         private List<ProdutoSpDto> produtoSpDtos = new();
+        private string CifsName = string.Empty;
 
         private EntradaDto entradaDto;
-        private bool isEntrada=false;
+        private bool isEntradaConferencia=false;
         public EntradaProduto()
         {
             InitializeComponent();
@@ -44,7 +42,8 @@ namespace MapaEstoqueCD.View.Modal
                     origem=Origem.OUT
                 }
             });
-            isEntrada =true;
+            CifsName = entradasViewerDto.CifsNome;
+            isEntradaConferencia =true;
             ReloadGrid();
         }
 
@@ -178,15 +177,20 @@ namespace MapaEstoqueCD.View.Modal
                     bloco = comboBox_bloco.Text,
                     apt = comboBox_apt.Text,
                     dataEntrada = dateTimePicker_dataEntrada.Value,
-                    observacao = richTextBox_obs.Text,
+                    observacao = richTextBox_obs.Text ,
                     produtos = produtoSpDtos.Where(p => p.propsPST.origem == Origem.OUT).ToList(),
                 };
+
+                if (isEntradaConferencia && !string.IsNullOrEmpty(CifsName))
+                {
+                    entradaDto.observacao = $"CIF: {CifsName} - {entradaDto.observacao}";
+                }
 
                 if (estoqueController.SetEntrada(entradaDto))
                 {
                     MessageBox.Show(Text = "Entrada registrada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    if (isEntrada)
+                    if (isEntradaConferencia)
                     {
                         DialogResult = DialogResult.OK;
                         this.Close();

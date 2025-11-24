@@ -70,7 +70,7 @@
             button_salvar.Location = new Point(312, 538);
             button_salvar.Name = "button_salvar";
             button_salvar.Size = new Size(103, 103);
-            button_salvar.TabIndex = 0;
+            button_salvar.TabIndex = 1;
             button_salvar.Text = "Salvar";
             button_salvar.TextAlign = ContentAlignment.BottomCenter;
             button_salvar.UseVisualStyleBackColor = true;
@@ -161,7 +161,7 @@
             groupBox2.Location = new Point(12, 196);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(403, 142);
-            groupBox2.TabIndex = 6;
+            groupBox2.TabIndex = 0;
             groupBox2.TabStop = false;
             groupBox2.Text = "Informações";
             // 
@@ -206,7 +206,7 @@
             maskedTextBox_datef.Name = "maskedTextBox_datef";
             maskedTextBox_datef.ReadOnly = true;
             maskedTextBox_datef.Size = new Size(127, 31);
-            maskedTextBox_datef.TabIndex = 1;
+            maskedTextBox_datef.TabIndex = 0;
             maskedTextBox_datef.TextAlign = HorizontalAlignment.Center;
             // 
             // groupBox7
@@ -261,7 +261,7 @@
             groupBox10.Location = new Point(12, 344);
             groupBox10.Name = "groupBox10";
             groupBox10.Size = new Size(403, 188);
-            groupBox10.TabIndex = 7;
+            groupBox10.TabIndex = 0;
             groupBox10.TabStop = false;
             groupBox10.Text = "Observação";
             // 

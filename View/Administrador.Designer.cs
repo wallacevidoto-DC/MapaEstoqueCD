@@ -80,13 +80,15 @@
             // 
             contextMenuStrip1.Items.AddRange(new ToolStripItem[] { editarToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(105, 26);
+            contextMenuStrip1.Size = new Size(229, 96);
             // 
             // editarToolStripMenuItem
             // 
+            editarToolStripMenuItem.Font = new Font("Segoe UI", 9.75F, FontStyle.Regular, GraphicsUnit.Point, 0);
             editarToolStripMenuItem.Image = Properties.Resources.editar_codigo;
+            editarToolStripMenuItem.ImageScaling = ToolStripItemImageScaling.None;
             editarToolStripMenuItem.Name = "editarToolStripMenuItem";
-            editarToolStripMenuItem.Size = new Size(104, 22);
+            editarToolStripMenuItem.Size = new Size(228, 70);
             editarToolStripMenuItem.Text = "Editar";
             editarToolStripMenuItem.Click += editarToolStripMenuItem_Click;
             // 
