@@ -1,6 +1,6 @@
-﻿namespace MapaEstoqueCD.View
+﻿namespace MapaEstoqueCD.View.Modal
 {
-    partial class MovimentacaoForm
+    partial class HistoricoMovForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,22 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
             DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HistoricoMovForm));
             toolStrip1 = new ToolStrip();
-            toolStripButton_filtrar = new ToolStripButton();
-            toolStripSeparator1 = new ToolStripSeparator();
             toolStripButton_remoto = new ToolStripDropDownButton();
             pDFToolStripMenuItem = new ToolStripMenuItem();
             eXCELToolStripMenuItem = new ToolStripMenuItem();
             toolStripSeparator3 = new ToolStripSeparator();
-            listView1 = new ListView();
             dataGridView1 = new DataGridView();
-            contextMenuStrip1 = new ContextMenuStrip(components);
-            saídaToolStripMenuItem = new ToolStripMenuItem();
-            zIndex = new DataGridViewTextBoxColumn();
             Column1 = new DataGridViewTextBoxColumn();
             Column11 = new DataGridViewTextBoxColumn();
             Column2 = new DataGridViewTextBoxColumn();
@@ -57,7 +51,6 @@
             Column10 = new DataGridViewTextBoxColumn();
             toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
-            contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // toolStrip1
@@ -66,32 +59,13 @@
             toolStrip1.Dock = DockStyle.Right;
             toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
             toolStrip1.ImageScalingSize = new Size(60, 60);
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton_filtrar, toolStripSeparator1, toolStripButton_remoto, toolStripSeparator3 });
-            toolStrip1.Location = new Point(1257, 0);
+            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripButton_remoto, toolStripSeparator3 });
+            toolStrip1.Location = new Point(1540, 0);
             toolStrip1.Name = "toolStrip1";
             toolStrip1.RenderMode = ToolStripRenderMode.System;
-            toolStrip1.Size = new Size(101, 605);
-            toolStrip1.TabIndex = 3;
+            toolStrip1.Size = new Size(101, 654);
+            toolStrip1.TabIndex = 4;
             toolStrip1.Text = "toolStrip1";
-            // 
-            // toolStripButton_filtrar
-            // 
-            toolStripButton_filtrar.AutoSize = false;
-            toolStripButton_filtrar.Image = Properties.Resources.filtro;
-            toolStripButton_filtrar.ImageTransparentColor = Color.Magenta;
-            toolStripButton_filtrar.Name = "toolStripButton_filtrar";
-            toolStripButton_filtrar.RightToLeft = RightToLeft.Yes;
-            toolStripButton_filtrar.Size = new Size(100, 100);
-            toolStripButton_filtrar.Text = "Filtrar";
-            toolStripButton_filtrar.TextAlign = ContentAlignment.BottomCenter;
-            toolStripButton_filtrar.TextImageRelation = TextImageRelation.Overlay;
-            toolStripButton_filtrar.ToolTipText = "Filtrar Produtos";
-            toolStripButton_filtrar.Click += toolStripButton_filtrar_Click;
-            // 
-            // toolStripSeparator1
-            // 
-            toolStripSeparator1.Name = "toolStripSeparator1";
-            toolStripSeparator1.Size = new Size(98, 6);
             // 
             // toolStripButton_remoto
             // 
@@ -111,7 +85,7 @@
             // 
             pDFToolStripMenuItem.Image = Properties.Resources.pdf;
             pDFToolStripMenuItem.Name = "pDFToolStripMenuItem";
-            pDFToolStripMenuItem.Size = new Size(107, 22);
+            pDFToolStripMenuItem.Size = new Size(224, 66);
             pDFToolStripMenuItem.Text = "PDF";
             pDFToolStripMenuItem.Click += pDFToolStripMenuItem_Click;
             // 
@@ -119,7 +93,7 @@
             // 
             eXCELToolStripMenuItem.Image = Properties.Resources.xls;
             eXCELToolStripMenuItem.Name = "eXCELToolStripMenuItem";
-            eXCELToolStripMenuItem.Size = new Size(107, 22);
+            eXCELToolStripMenuItem.Size = new Size(224, 66);
             eXCELToolStripMenuItem.Text = "EXCEL";
             eXCELToolStripMenuItem.Click += eXCELToolStripMenuItem_Click;
             // 
@@ -127,15 +101,6 @@
             // 
             toolStripSeparator3.Name = "toolStripSeparator3";
             toolStripSeparator3.Size = new Size(98, 6);
-            // 
-            // listView1
-            // 
-            listView1.Dock = DockStyle.Fill;
-            listView1.Location = new Point(0, 0);
-            listView1.Name = "listView1";
-            listView1.Size = new Size(1257, 605);
-            listView1.TabIndex = 4;
-            listView1.UseCompatibleStateImageBehavior = false;
             // 
             // dataGridView1
             // 
@@ -155,8 +120,7 @@
             dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
             dataGridView1.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { zIndex, Column1, Column11, Column2, Column3, Column4, Column7, Column5, Column6, Column8, Column9, Column10 });
-            dataGridView1.ContextMenuStrip = contextMenuStrip1;
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Column1, Column11, Column2, Column3, Column4, Column7, Column5, Column6, Column8, Column9, Column10 });
             dataGridViewCellStyle3.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle3.BackColor = Color.White;
             dataGridViewCellStyle3.Font = new Font("Segoe UI", 9F);
@@ -173,31 +137,8 @@
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersVisible = false;
-            dataGridView1.Size = new Size(1257, 605);
-            dataGridView1.TabIndex = 5;
-            dataGridView1.MouseDown += dataGridView1_MouseDown;
-            // 
-            // contextMenuStrip1
-            // 
-            contextMenuStrip1.ImageScalingSize = new Size(25, 25);
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { saídaToolStripMenuItem });
-            contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(144, 36);
-            // 
-            // saídaToolStripMenuItem
-            // 
-            saídaToolStripMenuItem.Image = Properties.Resources.ler;
-            saídaToolStripMenuItem.Name = "saídaToolStripMenuItem";
-            saídaToolStripMenuItem.Size = new Size(143, 32);
-            saídaToolStripMenuItem.Text = "HISTÓRICO";
-            saídaToolStripMenuItem.Click += saídaToolStripMenuItem_Click;
-            // 
-            // zIndex
-            // 
-            zIndex.HeaderText = "zIndex";
-            zIndex.Name = "zIndex";
-            zIndex.ReadOnly = true;
-            zIndex.Visible = false;
+            dataGridView1.Size = new Size(1540, 654);
+            dataGridView1.TabIndex = 6;
             // 
             // Column1
             // 
@@ -277,40 +218,32 @@
             Column10.Name = "Column10";
             Column10.ReadOnly = true;
             // 
-            // MovimentacaoForm
+            // HistoricoMovForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.FromArgb(248, 250, 255);
-            ClientSize = new Size(1358, 605);
+            ClientSize = new Size(1641, 654);
             Controls.Add(dataGridView1);
-            Controls.Add(listView1);
             Controls.Add(toolStrip1);
-            Name = "MovimentacaoForm";
-            Text = "Movimentacao";
+            Icon = (Icon)resources.GetObject("$this.Icon");
+            Name = "HistoricoMovForm";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Histótico de Movimentações";
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
-            contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private Button button1;
         private ToolStrip toolStrip1;
-        private ToolStripButton toolStripButton_filtrar;
-        private ToolStripSeparator toolStripSeparator1;
         private ToolStripDropDownButton toolStripButton_remoto;
         private ToolStripMenuItem pDFToolStripMenuItem;
         private ToolStripMenuItem eXCELToolStripMenuItem;
         private ToolStripSeparator toolStripSeparator3;
-        private ListView listView1;
         private DataGridView dataGridView1;
-        private ContextMenuStrip contextMenuStrip1;
-        private ToolStripMenuItem saídaToolStripMenuItem;
-        private DataGridViewTextBoxColumn zIndex;
         private DataGridViewTextBoxColumn Column1;
         private DataGridViewTextBoxColumn Column11;
         private DataGridViewTextBoxColumn Column2;

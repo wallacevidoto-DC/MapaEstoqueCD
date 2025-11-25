@@ -1,4 +1,5 @@
 ﻿using MapaEstoqueCD.Controller;
+using MapaEstoqueCD.Utils;
 using MapaEstoqueCD.View.Modal;
 using QRCoder;
 using Server.Models;
@@ -98,7 +99,7 @@ namespace MapaEstoqueCD.View
                 using var qrGenerator = new QRCodeGenerator();
 
                 var qrData = qrGenerator.CreateQrCode(payload, QRCodeGenerator.ECCLevel.Q);
-                using var qrCode = new QRCode(qrData);                
+                using var qrCode = new QRCode(qrData);
 
                 Bitmap qrBitmap = qrCode.GetGraphic(20);
 
@@ -124,6 +125,36 @@ namespace MapaEstoqueCD.View
         private void toolStripButton_reload_Click(object sender, EventArgs e)
         {
             CacheMP.Instance.server.RestartAsync();
+        }
+
+        private void toolStripButton_certificado_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                CacheMP.Instance.server.Stop();
+
+                string batPath = Path.Combine(AppContext.BaseDirectory, "frontend", "start structure.bat");
+
+                var processInfo = new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = batPath,
+                    WorkingDirectory = Path.GetDirectoryName(batPath),
+                    UseShellExecute = true, 
+                };
+
+                // Executa o .bat e espera finalizar
+                using (var process = System.Diagnostics.Process.Start(processInfo))
+                {
+                    process.WaitForExit(); // espera terminar
+                }
+
+                // Reinicia o server
+                CacheMP.Instance.server.StartAsync();
+            }
+            catch (Exception ex)
+            {
+                ex.GetErro(ex);
+            }
         }
     }
 }

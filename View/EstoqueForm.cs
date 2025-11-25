@@ -142,13 +142,21 @@ namespace MapaEstoqueCD.View
 
         private void pDFToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            estoqueController.PrintPdf(produtosCurrent);
+            var listaParaPdf = produtosCurrent.ToList();
 
-            //string path = @"D:\Downloads\estoque_exportado.pdf";
-            //string directory = Path.GetDirectoryName(path)!;
-            //Directory.CreateDirectory(directory); // Cria se não existir
+            var colunaOrdenada = dataGridView1.SortedColumn;
+            var direcao = dataGridView1.SortOrder;
 
-            //ExportDataGridViewToPdf.ExportDataGridViewStyled(dataGridView1, path);
+            if (colunaOrdenada != null && direcao != SortOrder.None)
+            {
+                if (estoqueController.ColunaParaFunc.TryGetValue(colunaOrdenada.HeaderText, out var func))
+                {
+                    listaParaPdf = direcao == SortOrder.Ascending
+                        ? listaParaPdf.OrderBy(func).ToList()
+                        : listaParaPdf.OrderByDescending(func).ToList();
+                }
+            }
+            estoqueController.PrintPdf(listaParaPdf);
         }
 
         private void eXCELToolStripMenuItem_Click(object sender, EventArgs e)
@@ -173,5 +181,31 @@ namespace MapaEstoqueCD.View
             produtosCurrent = filtrosAtivos.Count > 0 ? estoqueController.GetEstoquetByFilter(filtrosAtivos, ref dataGridView1) : estoqueController.GetAllEstoque(ref dataGridView1);
             produtoSelecionado = null;
         }
+
+        private void dataGridView1_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            // Pega a coluna clicada
+            DataGridViewColumn column = dataGridView1.Columns[e.ColumnIndex];
+
+            // Verifica o modo de ordenação atual
+            SortOrder sortOrder = column.HeaderCell.SortGlyphDirection;
+
+            string sortType = "";
+            switch (sortOrder)
+            {
+                case SortOrder.Ascending:
+                    sortType = "Ascendente";
+                    break;
+                case SortOrder.Descending:
+                    sortType = "Descendente";
+                    break;
+                case SortOrder.None:
+                    sortType = "Sem ordenação";
+                    break;
+            }
+
+            MessageBox.Show($"Coluna: {column.HeaderText}\nOrdenação: {sortType}");
+        }
+
     }
 }

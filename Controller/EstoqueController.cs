@@ -13,6 +13,7 @@ namespace MapaEstoqueCD.Controller
     {
         public readonly EstoqueService estoqueService = new();
         public readonly List<ColumnConfig> Columns;
+        public Dictionary<string, Func<EstoqueWsDto, object>> ColunaParaFunc;
         public EstoqueController()
         {
             Columns = new()
@@ -32,7 +33,25 @@ namespace MapaEstoqueCD.Controller
                                 new ColumnConfig("Data de Atualização", nameof(EstoqueWsDto.updateAt)),
                             };
 
+            ColunaParaFunc = new Dictionary<string, Func<EstoqueWsDto, object>>()
+                            {
+                                { "ID", p => p.estoqueId },
+                                { "Endereço", p => p.enderecoId },
+                                { "Código", p => p.produto.codigo },
+                                { "Descrição", p => p.produto.descricao },
+                                { "Qtd.", p => p.quantidade },
+                                { "Data Fab.", p => p.dataF },
+                                { "Sem. Fab.", p => p.semF },
+                                { "Data Lan.", p => p.dataL },
+                                { "Lote", p => p.lote },
+                                { "Observações", p => p.obs },
+                                { "Data de Criação", p => p.createAt },
+                                { "Data de Atualização", p => p.updateAt },
+                            };
+
         }
+
+
 
         internal List<EstoqueWsDto>? GetAllEstoque(ref ListView listView1)
         {
@@ -134,53 +153,106 @@ namespace MapaEstoqueCD.Controller
             {
                 if (string.IsNullOrWhiteSpace(filtro.Valor))
                     continue;
-
                 switch (filtro.Coluna.ToLower())
                 {
                     case "produto.codigo":
-                        estoque = filtro.Tipo switch
-                        {
-                            "contém" => estoque.Where(e => e.produto?.codigo?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
-                            "igual" => estoque.Where(e => string.Equals(e.produto?.codigo, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
-                            _ => estoque
-                        };
+                        estoque = estoque
+                            .Where(e => e.produto?.codigo?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true)
+                            .ToList();
                         break;
 
                     case "produto.descricao":
-                        estoque = filtro.Tipo switch
-                        {
-                            "contém" => estoque.Where(e => e.produto?.descricao?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
-                            "igual" => estoque.Where(e => string.Equals(e.produto?.descricao, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
-                            _ => estoque
-                        };
+                        estoque = estoque
+                            .Where(e => e.produto?.descricao?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true)
+                            .ToList();
                         break;
 
                     case "quantidade":
                         if (int.TryParse(filtro.Valor, out int qtd))
                         {
-                            estoque = filtro.Tipo switch
-                            {
-                                "maior" => estoque.Where(e => e.quantidade > qtd).ToList(),
-                                "menor" => estoque.Where(e => e.quantidade < qtd).ToList(),
-                                "igual" => estoque.Where(e => e.quantidade == qtd).ToList(),
-                                _ => estoque
-                            };
+                            estoque = estoque
+                                .Where(e => e.quantidade.ToString().Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase))
+                                .ToList();
                         }
                         break;
 
                     case "semf":
                         if (int.TryParse(filtro.Valor, out int semF))
-                            estoque = estoque.Where(e => e.semF == semF).ToList();
+                        {
+                            estoque = estoque
+                                .Where(e => e.semF.ToString().Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase))
+                                .ToList();
+                        }
                         break;
 
                     case "enderecoid":
-                        estoque = estoque.Where(e => e.enderecoId?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList();
+                        estoque = estoque
+                            .Where(e => e.enderecoId?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true)
+                            .ToList();
                         break;
 
                     case "lote":
-                        estoque = estoque.Where(e => e.lote?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList();
+                        estoque = estoque
+                            .Where(e => e.lote?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true)
+                            .ToList();
+                        break;
+
+                    case "obs":
+                        estoque = estoque
+                            .Where(e => e.obs?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true)
+                            .ToList();
                         break;
                 }
+
+                //switch (filtro.Coluna.ToLower())
+                //{
+                //    case "produto.codigo":
+                //        estoque = filtro.Tipo switch
+                //        {
+                //            "contém" => estoque.Where(e => e.produto?.codigo?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
+                //            "igual" => estoque.Where(e => string.Equals(e.produto?.codigo, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
+                //            _ => estoque
+                //        };
+                //        break;
+
+                //    case "produto.descricao":
+                //        estoque = filtro.Tipo switch
+                //        {
+                //            "contém" => estoque.Where(e => e.produto?.descricao?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
+                //            "igual" => estoque.Where(e => string.Equals(e.produto?.descricao, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
+                //            _ => estoque
+                //        };
+                //        break;
+
+                //    case "quantidade":
+                //        if (int.TryParse(filtro.Valor, out int qtd))
+                //        {
+                //            estoque = filtro.Tipo switch
+                //            {
+                //                "contém" => estoque.Where(e => e.quantidade.ToString().Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
+                //                "igual" => estoque.Where(e => string.Equals(e.quantidade.ToString(), filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
+                //                _ => estoque
+
+                //            };
+                //        }
+                //        break;
+
+                //    case "semf":
+                //        if (int.TryParse(filtro.Valor, out int semF))
+                //            estoque = estoque.Where(e => e.semF == semF).ToList();
+                //        break;
+
+                //    case "enderecoid":
+                //        estoque = estoque.Where(e => e.enderecoId?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList();
+                //        break;
+
+                //    case "lote":
+                //        estoque = estoque.Where(e => e.lote?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList();
+                //        break;
+                //    case "obs":
+                //        estoque = estoque.Where(e => e.obs?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList();
+                //        break;
+                //}
             }
 
             foreach (var p in estoque)

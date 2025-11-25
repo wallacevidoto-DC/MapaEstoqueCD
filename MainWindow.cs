@@ -100,5 +100,10 @@ namespace MapaEstoqueCD
             toolStripButton_entrada.BackgroundImage = Properties.Resources.select;
             toolStripButton_entrada.TextAlign = ContentAlignment.TopCenter;
         }
+
+        private void MainWindow_Load(object sender, EventArgs e)
+        {
+            toolStripButton_movimentacao_Click(null, null);
+        }
     }
 }

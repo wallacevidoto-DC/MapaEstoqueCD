@@ -24,7 +24,7 @@ namespace MapaEstoqueCD.Services
         private readonly (string PropertyName, string HeaderName, float Weight)[] columnDefinitions =
              [
                  //("movimentacaoId", "Mov. ID", 0.6f),
-                ("estoqueId", "Estoque ID", 0.6f),
+                //("estoqueId", "Estoque ID", 0.6f),
                 ("usuarioNome", "Usuário", 1.2f),
                 ("produtoCodigo", "Código Produto", 1.0f),
                 ("produtoDescricao", "Descrição do Produto", 2.0f),

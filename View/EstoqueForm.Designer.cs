@@ -294,7 +294,7 @@
             // Column1
             // 
             Column1.FillWeight = 30F;
-            Column1.HeaderText = "Endereco";
+            Column1.HeaderText = "Endereço";
             Column1.Name = "Column1";
             Column1.ReadOnly = true;
             // 

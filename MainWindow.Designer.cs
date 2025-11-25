@@ -235,6 +235,7 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Mapa de Estoque DC";
             WindowState = FormWindowState.Maximized;
+            Load += MainWindow_Load;
             toolStrip1.ResumeLayout(false);
             toolStrip1.PerformLayout();
             statusStrip1.ResumeLayout(false);
