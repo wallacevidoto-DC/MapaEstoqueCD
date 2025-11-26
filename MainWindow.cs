@@ -10,12 +10,9 @@ namespace MapaEstoqueCD
         public static MainWindow Instance { get; private set; }
         public MainWindow()
         {
-            Instance = this;
-            Cache = CacheMP.Instance;
+
             InitializeComponent();
-            ChekcedLogin();
-            ResetIMG();
-            WebSocketService.Instance.ConnectEvents();
+            SetVisibleBar(false);
         }
 
 
@@ -26,9 +23,8 @@ namespace MapaEstoqueCD
             tempLogin.ShowDialog();
             if (!tempLogin.isLoagin)
                 Environment.Exit(0);
-
             toolStripStatusLabel_infoUser.Text = $"{Cache.UserCurrent.Name.ToUpper()} -  {Cache.UserCurrent.Role}";
-
+            SetVisibleBar(true);
 
             if (!ControlAccess.IsSupers())
             {
@@ -103,7 +99,50 @@ namespace MapaEstoqueCD
 
         private void MainWindow_Load(object sender, EventArgs e)
         {
-            toolStripButton_movimentacao_Click(null, null);
+            try
+            {
+                Instance = this;
+                Cache = CacheMP.Instance;
+                ChekcedLogin();
+                ResetIMG();
+                WebSocketService.Instance.ConnectEvents();
+                toolStripButton_movimentacao_Click(null, null);
+            }
+            catch (Exception ex)
+            {
+
+                ex.GetErro("INICIAR O PROGRAMA");
+            }
+
+        }
+
+        private void toolStripButton_logoff_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("Desejá mesmo sair?", "LOGOFF", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+            {
+                SetVisibleBar(false);
+                CacheMP.Instance.UserCurrent = null;
+                paneL_center.Controls.Clear();
+                ChekcedLogin();
+                ResetIMG();
+                toolStripButton_movimentacao_Click(null, null);
+            }
+        }
+
+
+        private void SetVisibleBar(bool b)
+        {
+            if (b)
+            {
+                paneL_center.BackgroundImage = null;
+            }
+            else
+            {
+                paneL_center.BackgroundImage = Properties.Resources.imgestoque;
+            }
+            toolStrip_menu.Visible = b;
+            statusStrip_sub.Visible = b;
+
         }
     }
 }

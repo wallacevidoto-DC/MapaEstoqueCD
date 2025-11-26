@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
-            toolStrip1 = new ToolStrip();
+            toolStrip_menu = new ToolStrip();
             toolStripSeparator6 = new ToolStripSeparator();
             toolStripButton_movimentacao = new ToolStripButton();
             toolStripSeparator7 = new ToolStripSeparator();
@@ -43,26 +43,28 @@
             toolStripSeparator4 = new ToolStripSeparator();
             toolStripButton_adm = new ToolStripButton();
             toolStripSeparator5 = new ToolStripSeparator();
-            statusStrip1 = new StatusStrip();
+            toolStripButton_logoff = new ToolStripButton();
+            statusStrip_sub = new StatusStrip();
             toolStripStatusLabel_infoUser = new ToolStripStatusLabel();
             paneL_center = new Panel();
-            toolStrip1.SuspendLayout();
-            statusStrip1.SuspendLayout();
+            toolStrip_menu.SuspendLayout();
+            statusStrip_sub.SuspendLayout();
             SuspendLayout();
             // 
-            // toolStrip1
+            // toolStrip_menu
             // 
-            toolStrip1.BackColor = Color.FromArgb(248, 250, 255);
-            toolStrip1.BackgroundImageLayout = ImageLayout.None;
-            toolStrip1.GripStyle = ToolStripGripStyle.Hidden;
-            toolStrip1.ImageScalingSize = new Size(60, 65);
-            toolStrip1.Items.AddRange(new ToolStripItem[] { toolStripSeparator6, toolStripButton_movimentacao, toolStripSeparator7, toolStripButton_estoque, toolStripSeparator2, toolStripButton_entrada, toolStripSeparator1, toolStripButton_produto, toolStripSeparator3, toolStripButton_remoto, toolStripSeparator4, toolStripButton_adm, toolStripSeparator5 });
-            toolStrip1.Location = new Point(0, 0);
-            toolStrip1.Name = "toolStrip1";
-            toolStrip1.RenderMode = ToolStripRenderMode.System;
-            toolStrip1.Size = new Size(1326, 103);
-            toolStrip1.TabIndex = 0;
-            toolStrip1.Text = "toolStrip1";
+            toolStrip_menu.BackColor = Color.FromArgb(248, 250, 255);
+            toolStrip_menu.BackgroundImageLayout = ImageLayout.None;
+            toolStrip_menu.GripStyle = ToolStripGripStyle.Hidden;
+            toolStrip_menu.ImageScalingSize = new Size(60, 65);
+            toolStrip_menu.Items.AddRange(new ToolStripItem[] { toolStripSeparator6, toolStripButton_movimentacao, toolStripSeparator7, toolStripButton_estoque, toolStripSeparator2, toolStripButton_entrada, toolStripSeparator1, toolStripButton_produto, toolStripSeparator3, toolStripButton_remoto, toolStripSeparator4, toolStripButton_adm, toolStripSeparator5, toolStripButton_logoff });
+            toolStrip_menu.Location = new Point(0, 0);
+            toolStrip_menu.Name = "toolStrip_menu";
+            toolStrip_menu.RenderMode = ToolStripRenderMode.System;
+            toolStrip_menu.Size = new Size(1326, 103);
+            toolStrip_menu.TabIndex = 0;
+            toolStrip_menu.Text = "toolStrip1";
+            toolStrip_menu.Visible = false;
             // 
             // toolStripSeparator6
             // 
@@ -195,14 +197,32 @@
             toolStripSeparator5.Name = "toolStripSeparator5";
             toolStripSeparator5.Size = new Size(6, 103);
             // 
-            // statusStrip1
+            // toolStripButton_logoff
             // 
-            statusStrip1.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel_infoUser });
-            statusStrip1.Location = new Point(0, 599);
-            statusStrip1.Name = "statusStrip1";
-            statusStrip1.Size = new Size(1326, 22);
-            statusStrip1.TabIndex = 1;
-            statusStrip1.Text = "statusStrip1";
+            toolStripButton_logoff.AutoSize = false;
+            toolStripButton_logoff.BackColor = Color.WhiteSmoke;
+            toolStripButton_logoff.BackgroundImageLayout = ImageLayout.Stretch;
+            toolStripButton_logoff.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
+            toolStripButton_logoff.Image = Properties.Resources.sair;
+            toolStripButton_logoff.ImageTransparentColor = Color.Magenta;
+            toolStripButton_logoff.Name = "toolStripButton_logoff";
+            toolStripButton_logoff.RightToLeft = RightToLeft.Yes;
+            toolStripButton_logoff.Size = new Size(100, 100);
+            toolStripButton_logoff.Text = "DESLOGAR";
+            toolStripButton_logoff.TextAlign = ContentAlignment.BottomCenter;
+            toolStripButton_logoff.TextImageRelation = TextImageRelation.Overlay;
+            toolStripButton_logoff.ToolTipText = "Administrador";
+            toolStripButton_logoff.Click += toolStripButton_logoff_Click;
+            // 
+            // statusStrip_sub
+            // 
+            statusStrip_sub.Items.AddRange(new ToolStripItem[] { toolStripStatusLabel_infoUser });
+            statusStrip_sub.Location = new Point(0, 599);
+            statusStrip_sub.Name = "statusStrip_sub";
+            statusStrip_sub.Size = new Size(1326, 22);
+            statusStrip_sub.TabIndex = 1;
+            statusStrip_sub.Text = "statusStrip1";
+            statusStrip_sub.Visible = false;
             // 
             // toolStripStatusLabel_infoUser
             // 
@@ -215,10 +235,12 @@
             // paneL_center
             // 
             paneL_center.BackColor = Color.White;
+            paneL_center.BackgroundImage = Properties.Resources.imgestoque;
+            paneL_center.BackgroundImageLayout = ImageLayout.Stretch;
             paneL_center.Dock = DockStyle.Fill;
-            paneL_center.Location = new Point(0, 103);
+            paneL_center.Location = new Point(0, 0);
             paneL_center.Name = "paneL_center";
-            paneL_center.Size = new Size(1326, 496);
+            paneL_center.Size = new Size(1326, 621);
             paneL_center.TabIndex = 2;
             // 
             // MainWindow
@@ -228,25 +250,25 @@
             BackColor = Color.FromArgb(248, 250, 255);
             ClientSize = new Size(1326, 621);
             Controls.Add(paneL_center);
-            Controls.Add(statusStrip1);
-            Controls.Add(toolStrip1);
+            Controls.Add(statusStrip_sub);
+            Controls.Add(toolStrip_menu);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainWindow";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Mapa de Estoque DC";
             WindowState = FormWindowState.Maximized;
             Load += MainWindow_Load;
-            toolStrip1.ResumeLayout(false);
-            toolStrip1.PerformLayout();
-            statusStrip1.ResumeLayout(false);
-            statusStrip1.PerformLayout();
+            toolStrip_menu.ResumeLayout(false);
+            toolStrip_menu.PerformLayout();
+            statusStrip_sub.ResumeLayout(false);
+            statusStrip_sub.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
 
-        private ToolStrip toolStrip1;
+        private ToolStrip toolStrip_menu;
         private ToolStripButton toolStripButton_movimentacao;
         private ToolStripSeparator toolStripSeparator1;
         private Panel paneL_center;
@@ -260,8 +282,9 @@
         private ToolStripSeparator toolStripSeparator4;
         private ToolStripSeparator toolStripSeparator5;
         private ToolStripStatusLabel toolStripStatusLabel_infoUser;
-        public StatusStrip statusStrip1;
+        public StatusStrip statusStrip_sub;
         private ToolStripSeparator toolStripSeparator7;
         private ToolStripButton toolStripButton_entrada;
+        private ToolStripButton toolStripButton_logoff;
     }
 }

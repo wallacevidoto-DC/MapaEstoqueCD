@@ -11,7 +11,7 @@ namespace MapaEstoqueCD.Utils
     {
         public static async Task RunWithProgressAsync(int maxProgress, Func<IProgress<int>, Task> action)
         {
-            var statusStrip = MainWindow.Instance.statusStrip1; 
+            var statusStrip = MainWindow.Instance.statusStrip_sub; 
 
             if (statusStrip == null)
                 throw new InvalidOperationException("StatusStrip não encontrado na MainWindow.");
