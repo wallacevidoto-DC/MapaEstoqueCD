@@ -3,6 +3,7 @@ using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Database.Dto.Ws;
 using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.View.Modal;
+using Microsoft.VisualBasic;
 
 namespace MapaEstoqueCD.View
 {
@@ -96,11 +97,65 @@ namespace MapaEstoqueCD.View
 
         private void rEMOVERToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("Deseja remover essa conferência ?","Confirmação",MessageBoxButtons.YesNo,MessageBoxIcon.Question) == DialogResult.Yes)
+            if (MessageBox.Show("Deseja remover essa conferência ?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
                 entradasControllers.RemoveConferencia(entradaSelecionado);
                 entradaSelecionado = null;
                 entradasCurrent = entradasControllers.GetEntradasByFilter(filtrosAtivos, ref dataGridView1);
+            }
+        }
+
+        private void cOMUMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int? result = ReturnValue();
+            if (result is null)
+                return;
+
+            if (entradaSelecionado is not null)
+            {
+                entradaSelecionado.QtdConferida = result;
+                var tt = (new EntradaProduto(entradaSelecionado)).ShowDialog();
+                if (tt == DialogResult.OK)
+                {
+                    entradasControllers.SetEntradaLivreConferida(entradaSelecionado);
+                    entradaSelecionado = null;
+                    entradasCurrent = entradasControllers.GetEntradasByFilter(filtrosAtivos, ref dataGridView1);
+
+                }
+            }
+        }
+
+        private void pIKINGToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int? result = ReturnValue();
+            if (result is null)
+                return;
+
+            if (entradaSelecionado is not null)
+            {
+                entradaSelecionado.QtdConferida = result;
+                var tt = (new Picking(entradaSelecionado)).ShowDialog();
+                if (tt == DialogResult.OK)
+                {
+                    entradasControllers.SetEntradaLivreConferida(entradaSelecionado);
+                    entradaSelecionado = null;
+                    entradasCurrent = entradasControllers.GetEntradasByFilter(filtrosAtivos, ref dataGridView1);
+
+                }
+            }
+        }
+
+        private int? ReturnValue()
+        {
+            string valor = Interaction.InputBox("Digite um valor:", "Entrada de Dados", "0");
+            if (int.TryParse(valor, out int numero))
+            {
+                return numero;
+            }
+            else
+            {
+                MessageBox.Show("Valor inválido! Digite apenas números inteiros.");
+                return null;
             }
         }
     }

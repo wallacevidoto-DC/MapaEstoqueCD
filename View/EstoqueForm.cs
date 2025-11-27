@@ -31,7 +31,6 @@ namespace MapaEstoqueCD.View
             {
                 toolStripButton_importar.Visible = false;
                 toolStripButton_exportar.Visible = false;
-                toolStripButton_entrada.Visible = false;
                 toolStripSeparator4.Visible = false;
                 toolStripSeparator3.Visible = false;
                 toolStripSeparator2.Visible = false;

@@ -1,4 +1,5 @@
 ﻿using MapaEstoqueCD.Controller;
+using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Database.Dto.modal;
 
 namespace MapaEstoqueCD.View.Modal
@@ -10,10 +11,42 @@ namespace MapaEstoqueCD.View.Modal
         private List<ProdutoSpDto> produtoSpDtos = new();
 
         private PickingDto pickingDto;
+        private string CifsName = string.Empty;
+        private bool isEntradaConferencia = false;
+
+        public Picking(EntradasViewerDto entradasViewerDto)
+        {
+            InitializeComponent();
+            Entrada(entradasViewerDto);
+        }
 
         public Picking()
         {
             InitializeComponent();
+        }
+
+
+
+        private void Entrada(EntradasViewerDto entradasViewerDto)
+        {
+            produtoSpDtos.Add(new ProdutoSpDto
+            {
+                codigo = entradasViewerDto.ProdutoCodigo,
+                produtoId = entradasViewerDto.ProdutoId,
+                dataf = entradasViewerDto.DataF,
+                semf = entradasViewerDto.SemF ?? 0,
+                descricao = entradasViewerDto.ProdutoDescricao,
+                lote = entradasViewerDto.Lote,
+                quantidade = entradasViewerDto.QtdConferida ?? 0,
+                propsPST = new PropsPST
+                {
+                    isModified = false,
+                    origem = Origem.OUT
+                }
+            });
+            CifsName = entradasViewerDto.CifsNome;
+            isEntradaConferencia = true;
+            ReloadGrid();
         }
 
         public void ReloadGrid()
@@ -119,7 +152,10 @@ namespace MapaEstoqueCD.View.Modal
                     observacao = richTextBox_obs.Text,
                     produtos = produtoSpDtos.Where(p => p.propsPST.origem == Origem.OUT).ToList(),
                 };
-
+                if (isEntradaConferencia && !string.IsNullOrEmpty(CifsName))
+                {
+                    pickingDto.observacao = $"CIF: {CifsName} - {pickingDto.observacao}";
+                }
                 if (estoqueController.SetPicking(pickingDto))
                 {
                     MessageBox.Show(Text = "Picking registrada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);

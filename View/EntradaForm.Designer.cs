@@ -53,6 +53,8 @@
             Column10 = new DataGridViewTextBoxColumn();
             contextMenuStrip1 = new ContextMenuStrip(components);
             entrdaToolStripMenuItem = new ToolStripMenuItem();
+            cOMUMToolStripMenuItem = new ToolStripMenuItem();
+            pIKINGToolStripMenuItem = new ToolStripMenuItem();
             cORREÇÃOToolStripMenuItem = new ToolStripMenuItem();
             rEMOVERToolStripMenuItem = new ToolStripMenuItem();
             toolStrip1.SuspendLayout();
@@ -255,11 +257,27 @@
             // 
             // entrdaToolStripMenuItem
             // 
+            entrdaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cOMUMToolStripMenuItem, pIKINGToolStripMenuItem });
             entrdaToolStripMenuItem.Image = Properties.Resources.entrada;
             entrdaToolStripMenuItem.Name = "entrdaToolStripMenuItem";
             entrdaToolStripMenuItem.Size = new Size(189, 32);
             entrdaToolStripMenuItem.Text = "ENTRADA";
-            entrdaToolStripMenuItem.Click += entrdaToolStripMenuItem_Click;
+            // 
+            // cOMUMToolStripMenuItem
+            // 
+            cOMUMToolStripMenuItem.Image = Properties.Resources.caixa;
+            cOMUMToolStripMenuItem.Name = "cOMUMToolStripMenuItem";
+            cOMUMToolStripMenuItem.Size = new Size(189, 32);
+            cOMUMToolStripMenuItem.Text = "COMUM";
+            cOMUMToolStripMenuItem.Click += cOMUMToolStripMenuItem_Click;
+            // 
+            // pIKINGToolStripMenuItem
+            // 
+            pIKINGToolStripMenuItem.Image = Properties.Resources.escolha;
+            pIKINGToolStripMenuItem.Name = "pIKINGToolStripMenuItem";
+            pIKINGToolStripMenuItem.Size = new Size(189, 32);
+            pIKINGToolStripMenuItem.Text = "PICKING";
+            pIKINGToolStripMenuItem.Click += pIKINGToolStripMenuItem_Click;
             // 
             // cORREÇÃOToolStripMenuItem
             // 
@@ -319,5 +337,7 @@
         private ToolStripMenuItem entrdaToolStripMenuItem;
         private ToolStripMenuItem cORREÇÃOToolStripMenuItem;
         private ToolStripMenuItem rEMOVERToolStripMenuItem;
+        private ToolStripMenuItem cOMUMToolStripMenuItem;
+        private ToolStripMenuItem pIKINGToolStripMenuItem;
     }
 }
