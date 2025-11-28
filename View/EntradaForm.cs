@@ -1,7 +1,5 @@
 ﻿using MapaEstoqueCD.Controller;
 using MapaEstoqueCD.Database.Dto;
-using MapaEstoqueCD.Database.Dto.Ws;
-using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.View.Modal;
 using Microsoft.VisualBasic;
 
@@ -45,7 +43,7 @@ namespace MapaEstoqueCD.View
                 var tt = (new EntradaProduto(entradaSelecionado)).ShowDialog();
                 if (tt == DialogResult.OK)
                 {
-                    entradasControllers.SetEntradaLivreConferida(entradaSelecionado);
+                    //entradasControllers.SetEntradaLivreConferida(entradaSelecionado);
                     entradaSelecionado = null;
                     entradasCurrent = entradasControllers.GetEntradasByFilter(filtrosAtivos, ref dataGridView1);
 
@@ -117,7 +115,7 @@ namespace MapaEstoqueCD.View
                 var tt = (new EntradaProduto(entradaSelecionado)).ShowDialog();
                 if (tt == DialogResult.OK)
                 {
-                    entradasControllers.SetEntradaLivreConferida(entradaSelecionado);
+                    //entradasControllers.SetEntradaLivreConferida(entradaSelecionado);
                     entradaSelecionado = null;
                     entradasCurrent = entradasControllers.GetEntradasByFilter(filtrosAtivos, ref dataGridView1);
 
@@ -137,7 +135,7 @@ namespace MapaEstoqueCD.View
                 var tt = (new Picking(entradaSelecionado)).ShowDialog();
                 if (tt == DialogResult.OK)
                 {
-                    entradasControllers.SetEntradaLivreConferida(entradaSelecionado);
+                    //entradasControllers.SetEntradaLivreConferida(entradaSelecionado);
                     entradaSelecionado = null;
                     entradasCurrent = entradasControllers.GetEntradasByFilter(filtrosAtivos, ref dataGridView1);
 

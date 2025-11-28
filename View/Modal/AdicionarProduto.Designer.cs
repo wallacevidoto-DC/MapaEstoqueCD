@@ -193,6 +193,8 @@
             maskedTextBox_datef.TabIndex = 0;
             maskedTextBox_datef.TextAlign = HorizontalAlignment.Center;
             maskedTextBox_datef.Leave += maskedTextBox_datef_Leave;
+            maskedTextBox_datef.TextMaskFormat = MaskFormat.IncludePromptAndLiterals;
+            maskedTextBox_datef.CutCopyMaskFormat = MaskFormat.IncludePromptAndLiterals;
             // 
             // groupBox8
             // 

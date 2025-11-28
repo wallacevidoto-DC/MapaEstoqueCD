@@ -91,7 +91,7 @@ namespace MapaEstoqueCD.View.Modal
                 return;
             }
 
-            dto.SetProps(int.Parse(textBox_qtd.Text.Trim()),maskedTextBox_datef.Text.Trim(),int.Parse(textBox_semf.Text.Trim()),textBox_lote.Text.Trim());
+            dto.SetProps(int.Parse(textBox_qtd.Text.Trim()),maskedTextBox_datef.Text,int.Parse(textBox_semf.Text.Trim()),textBox_lote.Text.Trim());
 
             if (!dto.IsValid(out string erro))
             {

@@ -10,6 +10,7 @@ namespace MapaEstoqueCD.Services
 {
     public class EstoqueService
     {
+        private readonly EntradasService entradasService = new();
         public EstoqueService()
         {
 
@@ -51,7 +52,7 @@ namespace MapaEstoqueCD.Services
 
         public List<ProdutoSpDto> GetEnderecoByDetails(string rua, string bloco, string apt)
         {
-            Endereco sprod = CacheMP.Instance.Db.Enderecos.Include(x=>x.Estoque).ThenInclude(x=>x.Produto).FirstOrDefault(e => e.Rua == rua && e.Coluna == bloco && e.Palete == apt);
+            Endereco sprod = CacheMP.Instance.Db.Enderecos.Include(x => x.Estoque).ThenInclude(x => x.Produto).FirstOrDefault(e => e.Rua == rua && e.Coluna == bloco && e.Palete == apt);
 
             if (sprod == null)
             {
@@ -147,7 +148,7 @@ namespace MapaEstoqueCD.Services
                         EnderecoId = endereco.EnderecoId,
                         Quantidade = p.quantidade,
                         Lote = p.lote,
-                        DataF = p.dataf.Replace(" ",""),
+                        DataF = p.dataf.Replace(" ", ""),
                         SemF = p.semf,
                         //CreateAt = DateTime.Now,
                         DataL = entradaDto.dataEntrada,
@@ -180,15 +181,33 @@ namespace MapaEstoqueCD.Services
                     };
                     CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
                 }
-                    CacheMP.Instance.Db.SaveChanges();
+                CacheMP.Instance.Db.SaveChanges();
 
                 transaction.Commit();
+
+
+                if (entradaDto.entradaId is not null)
+                {
+                    var entrada = CacheMP.Instance.Db.Entradas.FirstOrDefault(x => x.EntradaId == entradaDto.entradaId);
+
+
+                    if (entrada.EntradaId == null && entradaDto.produtos.Count == 1)
+                    {
+                        throw new Exception("Id do picking não foi passado, ou a quantidade de itens é maios que 1.");
+                    }
+
+                    if (!entradasService.SetEntradaLivreConferida(entrada.EntradaId, entradaDto.produtos.FirstOrDefault().quantidade))
+                    {
+                        return false;
+                    }
+                }
                 return true;
             }
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw ;
+                ex.GetErro(entradaDto);
+                return false;
             }
         }
 
@@ -197,13 +216,13 @@ namespace MapaEstoqueCD.Services
             try
             {
 
-                if (DtoValidator.Validate(saidaDto ,out var erros).Any())
+                if (DtoValidator.Validate(saidaDto, out var erros).Any())
                 {
                     throw new Exception(string.Join("\n", erros.Select(x => "\n" + x.ErrorMessage)));
                 }
 
 
-                var estoque = CacheMP.Instance.Db.Estoque.Include(e =>e.Endereco).FirstOrDefault(e => e.EstoqueId == saidaDto.estoqueId);
+                var estoque = CacheMP.Instance.Db.Estoque.Include(e => e.Endereco).FirstOrDefault(e => e.EstoqueId == saidaDto.estoqueId);
 
                 if (estoque == null || estoque.Quantidade == null)
                 {
@@ -251,14 +270,14 @@ namespace MapaEstoqueCD.Services
                 catch (Exception ex)
                 {
 
-                    throw ;
+                    throw;
                 }
                 return true;
             }
             catch (Exception ex)
             {
-
-                throw ;
+                ex.GetErro(saidaDto);
+                throw;
             }
 
 
@@ -308,7 +327,7 @@ namespace MapaEstoqueCD.Services
 
 
                 };
-                CacheMP.Instance.Db.Movimentacoes.Update(movimentacao);
+                CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
                 CacheMP.Instance.Db.SaveChanges();
 
                 transaction.Commit();
@@ -317,7 +336,7 @@ namespace MapaEstoqueCD.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw ;
+                ex.GetErro(correcaoDto);
                 return false;
             }
         }
@@ -391,7 +410,7 @@ namespace MapaEstoqueCD.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw ;
+                ex.GetErro(transferenciaDto);
                 return false;
             }
         }
@@ -405,9 +424,25 @@ namespace MapaEstoqueCD.Services
                     throw new Exception(string.Join("\n", erros.Select(x => "\n" + x.ErrorMessage)));
                 }
 
+                if (pickingDto.entradaId is not null)
+                {
+                    var entrada = CacheMP.Instance.Db.Entradas.FirstOrDefault(x => x.EntradaId == pickingDto.entradaId);
+
+
+                    if (entrada.EntradaId == null && pickingDto.produtos.Count ==1)
+                    {
+                        throw new Exception("Id do picking não foi passado, ou a quantidade de itens é maios que 1.");
+                    }
+
+                    if (!entradasService.SetEntradaLivreConferida(entrada.EntradaId, pickingDto.produtos.FirstOrDefault().quantidade))
+                    {
+                        return false;
+                    }
+                }
+                
+
                 foreach (var p in pickingDto.produtos)
                 {
-                    
                     var movimentacao = new Movimentacao
                     {
                         ProdutoId = p.produtoId,
@@ -423,18 +458,19 @@ namespace MapaEstoqueCD.Services
 
                     };
                     CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
-                    CacheMP.Instance.Db.SaveChanges();
                 }
+                CacheMP.Instance.Db.SaveChanges();
 
+                
                 return true;
             }
             catch (Exception ex)
             {
-                throw ;
+                ex.GetErro(pickingDto);
                 return false;
             }
         }
-
-        
     }
+
+    
 }

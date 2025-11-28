@@ -9,6 +9,8 @@ namespace MapaEstoqueCD.Database.Dto.modal
         [Required(ErrorMessage = "A data de entrada é obrigatória.")]
         public DateTime dataEntrada { get; set; }
 
+        public int? entradaId { get; set; }
+
         public string observacao { get; set; }
 
         [Required(ErrorMessage = "O usuário é obrigatório.")]

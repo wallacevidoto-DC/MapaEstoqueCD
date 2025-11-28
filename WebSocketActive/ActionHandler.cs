@@ -96,7 +96,6 @@ namespace MapaEstoqueCD.WebSocketActive
 
         public string ActionName => ActionsWs.ENTRADA;
         public EstoqueService estoqueService = new();
-        public EntradasService entradasService = new();
 
 
         public async Task<WebSocketResponse?> ExecuteAsync(JsonElement data, WebSocket socket)
@@ -116,10 +115,6 @@ namespace MapaEstoqueCD.WebSocketActive
                 entrada.observacao = $"(REMOTO) - {entrada.observacao}";
                 estoqueService.SetEntrada(entrada);
 
-                if (entrada.entradaId is not null)
-                {
-                    entradasService.SetEntradaLivreConferida(entrada.entradaId);
-                }
                 return new WebSocketResponse { type = "entrada_resposta", status = "ok", mensagem = "Entrada realizado com sucesso", dados = null };
             }
             catch (Exception ex)
@@ -130,7 +125,83 @@ namespace MapaEstoqueCD.WebSocketActive
 
         }
     }
+    public class PickingHandler : IActionHandler
+    {
 
+        public string ActionName => ActionsWs.PICKING;
+        public EstoqueService estoqueService = new();
+
+
+        public async Task<WebSocketResponse?> ExecuteAsync(JsonElement data, WebSocket socket)
+        {
+            try
+            {
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    Converters = { new JsonStringEnumConverter() }
+                };
+
+                PickingDto entrada = JsonSerializer.Deserialize<PickingDto>(data.GetRawText(), options);
+
+                if (entrada is null) { throw new Exception("Erro ao receber os dados"); }
+
+                entrada.observacao = $"(REMOTO) - {entrada.observacao}";
+                estoqueService.SetPicking(entrada);
+
+                return new WebSocketResponse { type = "picking_resposta", status = "ok", mensagem = "Picking realizado com sucesso", dados = null };
+            }
+            catch (Exception ex)
+            {
+                ex.GetErroSr(data, false);
+                return new WebSocketResponse { type = "picking_resposta", status = "erro", mensagem = ex.Message };
+            }
+
+        }
+    }
+    public class EntradaConferenciaHandler : IActionHandler
+    {
+
+        public string ActionName => ActionsWs.ENTRADA_CONFERENCIA;
+        public EstoqueService estoqueService = new();
+        public EntradasService entradasService = new();
+
+
+        public async Task<WebSocketResponse?> ExecuteAsync(JsonElement data, WebSocket socket)
+        {
+            try
+            {
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    Converters = { new JsonStringEnumConverter() }
+                };
+
+                EntradaDto entrada = JsonSerializer.Deserialize<EntradaDto>(data.GetRawText(), options);
+
+                if (entrada is null) { throw new Exception("Erro ao receber os dados"); }
+
+                //if (entrada.entradaId is not null)
+                //{
+                //    if (entrada.produtos.Any())
+                //    {
+                //        var prod = entrada.produtos.First();
+                //        entradasService.SetEntradaLivreConferida((int)entrada.entradaId, prod.quantidade);
+                //    }
+                //}
+                entrada.observacao = $"(REMOTO) - {entrada.observacao}";
+                estoqueService.SetEntrada(entrada);
+
+                return new WebSocketResponse { type = "entrada_conferencia_resposta", status = "ok", mensagem = "Entrada realizado com sucesso", dados = null };
+            }
+            catch (Exception ex)
+            {
+                ex.GetErroSr(data, false);
+                return new WebSocketResponse { type = "entrada_conferencia_resposta", status = "erro", mensagem = ex.Message };
+            }
+
+        }
+    }
     public class EnderecoHandler : IActionHandler
     {
         public string ActionName => ActionsWs.GET_ADDRESS;

@@ -21,6 +21,8 @@ namespace MapaEstoqueCD.WebSocketActive
                     new GetEstoqueEntradaHandler(),
                     new LoginHandler(),
                     new EntradaHandler(),
+                    new PickingHandler(),
+                    new EntradaConferenciaHandler(),
                     new EnderecoHandler(),
                     new ProdutoHandler(),
                     new SaidaHandler(),

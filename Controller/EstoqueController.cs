@@ -277,8 +277,16 @@ namespace MapaEstoqueCD.Controller
 
         public bool SetEntrada(EntradaDto entradaDto)
         {
-            entradaDto.userId = CacheMP.Instance.UserCurrent.UserId;
-            return estoqueService.SetEntrada(entradaDto);
+            try
+            {
+                entradaDto.userId = CacheMP.Instance.UserCurrent.UserId;
+                return estoqueService.SetEntrada(entradaDto);
+            }
+            catch (Exception ex)
+            {
+                ex.GetErro(entradaDto);
+                return false;
+            }
         }
 
         public bool SetSaida(SaidaDto saidaDto)
@@ -293,9 +301,9 @@ namespace MapaEstoqueCD.Controller
 
                 ex.GetErro(saidaDto);
                 return false;
-                   
+
             }
-           
+
         }
 
         public bool SetCorrecaoProduto(CorrecaoDto correcaoDto)

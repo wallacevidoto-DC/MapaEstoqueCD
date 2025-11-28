@@ -14,6 +14,8 @@ namespace MapaEstoqueCD.WebSocketActive.Interface
         public const string GET_ESTOQUE_ENTRADA = "get_estoque_entrada";
         public const string GET_ADDRESS = "get_address";
         public const string ENTRADA = "entrada";
+        public const string PICKING = "picking";
+        public const string ENTRADA_CONFERENCIA = "entrada_conferencia";
         public const string SAIDA = "saida";
         public const string TRANSFERENCIA = "transferencia";
         public const string CORRECAO = "correcao";

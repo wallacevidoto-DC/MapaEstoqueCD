@@ -29,6 +29,11 @@ namespace MapaEstoqueCD.View.Modal
 
         private void Entrada(EntradasViewerDto entradasViewerDto)
         {
+            pickingDto = new PickingDto
+            {
+                entradaId = entradasViewerDto.EntradaId
+            };
+
             produtoSpDtos.Add(new ProdutoSpDto
             {
                 codigo = entradasViewerDto.ProdutoCodigo,
@@ -109,7 +114,11 @@ namespace MapaEstoqueCD.View.Modal
 
             if (produto.propsPST.origem != Origem.OUT)
                 return;
-
+            if (isEntradaConferencia)
+            {
+                MessageBox.Show("Modalidade não permitida para conferência", "ALERTA", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
             var confirmar = MessageBox.Show(
                 $"Deseja remover o produto '{produto.descricao}'?",
                 "Confirmar exclusão",
@@ -127,6 +136,11 @@ namespace MapaEstoqueCD.View.Modal
 
         private void button_addProd_Click(object sender, EventArgs e)
         {
+            if (isEntradaConferencia)
+            {
+                MessageBox.Show("Não habilitado para conferência","ALERTA",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+                return;
+            }
             var produto = AdicionarProduto.ShowDialogAndReturn();
 
             if (produto != null)
@@ -140,28 +154,46 @@ namespace MapaEstoqueCD.View.Modal
             {
                 MessageBox.Show("Operação cancelada.");
             }
-                    }       
+        }
 
         private void button_salvar_Click(object sender, EventArgs e)
         {
             if (produtoSpDtos.Count > 0)
             {
-                pickingDto = new PickingDto
+                if (isEntradaConferencia && pickingDto is not null)
                 {
-                    dataEntrada = dateTimePicker_dataEntrada.Value,
-                    observacao = richTextBox_obs.Text,
-                    produtos = produtoSpDtos.Where(p => p.propsPST.origem == Origem.OUT).ToList(),
-                };
-                if (isEntradaConferencia && !string.IsNullOrEmpty(CifsName))
-                {
-                    pickingDto.observacao = $"CIF: {CifsName} - {pickingDto.observacao}";
+                    pickingDto.dataEntrada = dateTimePicker_dataEntrada.Value;
+                    pickingDto.observacao = richTextBox_obs.Text;
+                    pickingDto.produtos = produtoSpDtos.Where(p => p.propsPST.origem == Origem.OUT).ToList();
+
+                    if (!string.IsNullOrEmpty(CifsName))
+                    {
+                        pickingDto.observacao = $"CIF: {CifsName} - {pickingDto.observacao}";
+                    }
                 }
+                else
+                {
+                    pickingDto = new PickingDto
+                    {
+                        dataEntrada = dateTimePicker_dataEntrada.Value,
+                        observacao = richTextBox_obs.Text,
+                        produtos = produtoSpDtos.Where(p => p.propsPST.origem == Origem.OUT).ToList()
+                    };
+                } 
                 if (estoqueController.SetPicking(pickingDto))
                 {
                     MessageBox.Show(Text = "Picking registrada com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                    if (isEntradaConferencia)
+                    {
+                        DialogResult = DialogResult.OK;
+                        this.Close();
+                        return;
+                    }
+
                     var dr = MessageBox.Show("Deseja registrar outra picking?", "Continuar", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                    if (dr == DialogResult.No) { 
+                    if (dr == DialogResult.No)
+                    {
                         this.Close();
                     }
                     else

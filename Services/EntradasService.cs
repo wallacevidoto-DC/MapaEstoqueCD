@@ -1,6 +1,5 @@
 ﻿using MapaEstoqueCD.Controller;
 using MapaEstoqueCD.Database.Dto;
-using MapaEstoqueCD.Database.Dto.modal;
 using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Utils;
 using System.Data.Entity;
@@ -35,10 +34,10 @@ namespace MapaEstoqueCD.Services
                     Quantidade = entradaLvDto.qtd_conferida,
                     UserId = entradaLvDto.userId,
                     DataL = DateTime.Now,
-                    DataF= entradaLvDto.dataf,
-                    SemF= entradaLvDto.semf,
-                    Lote= entradaLvDto.lote,
-                    Obs= entradaLvDto.obs,
+                    DataF = entradaLvDto.dataf,
+                    SemF = entradaLvDto.semf,
+                    Lote = entradaLvDto.lote,
+                    Obs = entradaLvDto.obs,
 
                 };
                 CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
@@ -68,7 +67,7 @@ namespace MapaEstoqueCD.Services
                 {
                     EntradaId = e.EntradaId,
                     Tipo = e.Tipo,
-                    ProdutoId = e.ProdutoId,   
+                    ProdutoId = e.ProdutoId,
                     UserNome = e.User != null ? e.User.Name : null,
                     ProdutoCodigo = e.Produto != null ? e.Produto.Codigo : null,
                     ProdutoDescricao = e.Produto != null ? e.Produto.Descricao : null,
@@ -79,30 +78,46 @@ namespace MapaEstoqueCD.Services
                     SemF = e.SemF,
                     CreateAt = e.CreateAt,
                     UpdateAt = e.UpdateAt
-                }).OrderBy(x=>x.CreateAt)
+                }).OrderBy(x => x.CreateAt)
                 .ToList();
         }
 
         public void SetEntradaLivreConferida(EntradasViewerDto entradaSelecionado)
         {
             Entradas model = CacheMP.Instance.Db.Entradas.FirstOrDefault(x => x.EntradaId == entradaSelecionado.EntradaId);
-            if (model != null) {
-                model.IsConf = true;
-                CacheMP.Instance.Db.SaveChanges();
-            }
-        }
-        public void SetEntradaLivreConferida(int? id)
-        {
-            if (id is null)
-            {
-                return;
-            }
-            Entradas model = CacheMP.Instance.Db.Entradas.FirstOrDefault(x => x.EntradaId == id);
             if (model != null)
             {
                 model.IsConf = true;
                 CacheMP.Instance.Db.SaveChanges();
             }
+        }
+        public bool SetEntradaLivreConferida(int id, int qtd)
+        {
+            try
+            {
+                var model = CacheMP.Instance.Db.Entradas.FirstOrDefault(x => x.EntradaId == id);
+
+
+
+                if (model == null && model.Produto == null)
+                {
+                    throw new Exception("Id do picking não foi passado");
+                }
+
+                model.QtdConferida -= qtd;
+                model.IsConf = model.QtdConferida <= 0 ? true : false;
+
+                CacheMP.Instance.Db.SaveChanges();
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                ex.GetErro(((id, qtd)));
+                return false;
+            }
+
+
         }
 
         public bool SetCorrecaoEntrada(CorrecaoEntradaDto correcaoDto)
@@ -111,7 +126,7 @@ namespace MapaEstoqueCD.Services
 
             try
             {
-                var entradaExistente = CacheMP.Instance.Db.Entradas.Include(X=>X.Produto).FirstOrDefault(e => e.EntradaId == correcaoDto.conferenciaId);
+                var entradaExistente = CacheMP.Instance.Db.Entradas.Include(X => X.Produto).FirstOrDefault(e => e.EntradaId == correcaoDto.conferenciaId);
 
                 if (entradaExistente == null)
                     throw new Exception($"Estoque não encontrado.");
@@ -137,7 +152,7 @@ namespace MapaEstoqueCD.Services
                     DataF = correcaoDto.dataf.Replace(" ", ""),
                     SemF = correcaoDto.semf,
                     Lote = correcaoDto.lote,
-                    DataL =  DateTime.Now
+                    DataL = DateTime.Now
 
 
                 };

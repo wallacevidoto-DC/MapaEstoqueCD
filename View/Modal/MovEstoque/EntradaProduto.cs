@@ -1,4 +1,5 @@
-﻿using MapaEstoqueCD.Controller;
+﻿using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
+using MapaEstoqueCD.Controller;
 using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Database.Dto.modal;
 
@@ -13,6 +14,7 @@ namespace MapaEstoqueCD.View.Modal
 
         private EntradaDto entradaDto;
         private bool isEntradaConferencia=false;
+        private int? entradaID = null;
         public EntradaProduto()
         {
             InitializeComponent();
@@ -44,6 +46,7 @@ namespace MapaEstoqueCD.View.Modal
             });
             CifsName = entradasViewerDto.CifsNome;
             isEntradaConferencia =true;
+            entradaID = entradasViewerDto.EntradaId;
             ReloadGrid();
         }
 
@@ -108,6 +111,11 @@ namespace MapaEstoqueCD.View.Modal
             if (produto.propsPST.origem != Origem.OUT)
                 return;
 
+            if (isEntradaConferencia)
+            {
+                MessageBox.Show("Modalidade não permitida para conferência","ALERTA",MessageBoxButtons.OK,MessageBoxIcon.Exclamation);
+                return;
+            }
             var confirmar = MessageBox.Show(
                 $"Deseja remover o produto '{produto.descricao}'?",
                 "Confirmar exclusão",
@@ -125,6 +133,13 @@ namespace MapaEstoqueCD.View.Modal
 
         private void button_addProd_Click(object sender, EventArgs e)
         {
+
+
+            if (isEntradaConferencia)
+            {
+                MessageBox.Show("Modalidade não permitida para conferência", "ALERTA", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
             var produto = AdicionarProduto.ShowDialogAndReturn();
 
             if (produto != null)
@@ -181,9 +196,14 @@ namespace MapaEstoqueCD.View.Modal
                     produtos = produtoSpDtos.Where(p => p.propsPST.origem == Origem.OUT).ToList(),
                 };
 
-                if (isEntradaConferencia && !string.IsNullOrEmpty(CifsName))
+                if (isEntradaConferencia)
                 {
+                    entradaDto.entradaId = entradaID;
+                    if (!string.IsNullOrEmpty(CifsName))
+                    {                        
                     entradaDto.observacao = $"CIF: {CifsName} - {entradaDto.observacao}";
+                    }
+
                 }
 
                 if (estoqueController.SetEntrada(entradaDto))
