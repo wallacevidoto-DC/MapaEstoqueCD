@@ -109,7 +109,7 @@ namespace MapaEstoqueCD.Services
                .ToList();
         }
 
-        internal bool SetEntrada(EntradaDto entradaDto)
+        internal bool SetEntradaOld(EntradaDto entradaDto)
         {
             if (DtoValidator.Validate(entradaDto, out var erros).Any())
             {
@@ -150,14 +150,9 @@ namespace MapaEstoqueCD.Services
                         Lote = p.lote,
                         DataF = p.dataf.Replace(" ", ""),
                         SemF = p.semf,
-                        //CreateAt = DateTime.Now,
                         DataL = entradaDto.dataEntrada,
                         Obs = entradaDto.observacao
                     };
-
-                    //novoEstoque.Endereco = null;
-                    //novoEstoque.Produto = null;
-                    //novoEstoque.Movimentacoes = null;
 
                     CacheMP.Instance.Db.Estoque.Add(novoEstoque);
                     CacheMP.Instance.Db.SaveChanges();
@@ -210,7 +205,122 @@ namespace MapaEstoqueCD.Services
                 return false;
             }
         }
+        public bool SetEntrada(EntradaDto entradaDto)
+        {
+            if (DtoValidator.Validate(entradaDto, out var erros).Any())
+            {
+                throw new Exception(string.Join("\n", erros.Select(x => "\n" + x.ErrorMessage)));
+            }
+            using var transaction = CacheMP.Instance.Db.Database.BeginTransaction();
 
+            try
+            {
+                // CORREÇÃO 1: Busca o endereço diretamente no banco de dados (remover .Local)
+                var endereco = CacheMP.Instance.Db.Enderecos
+                    .FirstOrDefault(e =>
+                        e.Rua == entradaDto.rua &&
+                        e.Coluna == entradaDto.bloco &&
+                        e.Palete == entradaDto.apt);
+
+                bool novoEnderecoAdicionado = false;
+
+                if (endereco == null)
+                {
+                    endereco = new Endereco
+                    {
+                        Rua = entradaDto.rua,
+                        Coluna = entradaDto.bloco,
+                        Palete = entradaDto.apt
+                    };
+                    endereco.GerarEnderecoId();
+                    CacheMP.Instance.Db.Enderecos.Add(endereco);
+                    novoEnderecoAdicionado = true;
+                }
+
+                // Salva o novo endereço para que ele tenha o ID gerado antes de ser usado no Estoque
+                // O SaveChanges aqui só é necessário se um novo Endereco foi adicionado.
+                if (novoEnderecoAdicionado)
+                {
+                    CacheMP.Instance.Db.SaveChanges();
+                }
+
+                foreach (var p in entradaDto.produtos)
+                {
+                    if (!p.IsValid(out string msg))
+                        throw new Exception($"Produto inválido: {p.codigo} — {msg}");
+                    var novoEstoque = new Estoque
+                    {
+                        ProdutoId = p.produtoId,
+                        EnderecoId = endereco.EnderecoId,
+                        Quantidade = p.quantidade,
+                        Lote = p.lote,
+                        DataF = p.dataf.Replace(" ", ""),
+                        SemF = p.semf,
+                        //CreateAt = DateTime.Now,
+                        DataL = entradaDto.dataEntrada,
+                        Obs = entradaDto.observacao
+                    };
+
+                    //novoEstoque.Endereco = null;
+                    //novoEstoque.Produto = null;
+                    //novoEstoque.Movimentacoes = null;
+
+                    CacheMP.Instance.Db.Estoque.Add(novoEstoque);
+                    // CORREÇÃO 2: REMOVENDO SaveChanges() DENTRO DO LOOP
+                    // CacheMP.Instance.Db.SaveChanges(); 
+
+                    var movimentacao = new Movimentacao
+                    {
+                        //EstoqueId = novoEstoque.EstoqueId,
+                        Estoque = novoEstoque,
+                        ProdutoId = p.produtoId,
+                        Tipo = entradaDto.tipo,
+                        Quantidade = p.quantidade,
+                        Obs = entradaDto.observacao,
+                        UserId = entradaDto.userId,
+                        DataF = p.dataf.Replace(" ", ""),
+                        SemF = p.semf,
+                        Lote = p.lote,
+                        Endereco = endereco.EnderecoId,
+                        DataL = entradaDto.dataEntrada
+
+
+                    };
+                    CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
+                    // CORREÇÃO 2: REMOVENDO SaveChanges() DENTRO DO LOOP
+                    // CacheMP.Instance.Db.SaveChanges(); 
+                }
+
+                // CORREÇÃO 2: CONSOLIDANDO SAVECHANGES após o loop, antes do commit
+                CacheMP.Instance.Db.SaveChanges();
+
+                transaction.Commit();
+
+
+                if (entradaDto.entradaId is not null)
+                {
+                    var entrada = CacheMP.Instance.Db.Entradas.FirstOrDefault(x => x.EntradaId == entradaDto.entradaId);
+
+
+                    if (entrada == null || entradaDto.produtos.Count != 1) // Alteração da condição para ser mais robusta
+                    {
+                        throw new Exception("Id do picking não foi passado, ou a quantidade de itens é maior que 1.");
+                    }
+
+                    if (!entradasService.SetEntradaLivreConferida(entrada.EntradaId, entradaDto.produtos.FirstOrDefault().quantidade))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+                ex.GetErro(entradaDto);
+                return false;
+            }
+        }
         public bool SetSaida(SaidaDto saidaDto)
         {
             try
