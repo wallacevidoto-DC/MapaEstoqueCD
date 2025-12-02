@@ -1,4 +1,6 @@
-﻿namespace MapaEstoqueCD.Database.Dto.modal
+﻿using MapaEstoqueCD.Database.Models;
+
+namespace MapaEstoqueCD.Database.Dto.modal
 {
     public class ProdutoSpDto
     {
@@ -51,6 +53,18 @@
             }
             return true;
         }
+        public override string ToString()
+        {
+            return $"ProdutoId: {produtoId}, " +
+                   $"Código: {codigo}, " +
+                   $"Descrição: {descricao}, " +
+                   $"Quantidade: {quantidade}, " +
+                   $"Data Fabricação: {dataf}, " +
+                   $"Semanas Fabricação: {semf}, " +
+                   $"Lote: {lote}, " +
+                   $"Origem: {propsPST?.origem}, " +
+                   $"IsModified: {propsPST?.isModified}";
+        }
     }
 
 
@@ -64,4 +78,7 @@
     {
         IN, OUT
     }
+
+   
+
 }

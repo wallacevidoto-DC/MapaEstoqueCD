@@ -160,7 +160,7 @@ namespace MapaEstoqueCD.Services
                     //novoEstoque.Movimentacoes = null;
 
                     CacheMP.Instance.Db.Estoque.Add(novoEstoque);
-                    //CacheMP.Instance.Db.SaveChanges();
+                    CacheMP.Instance.Db.SaveChanges();
 
                     var movimentacao = new Movimentacao
                     {
@@ -180,8 +180,8 @@ namespace MapaEstoqueCD.Services
 
                     };
                     CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
-                }
                 CacheMP.Instance.Db.SaveChanges();
+                }
 
                 transaction.Commit();
 
