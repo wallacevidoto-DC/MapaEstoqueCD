@@ -56,9 +56,21 @@ namespace MapaEstoqueCD.View.Modal
             }
         }
 
+        private void maskedTextBox_datef_Leave(object sender, EventArgs e)
+        {
+            string[] partes = maskedTextBox_datef.Text.Split('/');
+            if (partes.Length == 2 &&
+                int.TryParse(partes[0], out int mes) &&
+                (mes < 1 || mes > 12))
+            {
+                MessageBox.Show("Mês inválido!", "Erro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                maskedTextBox_datef.Focus();
+            }
+        }
+
         private void button_salvar_Click(object sender, EventArgs e)
         {
-            dto.SetProps(int.Parse(textBox_qtd.Text.Trim()), maskedTextBox_datef.Text.Trim(), int.Parse(textBox_semf.Text.Trim()), textBox_lote.Text.Trim());
+            dto.SetProps(int.Parse(textBox_qtd.Text.Trim()), maskedTextBox_datef.Text, int.Parse(textBox_semf.Text.Trim()), textBox_lote.Text.Trim());
 
             if (!dto.IsValid(out string erro))
             {

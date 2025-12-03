@@ -1,4 +1,5 @@
 ﻿using MapaEstoqueCD.Controller;
+using MapaEstoqueCD.Database.Common;
 using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Database.Dto.modal;
 using MapaEstoqueCD.Database.Dto.Ws;
@@ -17,13 +18,16 @@ namespace MapaEstoqueCD.Services
         }
         public List<Estoque> GetAll()
         {
-            return CacheMP.Instance.Db.Estoque.ToList();
+            using var db = ContextFactory.CreateDb();
+            return db.Estoque.ToList();
         }
 
 
         public List<EstoqueWsDto> GetAllProd()
         {
-            return CacheMP.Instance.Db.Estoque
+            using var db = ContextFactory.CreateDb();
+
+            return db.Estoque
                 .Include(e => e.Produto)
                 .Include(e => e.Endereco)
                 .Where(e => e.EnderecoId != null)
@@ -52,7 +56,8 @@ namespace MapaEstoqueCD.Services
 
         public List<ProdutoSpDto> GetEnderecoByDetails(string rua, string bloco, string apt)
         {
-            Endereco sprod = CacheMP.Instance.Db.Enderecos.Include(x => x.Estoque).ThenInclude(x => x.Produto).FirstOrDefault(e => e.Rua == rua && e.Coluna == bloco && e.Palete == apt);
+            using var db = ContextFactory.CreateDb();
+            Endereco sprod =db.Enderecos.Include(x => x.Estoque).ThenInclude(x => x.Produto).FirstOrDefault(e => e.Rua == rua && e.Coluna == bloco && e.Palete == apt);
 
             if (sprod == null)
             {
@@ -82,7 +87,8 @@ namespace MapaEstoqueCD.Services
 
         internal List<EstoqueWsDto> GetAllEstoque()
         {
-            return CacheMP.Instance.Db.Estoque
+            using var db = ContextFactory.CreateDb();
+            return db.Estoque
                .Include(e => e.Produto)
                .Include(e => e.Endereco)
                .Where(e => e.EnderecoId != null)
@@ -115,11 +121,12 @@ namespace MapaEstoqueCD.Services
             {
                 throw new Exception(string.Join("\n", erros.Select(x => "\n" + x.ErrorMessage)));
             }
-            using var transaction = CacheMP.Instance.Db.Database.BeginTransaction();
+            using var db = ContextFactory.CreateDb();
+            using var transaction =db.Database.BeginTransaction();
 
             try
             {
-                var endereco = CacheMP.Instance.Db.Enderecos.Local
+                var endereco =db.Enderecos.Local
                     .FirstOrDefault(e =>
                         e.Rua == entradaDto.rua &&
                         e.Coluna == entradaDto.bloco &&
@@ -134,8 +141,8 @@ namespace MapaEstoqueCD.Services
                         Palete = entradaDto.apt
                     };
                     endereco.GerarEnderecoId();
-                    CacheMP.Instance.Db.Enderecos.Add(endereco);
-                    CacheMP.Instance.Db.SaveChanges();
+                   db.Enderecos.Add(endereco);
+                   db.SaveChanges();
                 }
 
                 foreach (var p in entradaDto.produtos)
@@ -154,8 +161,8 @@ namespace MapaEstoqueCD.Services
                         Obs = entradaDto.observacao
                     };
 
-                    CacheMP.Instance.Db.Estoque.Add(novoEstoque);
-                    CacheMP.Instance.Db.SaveChanges();
+                   db.Estoque.Add(novoEstoque);
+                   db.SaveChanges();
 
                     var movimentacao = new Movimentacao
                     {
@@ -174,8 +181,8 @@ namespace MapaEstoqueCD.Services
 
 
                     };
-                    CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
-                CacheMP.Instance.Db.SaveChanges();
+                   db.Movimentacoes.Add(movimentacao);
+               db.SaveChanges();
                 }
 
                 transaction.Commit();
@@ -183,7 +190,7 @@ namespace MapaEstoqueCD.Services
 
                 if (entradaDto.entradaId is not null)
                 {
-                    var entrada = CacheMP.Instance.Db.Entradas.FirstOrDefault(x => x.EntradaId == entradaDto.entradaId);
+                    var entrada =db.Entradas.FirstOrDefault(x => x.EntradaId == entradaDto.entradaId);
 
 
                     if (entrada.EntradaId == null && entradaDto.produtos.Count == 1)
@@ -211,12 +218,13 @@ namespace MapaEstoqueCD.Services
             {
                 throw new Exception(string.Join("\n", erros.Select(x => "\n" + x.ErrorMessage)));
             }
-            using var transaction = CacheMP.Instance.Db.Database.BeginTransaction();
+            using var db = ContextFactory.CreateDb();
+            using var transaction =db.Database.BeginTransaction();
 
             try
             {
                 // CORREÇÃO 1: Busca o endereço diretamente no banco de dados (remover .Local)
-                var endereco = CacheMP.Instance.Db.Enderecos
+                var endereco =db.Enderecos
                     .FirstOrDefault(e =>
                         e.Rua == entradaDto.rua &&
                         e.Coluna == entradaDto.bloco &&
@@ -233,7 +241,7 @@ namespace MapaEstoqueCD.Services
                         Palete = entradaDto.apt
                     };
                     endereco.GerarEnderecoId();
-                    CacheMP.Instance.Db.Enderecos.Add(endereco);
+                   db.Enderecos.Add(endereco);
                     novoEnderecoAdicionado = true;
                 }
 
@@ -241,7 +249,7 @@ namespace MapaEstoqueCD.Services
                 // O SaveChanges aqui só é necessário se um novo Endereco foi adicionado.
                 if (novoEnderecoAdicionado)
                 {
-                    CacheMP.Instance.Db.SaveChanges();
+                   db.SaveChanges();
                 }
 
                 foreach (var p in entradaDto.produtos)
@@ -265,9 +273,9 @@ namespace MapaEstoqueCD.Services
                     //novoEstoque.Produto = null;
                     //novoEstoque.Movimentacoes = null;
 
-                    CacheMP.Instance.Db.Estoque.Add(novoEstoque);
+                   db.Estoque.Add(novoEstoque);
                     // CORREÇÃO 2: REMOVENDO SaveChanges() DENTRO DO LOOP
-                    // CacheMP.Instance.Db.SaveChanges(); 
+                    //db.SaveChanges(); 
 
                     var movimentacao = new Movimentacao
                     {
@@ -286,20 +294,20 @@ namespace MapaEstoqueCD.Services
 
 
                     };
-                    CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
+                   db.Movimentacoes.Add(movimentacao);
                     // CORREÇÃO 2: REMOVENDO SaveChanges() DENTRO DO LOOP
-                    // CacheMP.Instance.Db.SaveChanges(); 
+                    //db.SaveChanges(); 
                 }
 
                 // CORREÇÃO 2: CONSOLIDANDO SAVECHANGES após o loop, antes do commit
-                CacheMP.Instance.Db.SaveChanges();
+               db.SaveChanges();
 
                 transaction.Commit();
 
 
                 if (entradaDto.entradaId is not null)
                 {
-                    var entrada = CacheMP.Instance.Db.Entradas.FirstOrDefault(x => x.EntradaId == entradaDto.entradaId);
+                    var entrada =db.Entradas.FirstOrDefault(x => x.EntradaId == entradaDto.entradaId);
 
 
                     if (entrada == null || entradaDto.produtos.Count != 1) // Alteração da condição para ser mais robusta
@@ -331,8 +339,8 @@ namespace MapaEstoqueCD.Services
                     throw new Exception(string.Join("\n", erros.Select(x => "\n" + x.ErrorMessage)));
                 }
 
-
-                var estoque = CacheMP.Instance.Db.Estoque.Include(e => e.Endereco).FirstOrDefault(e => e.EstoqueId == saidaDto.estoqueId);
+                using var db = ContextFactory.CreateDb();
+                var estoque =db.Estoque.Include(e => e.Endereco).FirstOrDefault(e => e.EstoqueId == saidaDto.estoqueId);
 
                 if (estoque == null || estoque.Quantidade == null)
                 {
@@ -343,7 +351,7 @@ namespace MapaEstoqueCD.Services
 
                 estoque.Quantidade = qtdNew < 0 ? 0 : qtdNew;
 
-                CacheMP.Instance.Db.SaveChanges();
+               db.SaveChanges();
 
                 try
                 {
@@ -356,7 +364,7 @@ namespace MapaEstoqueCD.Services
                     {
                         Obs += " | Produto Zerado no Estoque";
                     }
-                    estoque = CacheMP.Instance.Db.Estoque.Include(e => e.Endereco).FirstOrDefault(e => e.EstoqueId == saidaDto.estoqueId);
+                    estoque =db.Estoque.Include(e => e.Endereco).FirstOrDefault(e => e.EstoqueId == saidaDto.estoqueId);
                     var movimentacao = new Movimentacao
                     {
                         EstoqueId = estoque.EstoqueId,
@@ -373,8 +381,8 @@ namespace MapaEstoqueCD.Services
 
 
                     };
-                    CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
-                    CacheMP.Instance.Db.SaveChanges();
+                   db.Movimentacoes.Add(movimentacao);
+                   db.SaveChanges();
 
                 }
                 catch (Exception ex)
@@ -399,11 +407,12 @@ namespace MapaEstoqueCD.Services
             {
                 throw new Exception(string.Join("\n", erros.Select(x => "\n" + x.ErrorMessage)));
             }
-            using var transaction = CacheMP.Instance.Db.Database.BeginTransaction();
+            using var db = ContextFactory.CreateDb();
+            using var transaction =db.Database.BeginTransaction();
 
             try
             {
-                var estoqueExistente = CacheMP.Instance.Db.Estoque.FirstOrDefault(e => e.EstoqueId == correcaoDto.estoqueId);
+                var estoqueExistente =db.Estoque.FirstOrDefault(e => e.EstoqueId == correcaoDto.estoqueId);
 
                 if (estoqueExistente == null)
                     throw new Exception($"Estoque não encontrado.");
@@ -417,8 +426,8 @@ namespace MapaEstoqueCD.Services
                 estoqueExistente.SemF = correcaoDto.produto.semf;
                 estoqueExistente.Obs = correcaoDto.observacao;
 
-                CacheMP.Instance.Db.Estoque.Update(estoqueExistente);
-                CacheMP.Instance.Db.SaveChanges();
+               db.Estoque.Update(estoqueExistente);
+               db.SaveChanges();
 
 
                 var movimentacao = new Movimentacao
@@ -437,8 +446,8 @@ namespace MapaEstoqueCD.Services
 
 
                 };
-                CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
-                CacheMP.Instance.Db.SaveChanges();
+               db.Movimentacoes.Add(movimentacao);
+               db.SaveChanges();
 
                 transaction.Commit();
                 return true;
@@ -457,11 +466,12 @@ namespace MapaEstoqueCD.Services
             {
                 throw new Exception(string.Join("\n", erros.Select(x => "\n" + x.ErrorMessage)));
             }
-            using var transaction = CacheMP.Instance.Db.Database.BeginTransaction();
+            using var db = ContextFactory.CreateDb();
+            using var transaction =db.Database.BeginTransaction();
 
             try
             {
-                var endereco = CacheMP.Instance.Db.Enderecos.Local
+                var endereco =db.Enderecos.Local
                     .FirstOrDefault(e =>
                         e.Rua == transferenciaDto.rua &&
                         e.Coluna == transferenciaDto.bloco &&
@@ -476,18 +486,18 @@ namespace MapaEstoqueCD.Services
                         Palete = transferenciaDto.apt
                     };
                     endereco.GerarEnderecoId();
-                    CacheMP.Instance.Db.Enderecos.Add(endereco);
-                    CacheMP.Instance.Db.SaveChanges();
+                   db.Enderecos.Add(endereco);
+                   db.SaveChanges();
                 }
 
                 if (!transferenciaDto.produto.IsValid(out string msg))
                     throw new Exception($"Produto inválido: {transferenciaDto.produto.codigo} — {msg}");
-                var estoqueExistente = CacheMP.Instance.Db.Estoque.FirstOrDefault(e => e.EstoqueId == transferenciaDto.estoqueID);
+                var estoqueExistente =db.Estoque.FirstOrDefault(e => e.EstoqueId == transferenciaDto.estoqueID);
 
                 if (estoqueExistente != null)
                 {
                     estoqueExistente.EnderecoId = endereco.EnderecoId;
-                    CacheMP.Instance.Db.SaveChanges();
+                   db.SaveChanges();
                 }
                 else
                 {
@@ -510,8 +520,8 @@ namespace MapaEstoqueCD.Services
 
 
                 };
-                CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
-                CacheMP.Instance.Db.SaveChanges();
+               db.Movimentacoes.Add(movimentacao);
+               db.SaveChanges();
 
 
                 transaction.Commit();
@@ -529,6 +539,7 @@ namespace MapaEstoqueCD.Services
         {
             try
             {
+                using var db = ContextFactory.CreateDb();
                 if (DtoValidator.Validate(pickingDto, out var erros).Any())
                 {
                     throw new Exception(string.Join("\n", erros.Select(x => "\n" + x.ErrorMessage)));
@@ -536,7 +547,8 @@ namespace MapaEstoqueCD.Services
 
                 if (pickingDto.entradaId is not null)
                 {
-                    var entrada = CacheMP.Instance.Db.Entradas.FirstOrDefault(x => x.EntradaId == pickingDto.entradaId);
+
+                    var entrada =db.Entradas.FirstOrDefault(x => x.EntradaId == pickingDto.entradaId);
 
 
                     if (entrada.EntradaId == null && pickingDto.produtos.Count ==1)
@@ -567,9 +579,9 @@ namespace MapaEstoqueCD.Services
 
 
                     };
-                    CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
+                   db.Movimentacoes.Add(movimentacao);
                 }
-                CacheMP.Instance.Db.SaveChanges();
+               db.SaveChanges();
 
                 
                 return true;

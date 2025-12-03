@@ -1,4 +1,5 @@
 ﻿using MapaEstoqueCD.Controller;
+using MapaEstoqueCD.Database.Common;
 using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Utils;
 using Microsoft.EntityFrameworkCore;
@@ -16,8 +17,8 @@ namespace MapaEstoqueCD.Services
 
         public List<MovimentacaoDto> GetAllMovime()
         {
-
-            return CacheMP.Instance.Db.Movimentacoes
+            using var db = ContextFactory.CreateDb();
+            return db.Movimentacoes
               .Include(m => m.User)
               .Include(m => m.Produto)
               .Select(m => new MovimentacaoDto
@@ -42,7 +43,8 @@ namespace MapaEstoqueCD.Services
 
         public List<MovimentacaoDto> GetAllMovimeByIdEstoque(int estoqueId)
         {
-            return CacheMP.Instance.Db.Movimentacoes
+            using var db = ContextFactory.CreateDb();
+            return db.Movimentacoes
                .Include(m => m.User)
                .Include(m => m.Produto)
                .Where( x=> x.EstoqueId == estoqueId)

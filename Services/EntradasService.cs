@@ -1,4 +1,5 @@
 ﻿using MapaEstoqueCD.Controller;
+using MapaEstoqueCD.Database.Common;
 using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Utils;
@@ -10,7 +11,8 @@ namespace MapaEstoqueCD.Services
     {
         public bool SetEntradaLivre(EntradaLvDto entradaLvDto)
         {
-            using var transaction = CacheMP.Instance.Db.Database.BeginTransaction();
+            using var db = ContextFactory.CreateDb();
+            using var transaction = db.Database.BeginTransaction();
 
             try
             {
@@ -25,7 +27,7 @@ namespace MapaEstoqueCD.Services
                     Lote = entradaLvDto.lote,
 
                 };
-                CacheMP.Instance.Db.Entradas.Add(novaEntrada);
+                db.Entradas.Add(novaEntrada);
 
                 var movimentacao = new Movimentacao
                 {
@@ -40,9 +42,9 @@ namespace MapaEstoqueCD.Services
                     Obs = entradaLvDto.obs,
 
                 };
-                CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
+                db.Movimentacoes.Add(movimentacao);
 
-                CacheMP.Instance.Db.SaveChanges();
+                db.SaveChanges();
 
                 transaction.Commit();
                 return true;
@@ -58,7 +60,8 @@ namespace MapaEstoqueCD.Services
 
         public List<EntradasViewerDto> GetAllEntradas()
         {
-            return CacheMP.Instance.Db.Entradas
+            using var db = ContextFactory.CreateDb();
+            return db.Entradas
                 .Include(e => e.User)
                 .Include(e => e.Produto)
                 .Include(e => e.Cifs)
@@ -84,18 +87,20 @@ namespace MapaEstoqueCD.Services
 
         public void SetEntradaLivreConferida(EntradasViewerDto entradaSelecionado)
         {
-            Entradas model = CacheMP.Instance.Db.Entradas.FirstOrDefault(x => x.EntradaId == entradaSelecionado.EntradaId);
+            using var db = ContextFactory.CreateDb();
+            Entradas model = db.Entradas.FirstOrDefault(x => x.EntradaId == entradaSelecionado.EntradaId);
             if (model != null)
             {
                 model.IsConf = true;
-                CacheMP.Instance.Db.SaveChanges();
+                db.SaveChanges();
             }
         }
         public bool SetEntradaLivreConferida(int id, int qtd)
         {
             try
             {
-                var model = CacheMP.Instance.Db.Entradas.FirstOrDefault(x => x.EntradaId == id);
+                using var db = ContextFactory.CreateDb();
+                var model = db.Entradas.FirstOrDefault(x => x.EntradaId == id);
 
 
 
@@ -107,7 +112,7 @@ namespace MapaEstoqueCD.Services
                 model.QtdConferida -= qtd;
                 model.IsConf = model.QtdConferida <= 0 ? true : false;
 
-                CacheMP.Instance.Db.SaveChanges();
+                db.SaveChanges();
                 return true;
 
             }
@@ -122,11 +127,12 @@ namespace MapaEstoqueCD.Services
 
         public bool SetCorrecaoEntrada(CorrecaoEntradaDto correcaoDto)
         {
-            using var transaction = CacheMP.Instance.Db.Database.BeginTransaction();
+            using var db = ContextFactory.CreateDb();
+            using var transaction = db.Database.BeginTransaction();
 
             try
             {
-                var entradaExistente = CacheMP.Instance.Db.Entradas.Include(X => X.Produto).FirstOrDefault(e => e.EntradaId == correcaoDto.conferenciaId);
+                var entradaExistente = db.Entradas.Include(X => X.Produto).FirstOrDefault(e => e.EntradaId == correcaoDto.conferenciaId);
 
                 if (entradaExistente == null)
                     throw new Exception($"Estoque não encontrado.");
@@ -138,8 +144,8 @@ namespace MapaEstoqueCD.Services
                 entradaExistente.DataF = correcaoDto.dataf.Replace(" ", "");
                 entradaExistente.SemF = correcaoDto.semf;
 
-                CacheMP.Instance.Db.Entradas.Update(entradaExistente);
-                CacheMP.Instance.Db.SaveChanges();
+                db.Entradas.Update(entradaExistente);
+                db.SaveChanges();
 
 
                 var movimentacao = new Movimentacao
@@ -156,8 +162,8 @@ namespace MapaEstoqueCD.Services
 
 
                 };
-                CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
-                CacheMP.Instance.Db.SaveChanges();
+                db.Movimentacoes.Add(movimentacao);
+                db.SaveChanges();
 
                 transaction.Commit();
                 return true;
@@ -174,12 +180,13 @@ namespace MapaEstoqueCD.Services
         {
             try
             {
+                using var db = ContextFactory.CreateDb();
 
-                var temp = CacheMP.Instance.Db.Entradas.FirstOrDefault(c => c.EntradaId == remove.EntradaId);
+                var temp = db.Entradas.FirstOrDefault(c => c.EntradaId == remove.EntradaId);
 
                 if (temp == null) { throw new Exception("Conferencia não existe."); }
 
-                CacheMP.Instance.Db.Entradas.Remove(temp);
+                db.Entradas.Remove(temp);
 
 
                 var movimentacao = new Movimentacao
@@ -195,11 +202,11 @@ namespace MapaEstoqueCD.Services
                     Obs = "REMOVIDO",
 
                 };
-                CacheMP.Instance.Db.Movimentacoes.Add(movimentacao);
+                db.Movimentacoes.Add(movimentacao);
 
-                CacheMP.Instance.Db.SaveChanges();
+                db.SaveChanges();
 
-                CacheMP.Instance.Db.SaveChanges();
+                db.SaveChanges();
             }
             catch (Exception ex)
             {

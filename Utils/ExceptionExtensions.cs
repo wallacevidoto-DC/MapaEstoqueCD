@@ -22,20 +22,21 @@ namespace MapaEstoqueCD.Utils
 
                     if (objeto != null)
                     {
-                        Type t = objeto.GetType();
-                        sw.WriteLine($"Classe: {t.Name}" + "{");
+                        GravarDetalhesPropriedades(sw, objeto, 0);
+                        //Type t = objeto.GetType();
+                        //sw.WriteLine($"Classe: {t.Name}" + "{");
 
-                        // Pega TODAS as propriedades e seus valores
-                        PropertyInfo[] props = t.GetProperties();
-                        foreach (var prop in t.GetProperties())
-                        {
-                            object? valor = prop.GetValue(objeto);
-                            string tipo = prop.PropertyType.Name; 
+                        //// Pega TODAS as propriedades e seus valores
+                        //PropertyInfo[] props = t.GetProperties();
+                        //foreach (var prop in t.GetProperties())
+                        //{
+                        //    object? valor = prop.GetValue(objeto);
+                        //    string tipo = prop.PropertyType.Name; 
 
-                            sw.WriteLine($"      {prop.Name} ({tipo}): {valor}");
-                        }
+                        //    sw.WriteLine($"      {prop.Name} ({tipo}): {valor}");
+                        //}
 
-                        sw.WriteLine("}");
+                        //sw.WriteLine("}");
                     }
 
                     sw.WriteLine("==============================================");
@@ -172,5 +173,87 @@ namespace MapaEstoqueCD.Utils
             }
         }
 
+        private static void GravarDetalhesPropriedades(StreamWriter sw, object objeto, int nivel)
+        {
+            if (objeto == null) return;
+
+            Type t = objeto.GetType();
+            string indentacao = new string(' ', nivel * 4); // 4 espaços por nível
+
+            // Se for uma string (que também é IEnumerable, mas queremos tratar como valor)
+            if (objeto is string)
+            {
+                // Se for chamado de forma recursiva, imprime o valor da string.
+                if (nivel > 0)
+                {
+                    sw.WriteLine($"{indentacao}{objeto}");
+                }
+                return;
+            }
+
+            // 💡 TRATAMENTO PRINCIPAL PARA COLEÇÕES
+            if (objeto is System.Collections.IEnumerable enumerable && !(objeto is System.Collections.IDictionary))
+            {
+                int indice = 0;
+                // Pega o tipo de argumento genérico, ex: T em List<T>
+                string nomeTipoItem = t.IsGenericType ? t.GetGenericArguments()[0].Name : t.Name.Replace("[]", "");
+
+                sw.WriteLine($"{indentacao}{t.Name} ({nomeTipoItem}) [");
+
+                foreach (var item in enumerable)
+                {
+                    if (item != null)
+                    {
+                        // Se for um tipo primitivo/simples (int, string, DateTime, etc.)
+                        if (item.GetType().IsPrimitive || item is ValueType || item is string)
+                        {
+                            sw.WriteLine($"{indentacao}  [{indice}]: {item}");
+                        }
+                        else // Se for um objeto complexo (DTO)
+                        {
+                            sw.WriteLine($"{indentacao}  [{indice}] (Tipo: {item.GetType().Name}) {{");
+                            // Chamada recursiva para inspecionar as propriedades do item
+                            GravarDetalhesPropriedades(sw, item, nivel + 1);
+                            sw.WriteLine($"{indentacao}  }}");
+                        }
+                    }
+                    else
+                    {
+                        sw.WriteLine($"{indentacao}  [{indice}]: null");
+                    }
+                    indice++;
+                }
+                sw.WriteLine($"{indentacao}]");
+                return;
+            }
+
+            // 💡 TRATAMENTO PARA OBJETOS NORMAIS (DTOs)
+            sw.WriteLine($"Classe: {t.Name}" + " {");
+
+            // Pega TODAS as propriedades e seus valores
+            PropertyInfo[] props = t.GetProperties();
+            foreach (var prop in props)
+            {
+                object? valor = prop.GetValue(objeto);
+                string tipo = prop.PropertyType.Name;
+
+                // Se o valor for null ou um tipo primitivo/simples, imprime diretamente
+                if (valor == null || prop.PropertyType.IsPrimitive || prop.PropertyType.IsValueType || prop.PropertyType == typeof(string))
+                {
+                    sw.WriteLine($"{indentacao}  {prop.Name} ({tipo}): {valor}");
+                }
+                else // Se for um objeto complexo ou uma coleção
+                {
+                    sw.Write($"{indentacao}  {prop.Name} ({tipo}): ");
+                    // Chamada recursiva para inspecionar o valor
+                    GravarDetalhesPropriedades(sw, valor, nivel + 1);
+                }
+            }
+
+            if (nivel == 0) // Fecha a chave apenas para o objeto DTO principal
+            {
+                sw.WriteLine("}");
+            }
+        }
     }
 }
