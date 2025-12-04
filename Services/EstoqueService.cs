@@ -466,16 +466,20 @@ namespace MapaEstoqueCD.Services
             {
                 throw new Exception(string.Join("\n", erros.Select(x => "\n" + x.ErrorMessage)));
             }
+
             using var db = ContextFactory.CreateDb();
-            using var transaction =db.Database.BeginTransaction();
+            using var transaction = db.Database.BeginTransaction();
 
             try
             {
-                var endereco =db.Enderecos.Local
+                // 🔥 CORREÇÃO 1: Busca endereço somente NO BANCO (não usa .Local)
+                var endereco = db.Enderecos
                     .FirstOrDefault(e =>
                         e.Rua == transferenciaDto.rua &&
                         e.Coluna == transferenciaDto.bloco &&
                         e.Palete == transferenciaDto.apt);
+
+                bool novoEnderecoAdicionado = false;
 
                 if (endereco == null)
                 {
@@ -486,23 +490,37 @@ namespace MapaEstoqueCD.Services
                         Palete = transferenciaDto.apt
                     };
                     endereco.GerarEnderecoId();
-                   db.Enderecos.Add(endereco);
-                   db.SaveChanges();
+                    db.Enderecos.Add(endereco);
+                    novoEnderecoAdicionado = true;
                 }
+
+                // 🔥 Somente salva se um novo endereço foi criado
+                if (novoEnderecoAdicionado)
+                {
+                    db.SaveChanges();
+                }
+
+                // --------------------- PRODUTO ---------------------
 
                 if (!transferenciaDto.produto.IsValid(out string msg))
                     throw new Exception($"Produto inválido: {transferenciaDto.produto.codigo} — {msg}");
-                var estoqueExistente =db.Estoque.FirstOrDefault(e => e.EstoqueId == transferenciaDto.estoqueID);
 
-                if (estoqueExistente != null)
-                {
-                    estoqueExistente.EnderecoId = endereco.EnderecoId;
-                   db.SaveChanges();
-                }
-                else
-                {
+                // 🔥 Busca estoque sem anexos indevidos
+                var estoqueExistente = db.Estoque
+                    .FirstOrDefault(e => e.EstoqueId == transferenciaDto.estoqueID);
+
+                if (estoqueExistente == null)
                     throw new Exception("Estoque ID não existe");
-                }
+
+                // ------------------- TRANSFERÊNCIA -----------------
+
+                // Atualiza o endereço do estoque
+                estoqueExistente.EnderecoId = endereco.EnderecoId;
+
+                // Não chama SaveChanges aqui — será consolidado no final
+
+
+                // ------------------- MOVIMENTAÇÃO -------------------
 
                 var movimentacao = new Movimentacao
                 {
@@ -510,19 +528,20 @@ namespace MapaEstoqueCD.Services
                     ProdutoId = transferenciaDto.produto.produtoId,
                     Tipo = transferenciaDto.tipo,
                     Quantidade = transferenciaDto.produto.quantidade,
-                    Obs = transferenciaDto.observacao + $" | S: {transferenciaDto.endOld} -> P: {endereco.EnderecoId} ",
+                    Obs = transferenciaDto.observacao +
+                          $" | S: {transferenciaDto.endOld} -> P: {endereco.EnderecoId}",
                     UserId = transferenciaDto.userId,
                     DataF = transferenciaDto.produto.dataf,
                     SemF = transferenciaDto.produto.semf,
                     Lote = transferenciaDto.produto.lote,
                     Endereco = endereco.EnderecoId,
                     DataL = transferenciaDto.dataEntrada
-
-
                 };
-               db.Movimentacoes.Add(movimentacao);
-               db.SaveChanges();
 
+                db.Movimentacoes.Add(movimentacao);
+
+                // 🔥 SAVECHANGES CONSOLIDADO — apenas 1 vez
+                db.SaveChanges();
 
                 transaction.Commit();
                 return true;
@@ -534,6 +553,7 @@ namespace MapaEstoqueCD.Services
                 return false;
             }
         }
+
 
         public bool SetPicking(PickingDto pickingDto)
         {
