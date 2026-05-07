@@ -1,4 +1,4 @@
-﻿using MapaEstoqueCD.Database.Dto;
+using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Services;
 using MapaEstoqueCD.Utils;
 using MapaEstoqueCD.View.Modal;
@@ -45,13 +45,12 @@ namespace MapaEstoqueCD.Controller
             {
                 entradaLvDto.userId = CacheMP.Instance.UserCurrent.UserId;
                 entradasService.SetEntradaLivre(entradaLvDto);
+                return true;
             }
             catch (Exception)
             {
-
-                throw;
-            }
                 return false;
+            }
         }
 
         public List<EntradasViewerDto>? AllGetEntradas(ref DataGridView datagrid)
@@ -68,6 +67,7 @@ namespace MapaEstoqueCD.Controller
                     p.ProdutoCodigo,
                     p.ProdutoDescricao,
                     p.Tipo,
+                    p.CifsNome,
                     p.QtdConferida,
                     p.QtdEntrada,
                     DataFormatter.FormatarMesAno(p.DataF),
@@ -257,6 +257,7 @@ namespace MapaEstoqueCD.Controller
                     p.ProdutoCodigo,
                     p.ProdutoDescricao,
                     p.Tipo,
+                    p.CifsNome,
                     p.QtdConferida,
                     p.QtdEntrada,
                     DataFormatter.FormatarMesAno(p.DataF),

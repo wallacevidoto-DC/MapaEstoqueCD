@@ -1,9 +1,9 @@
-﻿using MapaEstoqueCD.Controller;
+using MapaEstoqueCD.Controller;
 using MapaEstoqueCD.Database.Common;
 using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Utils;
-using System.Data.Entity;
+using Microsoft.EntityFrameworkCore;
 
 namespace MapaEstoqueCD.Services
 {
@@ -57,7 +57,7 @@ namespace MapaEstoqueCD.Services
                 return false;
             }
         }
-
+ 
         public List<EntradasViewerDto> GetAllEntradas()
         {
             using var db = ContextFactory.CreateDb();
@@ -70,6 +70,7 @@ namespace MapaEstoqueCD.Services
                 {
                     EntradaId = e.EntradaId,
                     Tipo = e.Tipo,
+                    CifsNome= e.Cifs.CifCod,
                     ProdutoId = e.ProdutoId,
                     UserNome = e.User != null ? e.User.Name : null,
                     ProdutoCodigo = e.Produto != null ? e.Produto.Codigo : null,
@@ -100,11 +101,9 @@ namespace MapaEstoqueCD.Services
             try
             {
                 using var db = ContextFactory.CreateDb();
-                var model = db.Entradas.FirstOrDefault(x => x.EntradaId == id);
+                var model = db.Entradas.Include(x=> x.Produto).FirstOrDefault(x => x.EntradaId == id);
 
-
-
-                if (model == null && model.Produto == null)
+                if (model == null || model.Produto == null)
                 {
                     throw new Exception("Id do picking não foi passado");
                 }
@@ -132,7 +131,7 @@ namespace MapaEstoqueCD.Services
 
             try
             {
-                var entradaExistente = db.Entradas.Include(X => X.Produto).FirstOrDefault(e => e.EntradaId == correcaoDto.conferenciaId);
+                var entradaExistente = db.Entradas.Include(X => X.Produto).Include(x => x.Cifs).FirstOrDefault(e => e.EntradaId == correcaoDto.conferenciaId);
 
                 if (entradaExistente == null)
                     throw new Exception($"Estoque não encontrado.");
@@ -144,13 +143,31 @@ namespace MapaEstoqueCD.Services
                 entradaExistente.DataF = correcaoDto.dataf.Replace(" ", "");
                 entradaExistente.SemF = correcaoDto.semf;
 
+                // Atualizar CIF se fornecido
+                if (!string.IsNullOrWhiteSpace(correcaoDto.cifName))
+                {
+                    var cif = db.Cifs.FirstOrDefault(c => c.CifCod == correcaoDto.cifName);
+                    if (cif == null)
+                    {
+                        cif = new Cifs
+                        {
+                            CifCod = correcaoDto.cifName,
+                            CreateAt = DateTime.Now,
+                            UpdateAt = DateTime.Now
+                        };
+                        db.Cifs.Add(cif);
+                        db.SaveChanges();
+                    }
+                    entradaExistente.CifsId = cif.CifId;
+                }
+
                 db.Entradas.Update(entradaExistente);
                 db.SaveChanges();
 
 
                 var movimentacao = new Movimentacao
                 {
-                    ProdutoId = entradaExistente.Produto.ProdutoId,
+                    ProdutoId = entradaExistente.ProdutoId,
                     Tipo = correcaoDto.tipo,
                     Quantidade = correcaoDto.qtd_conferida,
                     Obs = Obs,
@@ -171,8 +188,7 @@ namespace MapaEstoqueCD.Services
             catch (Exception ex)
             {
                 transaction.Rollback();
-                throw ex;
-                return false;
+                throw;
             }
         }
 
@@ -191,7 +207,7 @@ namespace MapaEstoqueCD.Services
 
                 var movimentacao = new Movimentacao
                 {
-                    ProdutoId = temp.Produto.ProdutoId,
+                    ProdutoId = temp.ProdutoId,
                     Tipo = "RM. CONFERÊNCIA",
                     Quantidade = (int)temp.QtdConferida,
                     UserId = CacheMP.Instance.UserCurrent.UserId,
@@ -203,8 +219,6 @@ namespace MapaEstoqueCD.Services
 
                 };
                 db.Movimentacoes.Add(movimentacao);
-
-                db.SaveChanges();
 
                 db.SaveChanges();
             }

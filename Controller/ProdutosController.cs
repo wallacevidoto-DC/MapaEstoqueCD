@@ -1,4 +1,4 @@
-﻿using MapaEstoqueCD.Database.Models;
+using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Services;
 using MapaEstoqueCD.Utils;
 using MapaEstoqueCD.Utils.Excel;
@@ -24,19 +24,19 @@ namespace MapaEstoqueCD.Controller
                 new ColumnConfig("COFINS", nameof(Produtos.Cofins)),
                 new ColumnConfig("Shelf Life", nameof(Produtos.ShelfLife)),
                 new ColumnConfig("EAN-13", nameof(Produtos.UCodigoBarras)),
-                new ColumnConfig("C(cm) Unit", nameof(Produtos.UC),false),
-                new ColumnConfig("L(cm) Unit", nameof(Produtos.UL),false),
-                new ColumnConfig("D(cm) Unit", nameof(Produtos.UD),false),
-                new ColumnConfig("H(cm) Unit", nameof(Produtos.UH),false),
-                new ColumnConfig("Peso Líquido (Unit)", nameof(Produtos.UPesoLiquido),false),
-                new ColumnConfig("Peso Bruto (Unit)", nameof(Produtos.UPesoBruto),false),
+                new ColumnConfig("C(cm) Unit", nameof(Produtos.UC)),
+                new ColumnConfig("L(cm) Unit", nameof(Produtos.UL)),
+                new ColumnConfig("D(cm) Unit", nameof(Produtos.UD)),
+                new ColumnConfig("H(cm) Unit", nameof(Produtos.UH)),
+                new ColumnConfig("Peso Líquido (Unit)", nameof(Produtos.UPesoLiquido)),
+                new ColumnConfig("Peso Bruto (Unit)", nameof(Produtos.UPesoBruto)),
                 new ColumnConfig("DUN-13", nameof(Produtos.DCodigoBarras)),
-                new ColumnConfig("Qtd/Unidade", nameof(Produtos.DQtd), false),
-                new ColumnConfig("C(cm) Caixa", nameof(Produtos.DC), false),
-                new ColumnConfig("L(cm) Caixa", nameof(Produtos.DL), false),
-                new ColumnConfig("H(cm) Caixa", nameof(Produtos.DH), false),
-                new ColumnConfig("Peso Líquido (Caixa)", nameof(Produtos.DPesoLiquido), false),
-                new ColumnConfig("Peso Bruto (Caixa)", nameof(Produtos.DPesoBruto), false),
+                new ColumnConfig("Qtd/Unidade", nameof(Produtos.DQtd)),
+                new ColumnConfig("C(cm) Caixa", nameof(Produtos.DC)),
+                new ColumnConfig("L(cm) Caixa", nameof(Produtos.DL)),
+                new ColumnConfig("H(cm) Caixa", nameof(Produtos.DH)),
+                new ColumnConfig("Peso Líquido (Caixa)", nameof(Produtos.DPesoLiquido)),
+                new ColumnConfig("Peso Bruto (Caixa)", nameof(Produtos.DPesoBruto)),
                 new ColumnConfig("DUN-14", nameof(Produtos.CCodigoBarras)),
                 new ColumnConfig("Qtd/Caixa", nameof(Produtos.CQtd)),
                 new ColumnConfig("C(cm) Palet", nameof(Produtos.CC)),
@@ -58,6 +58,13 @@ namespace MapaEstoqueCD.Controller
             return produtos;
         }
 
+        public List<Produtos> GetAllProduct(ref DataGridView dataGridView)
+        {
+            var produtos = CacheMP.Instance.Db.Produtos.ToList();
+            PopularDataGridView(produtos, ref dataGridView);
+            return produtos;
+        }
+
         public List<Produtos> GetProductByFilter(List<FiltroItem> filtros, ref ListView listView)
         {
             if (filtros == null || !filtros.Any())
@@ -65,6 +72,16 @@ namespace MapaEstoqueCD.Controller
 
             var produtos = _produtoService.GetProdutosByFilter(filtros);
             PopularListView(produtos, ref listView);
+            return produtos;
+        }
+
+        public List<Produtos> GetProductByFilter(List<FiltroItem> filtros, ref DataGridView dataGridView)
+        {
+            if (filtros == null || !filtros.Any())
+                return GetAllProduct(ref dataGridView);
+
+            var produtos = _produtoService.GetProdutosByFilter(filtros);
+            PopularDataGridView(produtos, ref dataGridView);
             return produtos;
         }
 
@@ -118,6 +135,62 @@ namespace MapaEstoqueCD.Controller
             }
 
             listView.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
+        }
+
+        private void PopularDataGridView(List<Produtos> produtos, ref DataGridView dataGridView)
+        {
+            dataGridView.Rows.Clear();
+            dataGridView.Columns.Clear();
+
+            var columns = Columns.Where(c => c.Visivel).ToList();
+            foreach (var col in columns)
+            {
+                dataGridView.Columns.Add(new DataGridViewTextBoxColumn
+                {
+                    HeaderText = col.Titulo,
+                    Name = col.Propriedade,
+                    ReadOnly = true
+                });
+            }
+
+            foreach (var p in produtos)
+            {
+                var values = columns.Select(c =>
+                {
+                    object? val = null;
+                    if (c.Propriedade.Contains("."))
+                    {
+                        var parts = c.Propriedade.Split('.');
+                        object? currentObj = p;
+                        foreach (var part in parts)
+                        {
+                            if (currentObj == null) break;
+                            var prop = currentObj.GetType().GetProperty(part);
+                            currentObj = prop?.GetValue(currentObj);
+                        }
+                        val = currentObj;
+                    }
+                    else
+                    {
+                        var prop = typeof(Produtos).GetProperty(c.Propriedade);
+                        val = prop?.GetValue(p);
+                    }
+
+                    // Format percentages for specific columns
+                    if (c.Propriedade == nameof(Produtos.Ipi) || 
+                        c.Propriedade == nameof(Produtos.Pis) || 
+                        c.Propriedade == nameof(Produtos.Cofins))
+                    {
+                        if (val is decimal num)
+                            return (num * 100).ToString("0.##") + "%";
+                        return "0%";
+                    }
+
+                    return val?.ToString() ?? "";
+                }).ToArray();
+
+                dataGridView.Rows.Add(values);
+            }
         }
 
         public Produtos GetByCod(string id) => _produtoService.ObterPorCod(id);

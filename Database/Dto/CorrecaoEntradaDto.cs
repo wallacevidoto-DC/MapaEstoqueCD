@@ -28,5 +28,8 @@ namespace MapaEstoqueCD.Database.Dto
 
         [Required(ErrorMessage = "O lote é obrigatório.")]
         public string lote { get; set; }
+
+        [Required(ErrorMessage = "O campo de observação é obrigatório.")]
+        public string cifName { get; set; }
     }
 }

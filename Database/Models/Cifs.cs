@@ -12,19 +12,8 @@ namespace MapaEstoqueCD.Database.Models
         [Column("cifId")]
         public int CifId { get; set; }
 
-        [Column("date")]
-        public DateTime? Date { get; set; }
-
-        [Column("cirt")]
-        public string Cirt { get; set; }
-
-        [Column("produtoId")]
-        public int? ProdutoId { get; set; }
-
-        public Produtos Produto { get; set; }
-
-        [Column("qtd")]
-        public int? Qtd { get; set; }
+        [Column("cifCod")]
+        public string CifCod { get; set; }
 
         [Column("create_at")]
         public DateTime? CreateAt { get; set; }

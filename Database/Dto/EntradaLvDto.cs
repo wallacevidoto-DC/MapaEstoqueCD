@@ -1,4 +1,4 @@
-﻿using MapaEstoqueCD.WebSocketActive.Dto;
+using MapaEstoqueCD.WebSocketActive.Dto;
 using System.ComponentModel.DataAnnotations;
 
 namespace MapaEstoqueCD.Database.Dto

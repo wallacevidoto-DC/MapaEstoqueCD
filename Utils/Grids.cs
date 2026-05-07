@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -169,6 +169,50 @@ namespace MapaEstoqueCD.Utils
                 Color.Black,
                 TextFormatFlags.Left | TextFormatFlags.VerticalCenter
             );
+        }
+
+        public static void SetDefaultDataGridView(ref DataGridView dataGridView, DataGridViewAutoSizeColumnsMode autoSizeMenu = DataGridViewAutoSizeColumnsMode.AllCells)
+        {
+            dataGridView.AllowUserToAddRows = false;
+            dataGridView.AllowUserToDeleteRows = false;
+            dataGridView.AllowUserToResizeRows = false;
+            
+            DataGridViewCellStyle alternatingStyle = new DataGridViewCellStyle();
+            alternatingStyle.BackColor = SystemColors.ButtonFace;
+            dataGridView.AlternatingRowsDefaultCellStyle = alternatingStyle;
+            
+            dataGridView.AutoSizeColumnsMode = autoSizeMenu;
+            dataGridView.BackgroundColor = SystemColors.ButtonHighlight;
+            
+            DataGridViewCellStyle headerStyle = new DataGridViewCellStyle();
+            headerStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            headerStyle.BackColor = Color.FromArgb(50, 50, 70);
+            headerStyle.Font = new Font("Segoe UI", 9F);
+            headerStyle.ForeColor = Color.White;
+            headerStyle.SelectionBackColor = SystemColors.Highlight;
+            headerStyle.SelectionForeColor = SystemColors.HighlightText;
+            headerStyle.WrapMode = DataGridViewTriState.True;
+            dataGridView.ColumnHeadersDefaultCellStyle = headerStyle;
+            
+            dataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            
+            DataGridViewCellStyle defaultCellStyle = new DataGridViewCellStyle();
+            defaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
+            defaultCellStyle.BackColor = Color.White;
+            defaultCellStyle.Font = new Font("Segoe UI", 9F);
+            defaultCellStyle.ForeColor = Color.Black;
+            defaultCellStyle.SelectionBackColor = Color.LightGray;
+            defaultCellStyle.SelectionForeColor = Color.Black;
+            defaultCellStyle.WrapMode = DataGridViewTriState.False;
+            dataGridView.DefaultCellStyle = defaultCellStyle;
+            
+            dataGridView.Dock = DockStyle.Fill;
+            dataGridView.EnableHeadersVisualStyles = false;
+            dataGridView.GridColor = SystemColors.ScrollBar;
+            dataGridView.ReadOnly = true;
+            dataGridView.RowHeadersVisible = false;
+            dataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dataGridView.MultiSelect = false;
         }
 
         public static void AutoResizeColumnsFill(ListView listView)

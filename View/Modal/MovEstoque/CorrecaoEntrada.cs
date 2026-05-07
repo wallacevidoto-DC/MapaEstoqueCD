@@ -1,10 +1,9 @@
-﻿using MapaEstoqueCD.Controller;
+using MapaEstoqueCD.Controller;
 using MapaEstoqueCD.Database;
 using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Database.Dto.modal;
 using MapaEstoqueCD.Utils;
 using Microsoft.EntityFrameworkCore;
-using System.Data.Entity;
 
 namespace MapaEstoqueCD.View.Modal
 {
@@ -29,28 +28,33 @@ namespace MapaEstoqueCD.View.Modal
             maskedTextBox_datef.Clear();
             textBox_semf.Clear();
             textBox_lote.Clear();
+            textBox_cif.Clear();
 
             if (estoqueWsDto is not null)
             {
-                var ent = CacheMP.Instance.Db.Entradas.FirstOrDefault(e => e.EntradaId == estoqueWsDto.conferenciaId);
+                var ent = CacheMP.Instance.Db.Entradas
+                    .Include(e => e.Produto)
+                    .Include(e => e.Cifs)
+                    .FirstOrDefault(e => e.EntradaId == estoqueWsDto.conferenciaId);
+
+                if (ent is null)
+                {
+                    MessageBox.Show("Entrada não encontrada");
+                    return;
+                }
 
                 if (ent.Produto is null)
                 {
                     ent.Produto = CacheMP.Instance.Db.Produtos.FirstOrDefault(e => e.ProdutoId == ent.ProdutoId);
                 }
 
-
-                if (ent is null)
-                {
-                    MessageBox.Show("Erro");
-                    return;
-                }
-                textBox_cod.Text = ent.Produto.Codigo;
-                textBox_decricao.Text = ent.Produto.Descricao;
+                textBox_cod.Text = ent.Produto?.Codigo ?? "";
+                textBox_decricao.Text = ent.Produto?.Descricao ?? "";
                 textBox_qtd.Text = estoqueWsDto.qtd_conferida.ToString();
                 maskedTextBox_datef.Text = DataFormatter.FormatarData(estoqueWsDto.dataf);
                 textBox_semf.Text = estoqueWsDto.semf.ToString();
-                textBox_lote.Text = estoqueWsDto.lote; ;
+                textBox_lote.Text = estoqueWsDto.lote;
+                textBox_cif.Text = ent.Cifs?.CifCod ?? "";
 
                 //dto = new ProdutoSpDto
                 //{
@@ -85,7 +89,8 @@ namespace MapaEstoqueCD.View.Modal
                 qtd_conferida = Convert.ToInt32(textBox_qtd.Text),
                 dataf = maskedTextBox_datef.Text,
                 semf = Convert.ToInt32(textBox_semf.Text),
-                lote = textBox_lote.Text
+                lote = textBox_lote.Text,
+                cifName = textBox_cif.Text
             }))
             {
                 MessageBox.Show("Correção realizada com sucesso!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);

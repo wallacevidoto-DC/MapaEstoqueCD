@@ -1,4 +1,4 @@
-﻿using MapaEstoqueCD.Utils;
+using MapaEstoqueCD.Utils;
 using MapaEstoqueCD.View.Modal.Controls;
 using System.Data;
 
@@ -68,8 +68,10 @@ namespace MapaEstoqueCD.View.Modal
                 {
                     lista.Add(new FiltroItem
                     {
-                        Coluna = filtro.SelectedProperty,
-                        Valor = filtro.InputText
+                        Coluna = filtro.SelectedItem,
+                        Valor = filtro.InputText,
+                        Tabela = filtro.SelectedProperty,
+                        Tipo = "contém"
                     });
                 }
             }
@@ -92,8 +94,10 @@ namespace MapaEstoqueCD.View.Modal
                 {
                     lista.Add(new FiltroItem
                     {
-                        Coluna = filtro.SelectedProperty,
-                        Valor = filtro.InputText
+                        Coluna = filtro.SelectedItem,
+                        Valor = filtro.InputText,
+                        Tabela = filtro.SelectedProperty,
+                        Tipo = "contém"
                     });
                 }
             }

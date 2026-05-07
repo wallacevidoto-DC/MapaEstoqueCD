@@ -30,6 +30,8 @@
         {
             button_salvar = new Button();
             groupBox2 = new GroupBox();
+            groupBox9 = new GroupBox();
+            textBox_cif = new TextBox();
             groupBox8 = new GroupBox();
             textBox_lote = new TextBox();
             groupBox6 = new GroupBox();
@@ -44,6 +46,7 @@
             groupBox3 = new GroupBox();
             textBox_cod = new TextBox();
             groupBox2.SuspendLayout();
+            groupBox9.SuspendLayout();
             groupBox8.SuspendLayout();
             groupBox6.SuspendLayout();
             groupBox7.SuspendLayout();
@@ -59,7 +62,7 @@
             button_salvar.FlatAppearance.BorderSize = 0;
             button_salvar.FlatStyle = FlatStyle.Flat;
             button_salvar.Image = Properties.Resources.salve;
-            button_salvar.Location = new Point(312, 349);
+            button_salvar.Location = new Point(312, 415);
             button_salvar.Name = "button_salvar";
             button_salvar.Size = new Size(103, 103);
             button_salvar.TabIndex = 5;
@@ -70,21 +73,43 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(groupBox9);
             groupBox2.Controls.Add(groupBox8);
             groupBox2.Controls.Add(groupBox6);
             groupBox2.Controls.Add(groupBox7);
             groupBox2.Controls.Add(groupBox5);
             groupBox2.Location = new Point(12, 207);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(403, 142);
+            groupBox2.Size = new Size(403, 202);
             groupBox2.TabIndex = 0;
             groupBox2.TabStop = false;
             groupBox2.Text = "Informações";
             // 
+            // groupBox9
+            // 
+            groupBox9.Controls.Add(textBox_cif);
+            groupBox9.Location = new Point(123, 22);
+            groupBox9.Name = "groupBox9";
+            groupBox9.Size = new Size(133, 53);
+            groupBox9.TabIndex = 4;
+            groupBox9.TabStop = false;
+            groupBox9.Text = "CIF";
+            // 
+            // textBox_cif
+            // 
+            textBox_cif.Dock = DockStyle.Fill;
+            textBox_cif.Font = new Font("Segoe UI", 9F);
+            textBox_cif.Location = new Point(3, 19);
+            textBox_cif.Multiline = true;
+            textBox_cif.Name = "textBox_cif";
+            textBox_cif.Size = new Size(127, 31);
+            textBox_cif.TabIndex = 0;
+            textBox_cif.TextAlign = HorizontalAlignment.Center;
+            // 
             // groupBox8
             // 
             groupBox8.Controls.Add(textBox_lote);
-            groupBox8.Location = new Point(201, 81);
+            groupBox8.Location = new Point(203, 140);
             groupBox8.Name = "groupBox8";
             groupBox8.Size = new Size(133, 53);
             groupBox8.TabIndex = 3;
@@ -105,7 +130,7 @@
             // groupBox6
             // 
             groupBox6.Controls.Add(maskedTextBox_datef);
-            groupBox6.Location = new Point(201, 22);
+            groupBox6.Location = new Point(203, 81);
             groupBox6.Name = "groupBox6";
             groupBox6.Size = new Size(133, 53);
             groupBox6.TabIndex = 1;
@@ -127,7 +152,7 @@
             // groupBox7
             // 
             groupBox7.Controls.Add(textBox_semf);
-            groupBox7.Location = new Point(62, 81);
+            groupBox7.Location = new Point(64, 140);
             groupBox7.Name = "groupBox7";
             groupBox7.Size = new Size(133, 53);
             groupBox7.TabIndex = 2;
@@ -149,7 +174,7 @@
             // groupBox5
             // 
             groupBox5.Controls.Add(textBox_qtd);
-            groupBox5.Location = new Point(62, 22);
+            groupBox5.Location = new Point(64, 81);
             groupBox5.Name = "groupBox5";
             groupBox5.Size = new Size(133, 53);
             groupBox5.TabIndex = 0;
@@ -230,7 +255,7 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.FromArgb(248, 250, 255);
-            ClientSize = new Size(427, 462);
+            ClientSize = new Size(427, 524);
             Controls.Add(button_salvar);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
@@ -242,6 +267,8 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Correção Entrada";
             groupBox2.ResumeLayout(false);
+            groupBox9.ResumeLayout(false);
+            groupBox9.PerformLayout();
             groupBox8.ResumeLayout(false);
             groupBox8.PerformLayout();
             groupBox6.ResumeLayout(false);
@@ -275,5 +302,7 @@
         private GroupBox groupBox3;
         private TextBox textBox_cod;
         private MaskedTextBox maskedTextBox_datef;
+        private GroupBox groupBox9;
+        private TextBox textBox_cif;
     }
 }

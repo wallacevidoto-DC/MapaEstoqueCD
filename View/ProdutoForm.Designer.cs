@@ -1,4 +1,4 @@
-﻿namespace MapaEstoqueCD.View
+namespace MapaEstoqueCD.View
 {
     partial class ProdutoForm
     {
@@ -44,12 +44,13 @@
             toolStripSeparator4 = new ToolStripSeparator();
             panel1 = new Panel();
             panel3 = new Panel();
-            listView1 = new ListView();
+            dataGridView1 = new DataGridView();
             contextMenuStrip1 = new ContextMenuStrip(components);
             editarToolStripMenuItem = new ToolStripMenuItem();
             toolStrip1.SuspendLayout();
             panel1.SuspendLayout();
             panel3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
@@ -191,22 +192,23 @@
             // 
             // panel3
             // 
-            panel3.Controls.Add(listView1);
+            panel3.Controls.Add(dataGridView1);
             panel3.Dock = DockStyle.Fill;
             panel3.Location = new Point(0, 0);
             panel3.Name = "panel3";
             panel3.Size = new Size(901, 633);
             panel3.TabIndex = 1;
             // 
-            // listView1
+            // dataGridView1
             // 
-            listView1.ContextMenuStrip = contextMenuStrip1;
-            listView1.Dock = DockStyle.Fill;
-            listView1.Location = new Point(0, 0);
-            listView1.Name = "listView1";
-            listView1.Size = new Size(901, 633);
-            listView1.TabIndex = 0;
-            listView1.UseCompatibleStateImageBehavior = false;
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.ContextMenuStrip = contextMenuStrip1;
+            dataGridView1.Dock = DockStyle.Fill;
+            dataGridView1.Location = new Point(0, 0);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.Size = new Size(901, 633);
+            dataGridView1.TabIndex = 0;
+            dataGridView1.MouseDown += dataGridView1_MouseDown;
             // 
             // contextMenuStrip1
             // 
@@ -237,6 +239,7 @@
             toolStrip1.PerformLayout();
             panel1.ResumeLayout(false);
             panel3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
@@ -257,7 +260,7 @@
         private ToolStripMenuItem pDFToolStripMenuItem;
         private ToolStripMenuItem eXCELToolStripMenuItem;
         private Panel panel3;
-        private ListView listView1;
+        private DataGridView dataGridView1;
         private Panel panel2;
         private Button button1;
         private ToolStripButton toolStripButton_filtrar;

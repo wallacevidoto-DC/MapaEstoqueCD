@@ -22,7 +22,7 @@ namespace MapaEstoqueCD.Database.Models
         
 
         [ForeignKey("ProdutoId")]
-        public Produtos? Produto { get; set; }
+        public Produtos Produto { get; set; }
 
         [Column("qtd_conferida")]
         public int? QtdConferida { get; set; }
@@ -32,7 +32,7 @@ namespace MapaEstoqueCD.Database.Models
 
         [Column("cifsId")]
         public int? CifsId { get; set; }
-        public Cifs Cifs { get; set; }
+        public Cifs? Cifs { get; set; }
 
 
         [Column("lote")]
