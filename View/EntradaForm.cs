@@ -156,5 +156,10 @@ namespace MapaEstoqueCD.View
                 return null;
             }
         }
+
+        private void toolStripButton_cif_Click(object sender, EventArgs e)
+        {
+            new CifForm().ShowDialog();
+        }
     }
 }
