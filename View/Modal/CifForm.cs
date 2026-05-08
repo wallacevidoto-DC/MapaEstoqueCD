@@ -1,8 +1,5 @@
 using MapaEstoqueCD.Controller;
 using MapaEstoqueCD.Database.Models;
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace MapaEstoqueCD.View.Modal
 {
@@ -26,7 +23,7 @@ namespace MapaEstoqueCD.View.Modal
             {
                 dataGridView1.Rows.Add(cif.CifId, cif.CifCod, cif.CreateAt?.ToString("dd/MM/yyyy HH:mm"));
             }
-            
+
             textBox_cod.Clear();
             _currentCifId = 0;
         }

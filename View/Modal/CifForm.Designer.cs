@@ -94,6 +94,7 @@ namespace MapaEstoqueCD.View.Modal
             // textBox_cod
             // 
             textBox_cod.BackColor = Color.White;
+            textBox_cod.CharacterCasing = CharacterCasing.Upper;
             textBox_cod.Dock = DockStyle.Left;
             textBox_cod.Font = new Font("Segoe UI", 40F);
             textBox_cod.Location = new Point(3, 19);

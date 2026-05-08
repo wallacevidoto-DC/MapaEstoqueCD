@@ -97,6 +97,7 @@
             // 
             // textBox_cif
             // 
+            textBox_cif.CharacterCasing = CharacterCasing.Upper;
             textBox_cif.Dock = DockStyle.Fill;
             textBox_cif.Font = new Font("Segoe UI", 9F);
             textBox_cif.Location = new Point(3, 19);

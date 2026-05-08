@@ -69,7 +69,7 @@ namespace MapaEstoqueCD.Controller
                     p.Tipo,
                     p.CifsNome,
                     p.QtdConferida,
-                    p.QtdEntrada,
+                    //p.QtdEntrada,
                     DataFormatter.FormatarMesAno(p.DataF),
                     p.SemF,
                     p.Lote,
@@ -259,7 +259,7 @@ namespace MapaEstoqueCD.Controller
                     p.Tipo,
                     p.CifsNome,
                     p.QtdConferida,
-                    p.QtdEntrada,
+                    //p.QtdEntrada,
                     DataFormatter.FormatarMesAno(p.DataF),
                     p.SemF,
                     p.Lote,
@@ -286,5 +286,6 @@ namespace MapaEstoqueCD.Controller
         {
             entradasService.RemoveConferencia(entradaSelecionado);
         }
+
     }
 }

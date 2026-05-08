@@ -11,6 +11,7 @@ namespace MapaEstoqueCD.View.Modal
     {
         private readonly CorrecaoEntradaDto entrdaCDto;
         private readonly EntradasControllers entradaController = new();
+        private readonly CifsController cifsController = new();
         private ProdutoSpDto dto;
         public CorrecaoEntrada(CorrecaoEntradaDto estoqueWsDto)
         {
@@ -83,6 +84,30 @@ namespace MapaEstoqueCD.View.Modal
             //    return;
             //}
 
+            string cifNome = textBox_cif.Text.Trim();
+            if (!string.IsNullOrWhiteSpace(cifNome))
+            {
+                if (!cifsController.ValidarFormatoCif(cifNome))
+                {
+                    MessageBox.Show("O código da CIF deve seguir o padrão A000/YY (Ex: A001/26).", "Padrão Inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (!cifsController.ExisteCif(cifNome))
+                {
+                    var result = MessageBox.Show($"A CIF '{cifNome}' não existe. Deseja criar uma nova CIF automaticamente seguindo o padrão?", "CIF Inexistente", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        cifNome = cifsController.CreateNextCif();
+                        textBox_cif.Text = cifNome;
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+            }
+
             if (entradaController.SetCorrecaoEntrada(new CorrecaoEntradaDto
             {
                 conferenciaId = entrdaCDto.conferenciaId,
@@ -90,7 +115,7 @@ namespace MapaEstoqueCD.View.Modal
                 dataf = maskedTextBox_datef.Text,
                 semf = Convert.ToInt32(textBox_semf.Text),
                 lote = textBox_lote.Text,
-                cifName = textBox_cif.Text
+                cifName = cifNome
             }))
             {
                 MessageBox.Show("Correção realizada com sucesso!", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);

@@ -1,8 +1,6 @@
 using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Services;
-using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
+using System.Text.RegularExpressions;
 
 namespace MapaEstoqueCD.Controller
 {
@@ -20,6 +18,12 @@ namespace MapaEstoqueCD.Controller
             if (string.IsNullOrWhiteSpace(cod))
             {
                 MessageBox.Show("O código da CIF não pode estar vazio.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (!ValidarFormatoCif(cod))
+            {
+                MessageBox.Show("O código da CIF deve seguir o padrão A000/YY (Ex: A001/26).", "Padrão Inválido", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
@@ -69,7 +73,7 @@ namespace MapaEstoqueCD.Controller
                     {
                         int indexBarra = cod.IndexOf('/');
                         string numeroParte = "";
-                        
+
                         if (indexBarra > 1)
                         {
                             numeroParte = cod.Substring(1, indexBarra - 1);
@@ -92,6 +96,25 @@ namespace MapaEstoqueCD.Controller
             }
 
             return $"A{proximoNumero:D3}/{anoAtual}";
+        }
+
+        public string CreateNextCif()
+        {
+            string novoCod = GerarProximoCif();
+            Cifs cif = new Cifs { CifCod = novoCod };
+            _cifsService.Salvar(cif);
+            return novoCod;
+        }
+
+        public bool ExisteCif(string cod)
+        {
+            return _cifsService.ExisteCif(cod);
+        }
+
+        public bool ValidarFormatoCif(string cod)
+        {
+            if (string.IsNullOrWhiteSpace(cod)) return false;
+            return Regex.IsMatch(cod, @"^A\d{3}/\d{2}$");
         }
     }
 }

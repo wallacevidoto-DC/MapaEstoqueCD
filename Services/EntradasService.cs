@@ -76,7 +76,7 @@ namespace MapaEstoqueCD.Services
                     ProdutoCodigo = e.Produto != null ? e.Produto.Codigo : null,
                     ProdutoDescricao = e.Produto != null ? e.Produto.Descricao : null,
                     QtdConferida = e.QtdConferida,
-                    QtdEntrada = e.QtdEntrada,
+                    //QtdEntrada = e.QtdEntrada,
                     Lote = e.Lote,
                     DataF = e.DataF,
                     SemF = e.SemF,
@@ -136,7 +136,7 @@ namespace MapaEstoqueCD.Services
                 if (entradaExistente == null)
                     throw new Exception($"Estoque não encontrado.");
 
-                string Obs = $"Correção: (Q:{entradaExistente.QtdConferida} - DF:{DataFormatter.FormatarData(entradaExistente.DataF)} - SF:{entradaExistente.SemF} - LT:{entradaExistente.Lote} )";
+                string Obs = $"Correção: (Q:{entradaExistente.QtdConferida} - DF:{DataFormatter.FormatarData(entradaExistente.DataF)} - SF:{entradaExistente.SemF} - LT:{entradaExistente.Lote} - CIF:{correcaoDto.cifName} )";
 
                 entradaExistente.QtdConferida = correcaoDto.qtd_conferida;
                 entradaExistente.Lote = correcaoDto.lote;
@@ -147,18 +147,10 @@ namespace MapaEstoqueCD.Services
                 if (!string.IsNullOrWhiteSpace(correcaoDto.cifName))
                 {
                     var cif = db.Cifs.FirstOrDefault(c => c.CifCod == correcaoDto.cifName);
-                    if (cif == null)
+                    if (cif != null)
                     {
-                        cif = new Cifs
-                        {
-                            CifCod = correcaoDto.cifName,
-                            CreateAt = DateTime.Now,
-                            UpdateAt = DateTime.Now
-                        };
-                        db.Cifs.Add(cif);
-                        db.SaveChanges();
+                        entradaExistente.CifsId = cif.CifId;
                     }
-                    entradaExistente.CifsId = cif.CifId;
                 }
 
                 db.Entradas.Update(entradaExistente);
@@ -227,5 +219,6 @@ namespace MapaEstoqueCD.Services
                 throw;
             }
         }
+
     }
 }
