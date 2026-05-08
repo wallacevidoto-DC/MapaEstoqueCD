@@ -37,7 +37,7 @@ namespace MapaEstoqueCD.View.Modal
             {
                 _cifsController.SaveCif(textBox_cod.Text, _currentCifId);
                 LoadData();
-                MessageBox.Show("CIF salva com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //MessageBox.Show("CIF salva com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {

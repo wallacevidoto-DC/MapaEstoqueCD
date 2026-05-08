@@ -49,6 +49,7 @@ namespace MapaEstoqueCD.Controller
             }
 
             _cifsService.Salvar(cif);
+            MessageBox.Show("CIF salva com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         public string GerarProximoCif()
