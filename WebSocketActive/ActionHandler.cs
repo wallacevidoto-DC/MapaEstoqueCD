@@ -1,4 +1,4 @@
-﻿using MapaEstoqueCD.Controller;
+using MapaEstoqueCD.Controller;
 using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Database.Dto.modal;
 using MapaEstoqueCD.Database.Dto.Ws;
@@ -112,6 +112,22 @@ namespace MapaEstoqueCD.WebSocketActive
 
                 if (entrada is null) { throw new Exception("Erro ao receber os dados"); }
 
+                // Validação: quantidade não pode ser negativa ou maior que QtdConferida
+                if (entrada.entradaId is not null)
+                {
+                    using var db = Database.Common.ContextFactory.CreateDb();
+                    var entradaDb = db.Entradas.FirstOrDefault(x => x.EntradaId == entrada.entradaId);
+                    if (entradaDb != null && entrada.produtos.Any())
+                    {
+                        var qtdConferida = entradaDb.QtdConferida ?? 0;
+                        var qtdInformada = entrada.produtos.First().quantidade;
+                        if (qtdInformada <= 0 || qtdInformada > qtdConferida)
+                        {
+                            return new WebSocketResponse { type = "entrada_resposta", status = "erro", mensagem = $"A quantidade informada ({qtdInformada}) não pode ser negativa ou maior que a quantidade conferida ({qtdConferida})." };
+                        }
+                    }
+                }
+
                 entrada.observacao = $"(REMOTO) - {entrada.observacao}";
                 estoqueService.SetEntrada(entrada);
 
@@ -145,6 +161,22 @@ namespace MapaEstoqueCD.WebSocketActive
                 PickingDto entrada = JsonSerializer.Deserialize<PickingDto>(data.GetRawText(), options);
 
                 if (entrada is null) { throw new Exception("Erro ao receber os dados"); }
+
+                // Validação: quantidade não pode ser negativa ou maior que QtdConferida
+                if (entrada.entradaId is not null)
+                {
+                    using var db = Database.Common.ContextFactory.CreateDb();
+                    var entradaDb = db.Entradas.FirstOrDefault(x => x.EntradaId == entrada.entradaId);
+                    if (entradaDb != null && entrada.produtos.Any())
+                    {
+                        var qtdConferida = entradaDb.QtdConferida ?? 0;
+                        var qtdInformada = entrada.produtos.First().quantidade;
+                        if (qtdInformada <= 0 || qtdInformada > qtdConferida)
+                        {
+                            return new WebSocketResponse { type = "picking_resposta", status = "erro", mensagem = $"A quantidade informada ({qtdInformada}) não pode ser negativa ou maior que a quantidade conferida ({qtdConferida})." };
+                        }
+                    }
+                }
 
                 entrada.observacao = $"(REMOTO) - {entrada.observacao}";
                 estoqueService.SetPicking(entrada);
@@ -180,6 +212,22 @@ namespace MapaEstoqueCD.WebSocketActive
                 EntradaDto entrada = JsonSerializer.Deserialize<EntradaDto>(data.GetRawText(), options);
 
                 if (entrada is null) { throw new Exception("Erro ao receber os dados"); }
+
+                // Validação: quantidade não pode ser negativa ou maior que QtdConferida
+                if (entrada.entradaId is not null)
+                {
+                    using var db = Database.Common.ContextFactory.CreateDb();
+                    var entradaDb = db.Entradas.FirstOrDefault(x => x.EntradaId == entrada.entradaId);
+                    if (entradaDb != null && entrada.produtos.Any())
+                    {
+                        var qtdConferida = entradaDb.QtdConferida ?? 0;
+                        var qtdInformada = entrada.produtos.First().quantidade;
+                        if (qtdInformada <= 0 || qtdInformada > qtdConferida)
+                        {
+                            return new WebSocketResponse { type = "entrada_conferencia_resposta", status = "erro", mensagem = $"A quantidade informada ({qtdInformada}) não pode ser negativa ou maior que a quantidade conferida ({qtdConferida})." };
+                        }
+                    }
+                }
 
                 //if (entrada.entradaId is not null)
                 //{
@@ -628,6 +676,119 @@ namespace MapaEstoqueCD.WebSocketActive
                 return new WebSocketResponse { type = "remove_estoque_entrada_resposta", status = "erro", mensagem = ex.Message };
             }
 
+        }
+    }
+
+    public class ValidarCifHandler : IActionHandler
+    {
+        public string ActionName => ActionsWs.VALIDAR_CIF;
+
+        public async Task<WebSocketResponse?> ExecuteAsync(JsonElement data, WebSocket socket)
+        {
+            try
+            {
+                string cifCod = data.GetProperty("cifCod").GetString() ?? "";
+                int entradaId = data.GetProperty("entradaId").GetInt32();
+
+                if (string.IsNullOrWhiteSpace(cifCod))
+                {
+                    return new WebSocketResponse { type = "validar_cif_resposta", status = "erro", mensagem = "O código CIF não pode estar vazio." };
+                }
+
+                // Validar formato A999/YY
+                if (!System.Text.RegularExpressions.Regex.IsMatch(cifCod, @"^A\d{3}/\d{2}$"))
+                {
+                    return new WebSocketResponse { type = "validar_cif_resposta", status = "erro", mensagem = "O código CIF deve seguir o padrão A000/YY (Ex: A001/26)." };
+                }
+
+                using var db = Database.Common.ContextFactory.CreateDb();
+
+                var cif = db.Cifs.FirstOrDefault(c => c.CifCod == cifCod);
+                if (cif == null)
+                {
+                    return new WebSocketResponse { type = "validar_cif_resposta", status = "nao_encontrado", mensagem = $"CIF '{cifCod}' não encontrada. Deseja criar uma nova?" };
+                }
+
+                // Vincular CIF à entrada
+                var entrada = db.Entradas.FirstOrDefault(e => e.EntradaId == entradaId);
+                if (entrada == null)
+                {
+                    return new WebSocketResponse { type = "validar_cif_resposta", status = "erro", mensagem = "Entrada não encontrada." };
+                }
+
+                entrada.CifsId = cif.CifId;
+                entrada.UpdateAt = DateTime.Now;
+                db.SaveChanges();
+
+                return new WebSocketResponse { type = "validar_cif_resposta", status = "ok", mensagem = $"CIF '{cifCod}' vinculada com sucesso.", dados = new { cifCod = cif.CifCod, cifId = cif.CifId } };
+            }
+            catch (Exception ex)
+            {
+                ex.GetErroSr(data, false);
+                return new WebSocketResponse { type = "validar_cif_resposta", status = "erro", mensagem = ex.Message };
+            }
+        }
+    }
+
+    public class CriarCifHandler : IActionHandler
+    {
+        public string ActionName => ActionsWs.CRIAR_CIF;
+        private readonly CifsService _cifsService = new();
+
+        public async Task<WebSocketResponse?> ExecuteAsync(JsonElement data, WebSocket socket)
+        {
+            try
+            {
+                int entradaId = data.GetProperty("entradaId").GetInt32();
+
+                // Gerar próximo CIF
+                var ultimo = _cifsService.ObterUltimoCif();
+                int proximoNumero = 1;
+                string anoAtual = DateTime.Now.ToString("yy");
+
+                if (ultimo != null && !string.IsNullOrEmpty(ultimo.CifCod))
+                {
+                    try
+                    {
+                        string cod = ultimo.CifCod;
+                        if (cod.StartsWith("A"))
+                        {
+                            int indexBarra = cod.IndexOf('/');
+                            string numeroParte = indexBarra > 1 ? cod.Substring(1, indexBarra - 1) : cod.Substring(1);
+                            if (int.TryParse(numeroParte, out int ultimoNumero))
+                            {
+                                proximoNumero = ultimoNumero + 1;
+                            }
+                        }
+                    }
+                    catch { proximoNumero = 1; }
+                }
+
+                string novoCod = $"A{proximoNumero:D3}/{anoAtual}";
+
+                // Salvar nova CIF
+                var novaCif = new Database.Models.Cifs { CifCod = novoCod };
+                _cifsService.Salvar(novaCif);
+
+                // Vincular à entrada
+                using var db = Database.Common.ContextFactory.CreateDb();
+                var entrada = db.Entradas.FirstOrDefault(e => e.EntradaId == entradaId);
+                if (entrada == null)
+                {
+                    return new WebSocketResponse { type = "criar_cif_resposta", status = "erro", mensagem = "Entrada não encontrada." };
+                }
+
+                entrada.CifsId = novaCif.CifId;
+                entrada.UpdateAt = DateTime.Now;
+                db.SaveChanges();
+
+                return new WebSocketResponse { type = "criar_cif_resposta", status = "ok", mensagem = $"CIF '{novoCod}' criada e vinculada com sucesso.", dados = new { cifCod = novoCod, cifId = novaCif.CifId } };
+            }
+            catch (Exception ex)
+            {
+                ex.GetErroSr(data, false);
+                return new WebSocketResponse { type = "criar_cif_resposta", status = "erro", mensagem = ex.Message };
+            }
         }
     }
 

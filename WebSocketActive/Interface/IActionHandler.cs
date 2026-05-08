@@ -1,4 +1,4 @@
-﻿using System.Net.WebSockets;
+using System.Net.WebSockets;
 using System.Text.Json;
 
 namespace MapaEstoqueCD.WebSocketActive.Interface
@@ -25,6 +25,8 @@ namespace MapaEstoqueCD.WebSocketActive.Interface
         public const string LOGIN = "login"; 
         public const string CONFERENCIA_LIVRE = "conferencia_livre";
         public const string REMOVE_CONFERENCIA = "remove_estoque_entrada";
+        public const string VALIDAR_CIF = "validar_cif";
+        public const string CRIAR_CIF = "criar_cif";
     }
 
     public class WebSocketResponse
