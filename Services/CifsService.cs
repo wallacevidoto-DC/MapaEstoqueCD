@@ -50,5 +50,20 @@ namespace MapaEstoqueCD.Services
         {
             return _db.Cifs.Any(c => c.CifCod == cod && c.CifId != idExcluir);
         }
+
+        public bool TemVinculos(int id)
+        {
+            return _db.Entradas.Any(e => e.CifsId == id);
+        }
+
+        public void Excluir(int id)
+        {
+            var cif = _db.Cifs.Find(id);
+            if (cif != null)
+            {
+                _db.Cifs.Remove(cif);
+                _db.SaveChanges();
+            }
+        }
     }
 }

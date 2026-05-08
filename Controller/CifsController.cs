@@ -116,5 +116,21 @@ namespace MapaEstoqueCD.Controller
             if (string.IsNullOrWhiteSpace(cod)) return false;
             return Regex.IsMatch(cod, @"^A\d{3}/\d{2}$");
         }
+
+        public void ExcluirCif(int id)
+        {
+            if (_cifsService.TemVinculos(id))
+            {
+                MessageBox.Show("Não é possível excluir esta CIF pois ela possui vínculos com entradas no sistema.", "Exclusão Não Permitida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var confirmacao = MessageBox.Show("Tem certeza que deseja excluir esta CIF?", "Confirmação", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (confirmacao == DialogResult.Yes)
+            {
+                _cifsService.Excluir(id);
+                MessageBox.Show("CIF excluída com sucesso!", "Sucesso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
     }
 }

@@ -63,5 +63,41 @@ namespace MapaEstoqueCD.View.Modal
                 textBox_cod.Text = row.Cells[1].Value.ToString();
             }
         }
+
+        private void excluirToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            int id = 0;
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                id = (int)dataGridView1.SelectedRows[0].Cells[0].Value;
+            }
+            else if (dataGridView1.CurrentRow != null)
+            {
+                id = (int)dataGridView1.CurrentRow.Cells[0].Value;
+            }
+
+            if (id > 0)
+            {
+                _cifsController.ExcluirCif(id);
+                LoadData();
+            }
+        }
+
+        private void dataGridView1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != MouseButtons.Right)
+                return;
+
+            var hit = dataGridView1.HitTest(e.X, e.Y);
+
+            if (hit.Type == DataGridViewHitTestType.Cell && hit.RowIndex >= 0)
+            {
+                int rowIndex = hit.RowIndex;
+
+                dataGridView1.ClearSelection();
+                dataGridView1.Rows[rowIndex].Selected = true;
+                dataGridView1.CurrentCell = dataGridView1.Rows[rowIndex].Cells[Math.Max(0, hit.ColumnIndex)];
+            }
+        }
     }
 }

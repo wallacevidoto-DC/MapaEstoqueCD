@@ -1,4 +1,4 @@
-﻿using MapaEstoqueCD.Controller;
+using MapaEstoqueCD.Controller;
 using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.View.Modal;
 using Microsoft.VisualBasic;
@@ -105,41 +105,51 @@ namespace MapaEstoqueCD.View
 
         private void cOMUMToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (entradaSelecionado is null) return;
+
             int? result = ReturnValue();
             if (result is null)
                 return;
 
-            if (entradaSelecionado is not null)
+            if (result > entradaSelecionado.QtdConferida)
             {
-                entradaSelecionado.QtdConferida = result;
-                var tt = (new EntradaProduto(entradaSelecionado)).ShowDialog();
-                if (tt == DialogResult.OK)
-                {
-                    //entradasControllers.SetEntradaLivreConferida(entradaSelecionado);
-                    entradaSelecionado = null;
-                    entradasCurrent = entradasControllers.GetEntradasByFilter(filtrosAtivos, ref dataGridView1);
+                MessageBox.Show($"O valor informado ({result}) não pode ser maior que a quantidade disponível ({entradaSelecionado.QtdConferida}).", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-                }
+            entradaSelecionado.QtdConferida = result;
+            var tt = (new EntradaProduto(entradaSelecionado)).ShowDialog();
+            if (tt == DialogResult.OK)
+            {
+                //entradasControllers.SetEntradaLivreConferida(entradaSelecionado);
+                entradaSelecionado = null;
+                entradasCurrent = entradasControllers.GetEntradasByFilter(filtrosAtivos, ref dataGridView1);
+
             }
         }
 
         private void pIKINGToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (entradaSelecionado is null) return;
+
             int? result = ReturnValue();
             if (result is null)
                 return;
 
-            if (entradaSelecionado is not null)
+            if (result > entradaSelecionado.QtdConferida)
             {
-                entradaSelecionado.QtdConferida = result;
-                var tt = (new Picking(entradaSelecionado)).ShowDialog();
-                if (tt == DialogResult.OK)
-                {
-                    //entradasControllers.SetEntradaLivreConferida(entradaSelecionado);
-                    entradaSelecionado = null;
-                    entradasCurrent = entradasControllers.GetEntradasByFilter(filtrosAtivos, ref dataGridView1);
+                MessageBox.Show($"O valor informado ({result}) não pode ser maior que a quantidade disponível ({entradaSelecionado.QtdConferida}).", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
 
-                }
+            entradaSelecionado.QtdConferida = result;
+            var tt = (new Picking(entradaSelecionado)).ShowDialog();
+            if (tt == DialogResult.OK)
+            {
+                //entradasControllers.SetEntradaLivreConferida(entradaSelecionado);
+                entradaSelecionado = null;
+                entradasCurrent = entradasControllers.GetEntradasByFilter(filtrosAtivos, ref dataGridView1);
+
             }
         }
 
@@ -148,6 +158,11 @@ namespace MapaEstoqueCD.View
             string valor = Interaction.InputBox("Digite um valor:", "Entrada de Dados", "0");
             if (int.TryParse(valor, out int numero))
             {
+                if (numero < 0)
+                {
+                    MessageBox.Show("O valor não pode ser negativo.", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return null;
+                }
                 return numero;
             }
             else

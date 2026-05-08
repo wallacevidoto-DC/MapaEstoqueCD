@@ -1,4 +1,4 @@
-﻿using MapaEstoqueCD.Database.Dto;
+using MapaEstoqueCD.Database.Dto;
 using MapaEstoqueCD.Database.Models;
 using MapaEstoqueCD.Services;
 using MapaEstoqueCD.Utils;
@@ -168,180 +168,59 @@ namespace MapaEstoqueCD.Controller
                 if (string.IsNullOrWhiteSpace(filtro.Valor))
                     continue;
 
-                switch (filtro.Coluna.ToLower())
+                // Usamos filtro.Tabela que contém o nome da Propriedade (ValueMember)
+                switch (filtro.Tabela.ToLower())
                 {
-                    case "usuário":
-                    case "usuario":
+                    case "movimentacaoid":
+                        movimentacoes = movimentacoes.Where(m => m.movimentacaoId.ToString().Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
+                        break;
+
                     case "usuarionome":
-                        movimentacoes = movimentacoes
-                            .Where(m => m.usuarioNome?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true)
-                            .ToList();
+                        movimentacoes = movimentacoes.Where(m => m.usuarioNome != null && m.usuarioNome.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
 
-                    case "produto.codigo":
                     case "produtocodigo":
-                        movimentacoes = movimentacoes
-                            .Where(m => m.produtoCodigo?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true)
-                            .ToList();
+                        movimentacoes = movimentacoes.Where(m => m.produtoCodigo != null && m.produtoCodigo.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
 
-                    case "produto.descricao":
                     case "produtodescricao":
-                        movimentacoes = movimentacoes
-                            .Where(m => m.produtoDescricao?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true)
-                            .ToList();
+                        movimentacoes = movimentacoes.Where(m => m.produtoDescricao != null && m.produtoDescricao.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
 
                     case "tipo":
-                        movimentacoes = movimentacoes
-                            .Where(m => m.tipo?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true)
-                            .ToList();
+                        movimentacoes = movimentacoes.Where(m => m.tipo != null && m.tipo.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
 
                     case "quantidade":
-                        if (int.TryParse(filtro.Valor, out int qtd))
-                        {
-                            movimentacoes = movimentacoes
-                                .Where(m => m.quantidade.ToString().Contains(filtro.Valor))
-                                .ToList();
-                        }
-                        break;
-
-                    case "semf":
-                        if (int.TryParse(filtro.Valor, out int semF))
-                        {
-                            movimentacoes = movimentacoes
-                                .Where(m => m.semF.ToString().Contains(filtro.Valor))
-                                .ToList();
-                        }
-                        break;
-
-                    case "lote":
-                        movimentacoes = movimentacoes
-                            .Where(m => m.lote?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true)
-                            .ToList();
-                        break;
-
-                    case "endereco":
-                        movimentacoes = movimentacoes
-                            .Where(m => m.endereco?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true)
-                            .ToList();
+                        movimentacoes = movimentacoes.Where(m => m.quantidade.ToString().Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
 
                     case "dataf":
-                        if (DateTime.TryParse(filtro.Valor, out DateTime dataF))
-                        {
-                            movimentacoes = movimentacoes
-                                .Where(m => Convert.ToDateTime(m.dataF).Date == dataF.Date)
-                                .ToList();
-                        }
+                        movimentacoes = movimentacoes.Where(m => m.dataF != null && m.dataF.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
 
-                    case "datadecriação":
+                    case "semf":
+                        movimentacoes = movimentacoes.Where(m => m.semF.ToString().Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
+                        break;
+
+                    case "lote":
+                        movimentacoes = movimentacoes.Where(m => m.lote != null && m.lote.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
+                        break;
+
+                    case "endereco":
+                        movimentacoes = movimentacoes.Where(m => m.endereco != null && m.endereco.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
+                        break;
+
                     case "createat":
-                        if (DateTime.TryParse(filtro.Valor, out DateTime createAt))
-                        {
-                            movimentacoes = movimentacoes
-                                .Where(m => m.createAt.Date == createAt.Date)
-                                .ToList();
-                        }
+                        movimentacoes = movimentacoes.Where(m => m.createAt.ToString("dd/MM/yyyy HH:mm").Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
 
-                    case "observações":
                     case "obs":
-                        movimentacoes = movimentacoes
-                            .Where(m => m.obs?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true)
-                            .ToList();
+                        movimentacoes = movimentacoes.Where(m => m.obs != null && m.obs.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
                 }
-
-                //switch (filtro.Coluna.ToLower())
-                //{
-                //    case "usuário":
-                //    case "usuario":
-                //    case "usuarionome":
-                //        movimentacoes = filtro.Tipo switch
-                //        {
-                //            "contém" => movimentacoes.Where(m => m.usuarioNome?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
-                //            "igual" => movimentacoes.Where(m => string.Equals(m.usuarioNome, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
-                //            _ => movimentacoes
-                //        };
-                //        break;
-
-                //    case "produto.codigo":
-                //    case "produtocodigo":
-                //        movimentacoes = filtro.Tipo switch
-                //        {
-                //            "contém" => movimentacoes.Where(m => m.produtoCodigo?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
-                //            "igual" => movimentacoes.Where(m => string.Equals(m.produtoCodigo, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
-                //            _ => movimentacoes
-                //        };
-                //        break;
-
-                //    case "produto.descricao":
-                //    case "produtodescricao":
-                //        movimentacoes = filtro.Tipo switch
-                //        {
-                //            "contém" => movimentacoes.Where(m => m.produtoDescricao?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
-                //            "igual" => movimentacoes.Where(m => string.Equals(m.produtoDescricao, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
-                //            _ => movimentacoes
-                //        };
-                //        break;
-
-                //    case "tipo":
-                //        movimentacoes = filtro.Tipo switch
-                //        {
-                //            "contém" => movimentacoes.Where(m => m.tipo?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
-                //            "igual" => movimentacoes.Where(m => string.Equals(m.tipo, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
-                //            _ => movimentacoes
-                //        };
-                //        break;
-
-                //    case "quantidade":
-                //        if (int.TryParse(filtro.Valor, out int qtd))
-                //        {
-                //            movimentacoes = filtro.Tipo switch
-                //            {
-                //                "maior" => movimentacoes.Where(m => m.quantidade > qtd).ToList(),
-                //                "menor" => movimentacoes.Where(m => m.quantidade < qtd).ToList(),
-                //                "igual" => movimentacoes.Where(m => m.quantidade == qtd).ToList(),
-                //                _ => movimentacoes
-                //            };
-                //        }
-                //        break;
-
-                //    case "semf":
-                //        if (int.TryParse(filtro.Valor, out int semF))
-                //            movimentacoes = movimentacoes.Where(m => m.semF == semF).ToList();
-                //        break;
-
-                //    case "lote":
-                //        movimentacoes = filtro.Tipo switch
-                //        {
-                //            "contém" => movimentacoes.Where(m => m.lote?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
-                //            "igual" => movimentacoes.Where(m => string.Equals(m.lote, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
-                //            _ => movimentacoes
-                //        };
-                //        break;
-                //    case "endereco":
-                //        movimentacoes = movimentacoes.Where(e => e.endereco?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList();
-                //        break;
-                //    case "dataf":
-                //        if (DateTime.TryParse(filtro.Valor, out DateTime dataF))
-                //        {
-                //            movimentacoes = movimentacoes.Where(m => Convert.ToDateTime(m.dataF) == dataF.Date).ToList();
-                //        }
-                //        break;
-
-                //    case "datadecriação":
-                //    case "createat":
-                //        if (DateTime.TryParse(filtro.Valor, out DateTime createAt))
-                //        {
-                //            movimentacoes = movimentacoes.Where(m => m.createAt.Date == createAt.Date).ToList();
-                //        }
-                //        break;
-                //}
             }
+
             foreach (var m in movimentacoes)
             {
                 datagrid.Rows.Add(

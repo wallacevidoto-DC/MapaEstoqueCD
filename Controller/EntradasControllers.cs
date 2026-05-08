@@ -116,135 +116,55 @@ namespace MapaEstoqueCD.Controller
                 if (string.IsNullOrWhiteSpace(filtro.Valor))
                     continue;
 
-                switch (filtro.Coluna.ToLower())
+                // Usamos filtro.Tabela que contém o nome da Propriedade (ValueMember)
+                switch (filtro.Tabela.ToLower())
                 {
-                    case "EntradaId":
-                    case "entradaId":
-                        entradas = filtro.Tipo switch
-                        {
-                            "contém" => entradas.Where(e => e.EntradaId.ToString().Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
-                            "igual" => entradas.Where(e => string.Equals(e.Tipo, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
-                            _ => entradas
-                        };
+                    case "entradaid":
+                        entradas = entradas.Where(e => e.EntradaId.ToString().Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
+
                     case "tipo":
-                        entradas = filtro.Tipo switch
-                        {
-                            "contém" => entradas.Where(e => e.Tipo?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
-                            "igual" => entradas.Where(e => string.Equals(e.Tipo, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
-                            _ => entradas
-                        };
+                        entradas = entradas.Where(e => e.Tipo != null && e.Tipo.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
 
-                    case "usuário":
-                    case "usuario":
                     case "usernome":
-                        entradas = filtro.Tipo switch
-                        {
-                            "contém" => entradas.Where(e => e.UserNome?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
-                            "igual" => entradas.Where(e => string.Equals(e.UserNome, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
-                            _ => entradas
-                        };
+                        entradas = entradas.Where(e => e.UserNome != null && e.UserNome.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
 
-                    case "produto.codigo":
                     case "produtocodigo":
-                        entradas = filtro.Tipo switch
-                        {
-                            "contém" => entradas.Where(e => e.ProdutoCodigo?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
-                            "igual" => entradas.Where(e => string.Equals(e.ProdutoCodigo, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
-                            _ => entradas
-                        };
+                        entradas = entradas.Where(e => e.ProdutoCodigo != null && e.ProdutoCodigo.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
 
-                    case "produto.descricao":
                     case "produtodescricao":
-                        entradas = filtro.Tipo switch
-                        {
-                            "contém" => entradas.Where(e => e.ProdutoDescricao?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
-                            "igual" => entradas.Where(e => string.Equals(e.ProdutoDescricao, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
-                            _ => entradas
-                        };
+                        entradas = entradas.Where(e => e.ProdutoDescricao != null && e.ProdutoDescricao.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
 
-                    case "quantidade conferida":
                     case "qtdconferida":
-                        if (int.TryParse(filtro.Valor, out int qtdConf))
-                        {
-                            entradas = filtro.Tipo switch
-                            {
-                                "contém" => entradas.Where(e => e.QtdConferida.ToString().Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
-                                "igual" => entradas.Where(e => string.Equals(e.ProdutoDescricao, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
-                                _ => entradas
-                            };
-                            //entradas = filtro.Tipo switch
-                            //{
-                            //    "maior" => entradas.Where(e => e.QtdConferida > qtdConf).ToList(),
-                            //    "menor" => entradas.Where(e => e.QtdConferida < qtdConf).ToList(),
-                            //    "igual" => entradas.Where(e => e.QtdConferida == qtdConf).ToList(),
-                            //    _ => entradas
-                            //};
-                        }
+                        entradas = entradas.Where(e => e.QtdConferida.ToString().Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
 
-                    case "quantidade entrada":
                     case "qtdentrada":
-                        if (int.TryParse(filtro.Valor, out int qtdEnt))
-                        {
-                            entradas = filtro.Tipo switch
-                            {
-                                "contém" => entradas.Where(e => e.QtdEntrada.ToString().Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
-                                "igual" => entradas.Where(e => string.Equals(e.ProdutoDescricao, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
-                                _ => entradas
-                            };
-                            //entradas = filtro.Tipo switch
-                            //{
-                            //    "maior" => entradas.Where(e => e.QtdEntrada > qtdEnt).ToList(),
-                            //    "menor" => entradas.Where(e => e.QtdEntrada < qtdEnt).ToList(),
-                            //    "igual" => entradas.Where(e => e.QtdEntrada == qtdEnt).ToList(),
-                            //    _ => entradas
-                            //};
-                        }
+                        entradas = entradas.Where(e => e.QtdEntrada.ToString().Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
 
-                    case "cifs":
                     case "cifsnome":
-                        entradas = filtro.Tipo switch
-                        {
-                            "contém" => entradas.Where(e => e.CifsNome?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
-                            "igual" => entradas.Where(e => string.Equals(e.CifsNome, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
-                            _ => entradas
-                        };
+                        entradas = entradas.Where(e => e.CifsNome != null && e.CifsNome.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
 
                     case "lote":
-                        entradas = filtro.Tipo switch
-                        {
-                            "contém" => entradas.Where(e => e.Lote?.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase) == true).ToList(),
-                            "igual" => entradas.Where(e => string.Equals(e.Lote, filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList(),
-                            _ => entradas
-                        };
+                        entradas = entradas.Where(e => e.Lote != null && e.Lote.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
 
                     case "dataf":
-                        if (DateTime.TryParse(filtro.Valor, out DateTime dataF))
-                        {
-                            entradas = entradas.Where(e => Convert.ToDateTime(e.DataF) == dataF.Date).ToList();
-                        }
+                        entradas = entradas.Where(e => e.DataF != null && e.DataF.Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
 
                     case "semf":
-                        if (int.TryParse(filtro.Valor, out int semF))
-                            entradas = entradas.Where(e => e.SemF == semF).ToList();
+                        entradas = entradas.Where(e => e.SemF.ToString().Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
 
                     case "createat":
-                    case "data criação":
-                    case "datadecriação":
-                        if (DateTime.TryParse(filtro.Valor, out DateTime created))
-                        {
-                            entradas = entradas.Where(e => e.CreateAt?.Date == created.Date).ToList();
-                        }
+                        entradas = entradas.Where(e => e.CreateAt.HasValue && e.CreateAt.Value.ToString("dd/MM/yyyy HH:mm").Contains(filtro.Valor, StringComparison.OrdinalIgnoreCase)).ToList();
                         break;
                 }
             }

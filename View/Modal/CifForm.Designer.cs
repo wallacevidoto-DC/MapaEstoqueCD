@@ -43,6 +43,7 @@ namespace MapaEstoqueCD.View.Modal
             Date = new DataGridViewTextBoxColumn();
             contextMenuStrip1 = new ContextMenuStrip(components);
             editarToolStripMenuItem = new ToolStripMenuItem();
+            excluirToolStripMenuItem = new ToolStripMenuItem();
             groupBox3.SuspendLayout();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
@@ -151,6 +152,7 @@ namespace MapaEstoqueCD.View.Modal
             dataGridView1.RowHeadersVisible = false;
             dataGridView1.Size = new Size(385, 524);
             dataGridView1.TabIndex = 7;
+            dataGridView1.MouseDown += dataGridView1_MouseDown;
             // 
             // Column11
             // 
@@ -175,17 +177,25 @@ namespace MapaEstoqueCD.View.Modal
             // contextMenuStrip1
             // 
             contextMenuStrip1.ImageScalingSize = new Size(25, 25);
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { editarToolStripMenuItem });
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { editarToolStripMenuItem, excluirToolStripMenuItem });
             contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(114, 36);
+            contextMenuStrip1.Size = new Size(118, 68);
             // 
             // editarToolStripMenuItem
             // 
             editarToolStripMenuItem.Image = Properties.Resources.editar_codigo;
             editarToolStripMenuItem.Name = "editarToolStripMenuItem";
-            editarToolStripMenuItem.Size = new Size(113, 32);
+            editarToolStripMenuItem.Size = new Size(117, 32);
             editarToolStripMenuItem.Text = "Editar";
             editarToolStripMenuItem.Click += editarToolStripMenuItem_Click;
+            // 
+            // excluirToolStripMenuItem
+            // 
+            excluirToolStripMenuItem.Image = Properties.Resources.cancelar;
+            excluirToolStripMenuItem.Name = "excluirToolStripMenuItem";
+            excluirToolStripMenuItem.Size = new Size(117, 32);
+            excluirToolStripMenuItem.Text = "Excluir";
+            excluirToolStripMenuItem.Click += excluirToolStripMenuItem_Click;
             // 
             // CifForm
             // 
@@ -223,5 +233,6 @@ namespace MapaEstoqueCD.View.Modal
         private DataGridViewTextBoxColumn Date;
         private ContextMenuStrip contextMenuStrip1;
         private ToolStripMenuItem editarToolStripMenuItem;
+        private ToolStripMenuItem excluirToolStripMenuItem;
     }
 }
