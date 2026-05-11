@@ -25,7 +25,7 @@ namespace MapaEstoqueCD.Services
                     DataF = entradaLvDto.dataf,
                     SemF = entradaLvDto.semf,
                     Lote = entradaLvDto.lote,
-
+                    CifsId = entradaLvDto.cifId
                 };
                 db.Entradas.Add(novaEntrada);
 

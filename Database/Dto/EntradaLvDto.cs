@@ -26,6 +26,9 @@ namespace MapaEstoqueCD.Database.Dto
         public string lote { get; set; }
         public string obs { get; set; }
 
+        public int? cifId { get; set; }
+        public string? cifCod { get; set; }
+
         [Required(ErrorMessage = "O produto é obrigatório.")]
         public ProdutoWsDto produto { get; set; }
     }

@@ -687,8 +687,8 @@ namespace MapaEstoqueCD.WebSocketActive
         {
             try
             {
-                string cifCod = data.GetProperty("cifCod").GetString() ?? "";
-                int entradaId = data.GetProperty("entradaId").GetInt32();
+                string cifCod = data.TryGetProperty("cifCod", out var cProp) ? cProp.GetString() ?? "" : "";
+                int entradaId = data.TryGetProperty("entradaId", out var eProp) ? eProp.GetInt32() : 0;
 
                 if (string.IsNullOrWhiteSpace(cifCod))
                 {
@@ -702,25 +702,31 @@ namespace MapaEstoqueCD.WebSocketActive
                 }
 
                 using var db = Database.Common.ContextFactory.CreateDb();
-
                 var cif = db.Cifs.FirstOrDefault(c => c.CifCod == cifCod);
+                string msgSucesso = "CIF encontrada";
+
                 if (cif == null)
                 {
-                    return new WebSocketResponse { type = "validar_cif_resposta", status = "nao_encontrado", mensagem = $"CIF '{cifCod}' não encontrada. Deseja criar uma nova?" };
+                    cif = new Database.Models.Cifs { CifCod = cifCod, CreateAt = DateTime.Now, UpdateAt = DateTime.Now };
+                    db.Cifs.Add(cif);
+                    db.SaveChanges();
+                    msgSucesso = "CIF não existe mas foi criada com sucesso";
                 }
 
-                // Vincular CIF à entrada
-                var entrada = db.Entradas.FirstOrDefault(e => e.EntradaId == entradaId);
-                if (entrada == null)
+                // Se houver um entradaId válido, vincula
+                if (entradaId > 0)
                 {
-                    return new WebSocketResponse { type = "validar_cif_resposta", status = "erro", mensagem = "Entrada não encontrada." };
+                    var entrada = db.Entradas.FirstOrDefault(e => e.EntradaId == entradaId);
+                    if (entrada != null)
+                    {
+                        entrada.CifsId = cif.CifId;
+                        entrada.UpdateAt = DateTime.Now;
+                        db.SaveChanges();
+                        msgSucesso += " e vinculada à entrada";
+                    }
                 }
 
-                entrada.CifsId = cif.CifId;
-                entrada.UpdateAt = DateTime.Now;
-                db.SaveChanges();
-
-                return new WebSocketResponse { type = "validar_cif_resposta", status = "ok", mensagem = $"CIF '{cifCod}' vinculada com sucesso.", dados = new { cifCod = cif.CifCod, cifId = cif.CifId } };
+                return new WebSocketResponse { type = "validar_cif_resposta", status = "ok", mensagem = msgSucesso, dados = new { cifCod = cif.CifCod, cifId = cif.CifId } };
             }
             catch (Exception ex)
             {

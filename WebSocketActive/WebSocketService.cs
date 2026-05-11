@@ -1,4 +1,4 @@
-﻿using MapaEstoqueCD.Controller;
+using MapaEstoqueCD.Controller;
 using MapaEstoqueCD.WebSocketActive.Interface;
 using System.Net.WebSockets;
 using System.Text;
@@ -31,7 +31,9 @@ namespace MapaEstoqueCD.WebSocketActive
                     new CorrecaoEntradaHandler(),
                     new ProdutoEanHandler(),
                     new EnderecoConferenciaLivreHandler(),
-                     new RemoveConferenciaHandler()
+                     new RemoveConferenciaHandler(),
+                     new ValidarCifHandler(),
+                     new CriarCifHandler()
                });
         }
 
