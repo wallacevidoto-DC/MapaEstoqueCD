@@ -82,7 +82,7 @@ namespace MapaEstoqueCD.Services
                     SemF = e.SemF,
                     CreateAt = e.CreateAt,
                     UpdateAt = e.UpdateAt
-                }).OrderBy(x => x.CreateAt)
+                }).OrderByDescending(x => x.CreateAt)
                 .ToList();
         }
 
