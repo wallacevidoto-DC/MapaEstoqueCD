@@ -612,6 +612,64 @@ namespace MapaEstoqueCD.Services
                 return false;
             }
         }
+
+        public bool SetSaidaDireta(SaidaDiretaDto saidaDiretaDto)
+        {
+            try
+            {
+                string entrada_cif = "Sem CIF";
+                using var db = ContextFactory.CreateDb();
+                if (DtoValidator.Validate(saidaDiretaDto, out var erros).Any())
+                {
+                    throw new Exception(string.Join("\n", erros.Select(x => "\n" + x.ErrorMessage)));
+                }
+
+                if (saidaDiretaDto.entradaId is not null)
+                {
+
+                    var entrada = db.Entradas.Include(e => e.Cifs).FirstOrDefault(x => x.EntradaId == saidaDiretaDto.entradaId);
+                    entrada_cif = entrada?.Cifs?.CifCod ?? "Sem CIF";
+
+                    if (entrada.EntradaId == null && saidaDiretaDto.produtos.Count == 1)
+                    {
+                        throw new Exception("Id da saída não foi passado, ou a quantidade de itens é maior que 1.");
+                    }
+
+                    if (!entradasService.SetEntradaLivreConferida(entrada.EntradaId, saidaDiretaDto.produtos.FirstOrDefault().quantidade))
+                    {
+                        return false;
+                    }
+                }
+
+
+                foreach (var p in saidaDiretaDto.produtos)
+                {
+                    var movimentacao = new Movimentacao
+                    {
+                        ProdutoId = p.produtoId,
+                        Tipo = saidaDiretaDto.tipo,
+                        Quantidade = p.quantidade,
+                        Obs = saidaDiretaDto.observacao +  $"CIF: {entrada_cif}",
+                        UserId = saidaDiretaDto.userId,
+                        DataF = p.dataf,
+                        SemF = p.semf,
+                        Lote = p.lote,
+                        DataL = saidaDiretaDto.dataEntrada
+
+                    };
+                    db.Movimentacoes.Add(movimentacao);
+                }
+                db.SaveChanges();
+
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ex.GetErro(saidaDiretaDto);
+                return false;
+            }
+        }
     }
 
     

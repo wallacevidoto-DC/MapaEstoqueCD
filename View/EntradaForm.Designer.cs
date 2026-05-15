@@ -41,12 +41,6 @@
             toolStripSeparator3 = new ToolStripSeparator();
             toolStripButton_cif = new ToolStripButton();
             dataGridView1 = new DataGridView();
-            contextMenuStrip1 = new ContextMenuStrip(components);
-            entrdaToolStripMenuItem = new ToolStripMenuItem();
-            cOMUMToolStripMenuItem = new ToolStripMenuItem();
-            pIKINGToolStripMenuItem = new ToolStripMenuItem();
-            cORREÇÃOToolStripMenuItem = new ToolStripMenuItem();
-            rEMOVERToolStripMenuItem = new ToolStripMenuItem();
             xIndex = new DataGridViewTextBoxColumn();
             Column1 = new DataGridViewTextBoxColumn();
             Column2 = new DataGridViewTextBoxColumn();
@@ -58,6 +52,13 @@
             Column6 = new DataGridViewTextBoxColumn();
             Column8 = new DataGridViewTextBoxColumn();
             Column10 = new DataGridViewTextBoxColumn();
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            entrdaToolStripMenuItem = new ToolStripMenuItem();
+            cOMUMToolStripMenuItem = new ToolStripMenuItem();
+            pIKINGToolStripMenuItem = new ToolStripMenuItem();
+            cORREÇÃOToolStripMenuItem = new ToolStripMenuItem();
+            rEMOVERToolStripMenuItem = new ToolStripMenuItem();
+            sAÍDADIRETAToolStripMenuItem = new ToolStripMenuItem();
             toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             contextMenuStrip1.SuspendLayout();
@@ -185,53 +186,6 @@
             dataGridView1.TabIndex = 6;
             dataGridView1.MouseDown += dataGridView1_MouseDown;
             // 
-            // contextMenuStrip1
-            // 
-            contextMenuStrip1.ImageScalingSize = new Size(25, 25);
-            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { entrdaToolStripMenuItem, cORREÇÃOToolStripMenuItem, rEMOVERToolStripMenuItem });
-            contextMenuStrip1.Name = "contextMenuStrip1";
-            contextMenuStrip1.Size = new Size(146, 100);
-            // 
-            // entrdaToolStripMenuItem
-            // 
-            entrdaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cOMUMToolStripMenuItem, pIKINGToolStripMenuItem });
-            entrdaToolStripMenuItem.Image = Properties.Resources.entrada;
-            entrdaToolStripMenuItem.Name = "entrdaToolStripMenuItem";
-            entrdaToolStripMenuItem.Size = new Size(145, 32);
-            entrdaToolStripMenuItem.Text = "ENTRADA";
-            // 
-            // cOMUMToolStripMenuItem
-            // 
-            cOMUMToolStripMenuItem.Image = Properties.Resources.caixa;
-            cOMUMToolStripMenuItem.Name = "cOMUMToolStripMenuItem";
-            cOMUMToolStripMenuItem.Size = new Size(121, 22);
-            cOMUMToolStripMenuItem.Text = "COMUM";
-            cOMUMToolStripMenuItem.Click += cOMUMToolStripMenuItem_Click;
-            // 
-            // pIKINGToolStripMenuItem
-            // 
-            pIKINGToolStripMenuItem.Image = Properties.Resources.escolha;
-            pIKINGToolStripMenuItem.Name = "pIKINGToolStripMenuItem";
-            pIKINGToolStripMenuItem.Size = new Size(121, 22);
-            pIKINGToolStripMenuItem.Text = "PICKING";
-            pIKINGToolStripMenuItem.Click += pIKINGToolStripMenuItem_Click;
-            // 
-            // cORREÇÃOToolStripMenuItem
-            // 
-            cORREÇÃOToolStripMenuItem.Image = Properties.Resources.correcao;
-            cORREÇÃOToolStripMenuItem.Name = "cORREÇÃOToolStripMenuItem";
-            cORREÇÃOToolStripMenuItem.Size = new Size(145, 32);
-            cORREÇÃOToolStripMenuItem.Text = "CORREÇÃO";
-            cORREÇÃOToolStripMenuItem.Click += cORREÇÃOToolStripMenuItem_Click;
-            // 
-            // rEMOVERToolStripMenuItem
-            // 
-            rEMOVERToolStripMenuItem.Image = Properties.Resources.cancelar1;
-            rEMOVERToolStripMenuItem.Name = "rEMOVERToolStripMenuItem";
-            rEMOVERToolStripMenuItem.Size = new Size(145, 32);
-            rEMOVERToolStripMenuItem.Text = "REMOVER";
-            rEMOVERToolStripMenuItem.Click += rEMOVERToolStripMenuItem_Click;
-            // 
             // xIndex
             // 
             xIndex.HeaderText = "xIndex";
@@ -310,6 +264,61 @@
             Column10.Name = "Column10";
             Column10.ReadOnly = true;
             // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.ImageScalingSize = new Size(25, 25);
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { entrdaToolStripMenuItem, sAÍDADIRETAToolStripMenuItem, cORREÇÃOToolStripMenuItem, rEMOVERToolStripMenuItem });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(190, 154);
+            // 
+            // entrdaToolStripMenuItem
+            // 
+            entrdaToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { cOMUMToolStripMenuItem, pIKINGToolStripMenuItem });
+            entrdaToolStripMenuItem.Image = Properties.Resources.entrada;
+            entrdaToolStripMenuItem.Name = "entrdaToolStripMenuItem";
+            entrdaToolStripMenuItem.Size = new Size(189, 32);
+            entrdaToolStripMenuItem.Text = "ENTRADA";
+            // 
+            // cOMUMToolStripMenuItem
+            // 
+            cOMUMToolStripMenuItem.Image = Properties.Resources.caixa;
+            cOMUMToolStripMenuItem.Name = "cOMUMToolStripMenuItem";
+            cOMUMToolStripMenuItem.Size = new Size(189, 32);
+            cOMUMToolStripMenuItem.Text = "COMUM";
+            cOMUMToolStripMenuItem.Click += cOMUMToolStripMenuItem_Click;
+            // 
+            // pIKINGToolStripMenuItem
+            // 
+            pIKINGToolStripMenuItem.Image = Properties.Resources.escolha;
+            pIKINGToolStripMenuItem.Name = "pIKINGToolStripMenuItem";
+            pIKINGToolStripMenuItem.Size = new Size(189, 32);
+            pIKINGToolStripMenuItem.Text = "PICKING";
+            pIKINGToolStripMenuItem.Click += pIKINGToolStripMenuItem_Click;
+            // 
+            // cORREÇÃOToolStripMenuItem
+            // 
+            cORREÇÃOToolStripMenuItem.Image = Properties.Resources.correcao;
+            cORREÇÃOToolStripMenuItem.Name = "cORREÇÃOToolStripMenuItem";
+            cORREÇÃOToolStripMenuItem.Size = new Size(189, 32);
+            cORREÇÃOToolStripMenuItem.Text = "CORREÇÃO";
+            cORREÇÃOToolStripMenuItem.Click += cORREÇÃOToolStripMenuItem_Click;
+            // 
+            // rEMOVERToolStripMenuItem
+            // 
+            rEMOVERToolStripMenuItem.Image = Properties.Resources.cancelar1;
+            rEMOVERToolStripMenuItem.Name = "rEMOVERToolStripMenuItem";
+            rEMOVERToolStripMenuItem.Size = new Size(189, 32);
+            rEMOVERToolStripMenuItem.Text = "REMOVER";
+            rEMOVERToolStripMenuItem.Click += rEMOVERToolStripMenuItem_Click;
+            // 
+            // sAÍDADIRETAToolStripMenuItem
+            // 
+            sAÍDADIRETAToolStripMenuItem.Image = Properties.Resources.pacote;
+            sAÍDADIRETAToolStripMenuItem.Name = "sAÍDADIRETAToolStripMenuItem";
+            sAÍDADIRETAToolStripMenuItem.Size = new Size(189, 32);
+            sAÍDADIRETAToolStripMenuItem.Text = "SAÍDA DIRETA";
+            sAÍDADIRETAToolStripMenuItem.Click += sAÍDADIRETAToolStripMenuItem_Click;
+            // 
             // EntradaForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -356,5 +365,6 @@
         private DataGridViewTextBoxColumn Column6;
         private DataGridViewTextBoxColumn Column8;
         private DataGridViewTextBoxColumn Column10;
+        private ToolStripMenuItem sAÍDADIRETAToolStripMenuItem;
     }
 }

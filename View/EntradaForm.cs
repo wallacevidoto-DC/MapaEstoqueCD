@@ -176,5 +176,30 @@ namespace MapaEstoqueCD.View
         {
             new CifForm().ShowDialog();
         }
+
+        private void sAÍDADIRETAToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (entradaSelecionado is null) return;
+
+            int? result = ReturnValue();
+            if (result is null)
+                return;
+
+            if (result > entradaSelecionado.QtdConferida)
+            {
+                MessageBox.Show($"O valor informado ({result}) não pode ser maior que a quantidade disponível ({entradaSelecionado.QtdConferida}).", "Erro de Validação", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            entradaSelecionado.QtdConferida = result;
+            var tt = (new SaidaDireta(entradaSelecionado)).ShowDialog();
+            if (tt == DialogResult.OK)
+            {
+                //entradasControllers.SetEntradaLivreConferida(entradaSelecionado);
+                entradaSelecionado = null;
+                entradasCurrent = entradasControllers.GetEntradasByFilter(filtrosAtivos, ref dataGridView1);
+
+            }
+        }
     }
 }

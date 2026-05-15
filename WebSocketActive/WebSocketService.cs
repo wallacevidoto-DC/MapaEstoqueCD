@@ -33,7 +33,8 @@ namespace MapaEstoqueCD.WebSocketActive
                     new EnderecoConferenciaLivreHandler(),
                      new RemoveConferenciaHandler(),
                      new ValidarCifHandler(),
-                     new CriarCifHandler()
+                     new CriarCifHandler(),
+                     new SaidaDiretaHandler()
                });
         }
 

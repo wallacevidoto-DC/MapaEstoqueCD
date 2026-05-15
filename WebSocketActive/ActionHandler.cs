@@ -191,6 +191,58 @@ namespace MapaEstoqueCD.WebSocketActive
 
         }
     }
+
+    public class SaidaDiretaHandler : IActionHandler
+    {
+
+        public string ActionName => ActionsWs.SAIDA_DIRETA;
+        public EstoqueService estoqueService = new();
+
+
+        public async Task<WebSocketResponse?> ExecuteAsync(JsonElement data, WebSocket socket)
+        {
+            try
+            {
+                var options = new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true,
+                    Converters = { new JsonStringEnumConverter() }
+                };
+
+                SaidaDiretaDto entrada = JsonSerializer.Deserialize<SaidaDiretaDto>(data.GetRawText(), options);
+
+                if (entrada is null) { throw new Exception("Erro ao receber os dados"); }
+
+                // Validação: quantidade não pode ser negativa ou maior que QtdConferida
+                if (entrada.entradaId is not null)
+                {
+                    using var db = Database.Common.ContextFactory.CreateDb();
+                    var entradaDb = db.Entradas.FirstOrDefault(x => x.EntradaId == entrada.entradaId);
+                    if (entradaDb != null && entrada.produtos.Any())
+                    {
+                        var qtdConferida = entradaDb.QtdConferida ?? 0;
+                        var qtdInformada = entrada.produtos.First().quantidade;
+                        if (qtdInformada <= 0 || qtdInformada > qtdConferida)
+                        {
+                            return new WebSocketResponse { type = "saida_direta_resposta", status = "erro", mensagem = $"A quantidade informada ({qtdInformada}) não pode ser negativa ou maior que a quantidade conferida ({qtdConferida})." };
+                        }
+                    }
+                }
+
+                entrada.observacao = $"(REMOTO) - {entrada.observacao}";
+                estoqueService.SetSaidaDireta(entrada);
+
+                return new WebSocketResponse { type = "saida_direta_resposta", status = "ok", mensagem = "Saída direta realizada com sucesso", dados = null };
+            }
+            catch (Exception ex)
+            {
+                ex.GetErroSr(data, false);
+                return new WebSocketResponse { type = "saida_direta_resposta", status = "erro", mensagem = ex.Message };
+            }
+
+        }
+    }
+
     public class EntradaConferenciaHandler : IActionHandler
     {
 

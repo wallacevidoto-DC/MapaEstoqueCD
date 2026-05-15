@@ -287,5 +287,11 @@ namespace MapaEstoqueCD.Controller
             pickingDto.userId = CacheMP.Instance.UserCurrent.UserId;
             return estoqueService.SetPicking(pickingDto);
         }
+
+        internal bool SetSaidaDireta(SaidaDiretaDto saidaDiretaDto)
+        {
+            saidaDiretaDto.userId = CacheMP.Instance.UserCurrent.UserId;
+            return estoqueService.SetSaidaDireta(saidaDiretaDto);
+        }
     }
 }

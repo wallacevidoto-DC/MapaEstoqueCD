@@ -22,11 +22,12 @@ namespace MapaEstoqueCD.WebSocketActive.Interface
         public const string CORRECAO_ENTRADA = "correcao_entrada";
         public const string GET_PRODUTO = "get_produto";
         public const string GET_PRODUTO_EAN = "get_produto_cod";
-        public const string LOGIN = "login"; 
+        public const string LOGIN = "login";
         public const string CONFERENCIA_LIVRE = "conferencia_livre";
         public const string REMOVE_CONFERENCIA = "remove_estoque_entrada";
         public const string VALIDAR_CIF = "validar_cif";
         public const string CRIAR_CIF = "criar_cif";
+        public const string SAIDA_DIRETA = "saida_direta";
     }
 
     public class WebSocketResponse
